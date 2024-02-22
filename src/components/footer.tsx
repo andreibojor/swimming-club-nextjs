@@ -60,16 +60,6 @@ export function SiteFooter(props: { className?: string }) {
           >
             Shadcn
           </a>
-          . The source code is available on{' '}
-          <a
-            href="#"
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium underline underline-offset-4"
-          >
-            GitHub
-          </a>
-          .
         </p>
         <div className="col-start-2 row-start-1 flex h-12 justify-end">
           <ThemeToggle />
