@@ -6,7 +6,7 @@ export default function HomeLayout(props: { children: ReactNode }) {
   return (
     <main className="relative">
       <Navbar />
-      <main className="flex min-h-screen w-full flex-1 flex-col items-center">
+      <main className="flex min-h-screen w-full flex-1 flex-col items-center pt-16">
         {props.children}
       </main>
     </main>

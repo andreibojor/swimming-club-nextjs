@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import { Balancer } from 'react-wrap-balancer';
 
+import * as Icons from '@/components/icons';
 import {
   Button,
   Card,
@@ -8,6 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  Label,
 } from '@/components/ui';
 
 export default function Home() {
@@ -37,6 +40,8 @@ export default function Home() {
           </Balancer>
         </p>
       </div>
+
+      {/* HOME CONTENT */}
       <div className="my-16 flex w-full max-w-screen-lg animate-fade-up flex-col items-center gap-5 border-t p-5 xl:px-0">
         <h2 className="pt-4 text-center text-3xl font-bold md:text-4xl">
           What&apos;s included?
@@ -49,8 +54,127 @@ export default function Home() {
           </Balancer>
         </p>
         <div className="z-10 mb-10 flex min-h-[50vh] w-full max-w-5xl flex-col justify-between gap-4 px-5 md:flex-row xl:px-0">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
+          <Card className="flex w-full flex-col justify-center border-none shadow-none md:w-1/2">
+            <CardHeader className="text-center ">
+              <CardTitle className="text-3xl font-light">
+                Cursuri de înot pentru începători
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="flex items-center justify-between space-x-2">
+                <Label htmlFor="necessary" className="flex flex-col space-y-1">
+                  <span className="flex items-center text-lg">
+                    <Icons.Waves className="mr-2 h-5 w-5 text-primary" />
+                    Strictly Necessary
+                  </span>
+                  <span className="font-normal leading-snug text-muted-foreground">
+                    These cookies are essential in order to use the website and
+                    use its features.
+                  </span>
+                </Label>
+              </div>
+              <div className="flex items-center justify-between space-x-2">
+                <Label htmlFor="necessary" className="flex flex-col space-y-1">
+                  <span className="flex items-center text-lg">
+                    <Icons.Waves className="mr-2 h-5 w-5 text-primary" />
+                    Strictly Necessary
+                  </span>
+                  <span className="font-normal leading-snug text-muted-foreground">
+                    These cookies are essential in order to use the website and
+                    use its features.
+                  </span>
+                </Label>
+              </div>
+              <div className="flex items-center justify-between space-x-2">
+                <Label htmlFor="necessary" className="flex flex-col space-y-1">
+                  <span className="flex items-center text-lg">
+                    <Icons.Waves className="mr-2 h-5 w-5 text-primary" />
+                    Strictly Necessary
+                  </span>
+                  <span className="font-normal leading-snug text-muted-foreground">
+                    These cookies are essential in order to use the website and
+                    use its features.
+                  </span>
+                </Label>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button variant="default" className="w-full">
+                Log in
+              </Button>
+            </CardFooter>
+          </Card>
+          <div className="w-full md:w-1/2">
+            <Image
+              alt="Child swimming"
+              src="/images/beginnerSwimming.webp"
+              className="rounded-lg"
+              width={500}
+              height={500}
+            />
+          </div>
+        </div>
+
+        <div className="z-10 mt-10 flex min-h-[50vh] w-full max-w-5xl flex-col justify-between gap-4 px-5 md:flex-row xl:px-0">
+          <div className="order-2 w-full md:order-1 md:w-1/2">
+            <Image
+              alt="Man swimming"
+              src="/images/advancedSwimming.webp"
+              className="rounded-lg"
+              width={500}
+              height={500}
+            />
+          </div>
+          <Card className="order-1 flex w-full flex-col justify-center border-none shadow-none md:order-2 md:w-1/2">
+            <CardHeader className="text-center ">
+              <CardTitle className="text-3xl">
+                Cursuri de înot pentru avansați
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="flex items-center justify-between space-x-2">
+                <Label htmlFor="necessary" className="flex flex-col space-y-1">
+                  <span className="flex items-center text-lg">
+                    <Icons.Waves className="mr-2 h-5 w-5" />
+                    Strictly Necessary
+                  </span>
+                  <span className="font-normal leading-snug text-muted-foreground">
+                    These cookies are essential in order to use the website and
+                    use its features.
+                  </span>
+                </Label>
+              </div>
+              <div className="flex items-center justify-between space-x-2">
+                <Label htmlFor="necessary" className="flex flex-col space-y-1">
+                  <span className="flex items-center text-lg">
+                    <Icons.Waves className="mr-2 h-5 w-5" />
+                    Strictly Necessary
+                  </span>
+                  <span className="font-normal leading-snug text-muted-foreground">
+                    These cookies are essential in order to use the website and
+                    use its features.
+                  </span>
+                </Label>
+              </div>
+              <div className="flex items-center justify-between space-x-2">
+                <Label htmlFor="necessary" className="flex flex-col space-y-1">
+                  <span className="flex items-center text-lg">
+                    <Icons.Waves className="mr-2 h-5 w-5" />
+                    Strictly Necessary
+                  </span>
+                  <span className="font-normal leading-snug text-muted-foreground">
+                    These cookies are essential in order to use the website and
+                    use its features.
+                  </span>
+                </Label>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button variant="default" className="w-full">
+                Log in
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
       </div>
     </>
