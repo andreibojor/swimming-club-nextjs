@@ -16,8 +16,8 @@ import {
 } from './ui';
 
 const DashboardTabs = ({ pools }: DashboardTabsProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
   // const query = searchParams.get('pool');
 
   const [pool, setPool] = useState('cluj-napoca');
