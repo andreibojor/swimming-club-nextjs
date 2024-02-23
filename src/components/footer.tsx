@@ -23,7 +23,7 @@ const ThemeToggle = dynamic(() => import('@/components/theme-toggle'), {
 
 export function SiteFooter(props: { className?: string }) {
   return (
-    <footer className={cn('container border-t', props.className)}>
+    <footer className={cn('container self-center border-t', props.className)}>
       <div className="my-4 grid grid-cols-2 md:flex md:items-center">
         <Link
           href="/"

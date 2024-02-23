@@ -5,6 +5,7 @@ import LocalFont from 'next/font/local';
 import '../styles/globals.css';
 
 import { ThemeProvider } from '@/components/theme-provider';
+import { TailwindIndicator } from '@/components/ui';
 import { cn } from '@/utils/cn';
 
 const fontSans = Inter({
@@ -37,6 +38,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
+          <TailwindIndicator />
         </ThemeProvider>
       </body>
     </html>
