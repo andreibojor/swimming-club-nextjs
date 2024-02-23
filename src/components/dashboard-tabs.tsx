@@ -15,7 +15,7 @@ import {
   TabsTrigger,
 } from './ui';
 
-const DashboardTabs = ({ pools }: DashboardTabsProps) => {
+const DashboardTabs = ({ pools, students }: DashboardTabsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get('pool');
@@ -49,6 +49,10 @@ const DashboardTabs = ({ pools }: DashboardTabsProps) => {
         </TabsList>
       </CardHeader>
       <CardContent>
+        {students &&
+          students.map((student) => (
+            <p key={student.id}>{student.full_name}</p>
+          ))}
         {pools.map((pool) => (
           <TabsContent key={pool.id} value={pool.value} className="space-y-4">
             <div className="flex flex-col justify-between md:flex-row">

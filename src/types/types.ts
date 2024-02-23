@@ -17,22 +17,23 @@ export interface Pool {
   value: string;
 }
 
+// DATABASE TYPES //
+
+export interface Student {
+  id: string | null;
+  avatar_url: string | null;
+  full_name: string | null;
+  lessons_left: number | null;
+  medical_certificate_path: string | null;
+  parent_id: string | null;
+  pool: string | null;
+  student_phone: string | null;
+  swimmer_level: string | null;
+}
+
 // PAGE     PROPS //
 
 export interface DashboardTabsProps {
   pools: Pool[];
-}
-
-// DATABASE TYPES //
-
-export interface Student {
-  id: string;
-  avatar_url: string;
-  full_name: string;
-  lessons_left: number;
-  medical_certificate_path: string;
-  parent_id: string;
-  pool: string;
-  student_phone: string;
-  swimmer_level: string;
+  students: any;
 }

@@ -2,11 +2,17 @@
 
 import { createClient } from '@/utils/supabase/server';
 
-export async function getStudents() {
+interface GetStudentsParams {
+  pool?: string;
+}
+
+export async function getStudents(params: GetStudentsParams) {
   try {
     const supabase = createClient();
 
-    const data = await supabase.from('students').select('*');
+    const { pool } = params;
+
+    const data = await supabase.from('students').select('*').eq('pool', pool);
 
     return data;
   } catch (error) {
