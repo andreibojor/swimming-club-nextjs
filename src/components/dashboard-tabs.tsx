@@ -16,21 +16,21 @@ import {
 } from './ui';
 
 const DashboardTabs = ({ pools }: DashboardTabsProps) => {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const query = searchParams.get('pool');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.get('pool');
 
-  const [pool, setPool] = useState('cluj-napoca');
+  const [pool, setPool] = useState(query || 'cluj-napoca');
 
-  // useEffect(() => {
-  //   const newUrl = formUrlQuery({
-  //     params: searchParams.toString(),
-  //     key: 'pool',
-  //     value: pool,
-  //   });
+  useEffect(() => {
+    const newUrl = formUrlQuery({
+      params: searchParams.toString(),
+      key: 'pool',
+      value: pool,
+    });
 
-  //   router.push(newUrl, { scroll: false });
-  // }, [pool, router, searchParams]);
+    router.push(newUrl, { scroll: false });
+  }, [pool, router, searchParams]);
 
   return (
     <Tabs defaultValue="cluj-napoca" className="space-y-4">

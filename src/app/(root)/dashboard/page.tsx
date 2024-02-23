@@ -10,7 +10,7 @@ const pools: Pool[] = [
   { id: 3, name: 'Sancraiu', value: 'sancraiu' },
 ];
 
-const DashboardPage = async () => {
+const DashboardPage = () => {
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <div className="flex flex-col justify-between gap-5">
