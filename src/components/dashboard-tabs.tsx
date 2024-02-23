@@ -18,9 +18,9 @@ import {
 const DashboardTabs = ({ pools }: DashboardTabsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const query = searchParams.get('pool');
+  // const query = searchParams.get('pool');
 
-  const [pool, setPool] = useState(query || 'cluj-napoca');
+  const [pool, setPool] = useState('cluj-napoca');
 
   // useEffect(() => {
   //   const newUrl = formUrlQuery({
