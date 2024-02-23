@@ -22,15 +22,15 @@ const DashboardTabs = ({ pools }: DashboardTabsProps) => {
 
   const [pool, setPool] = useState(query || 'cluj-napoca');
 
-  useEffect(() => {
-    const newUrl = formUrlQuery({
-      params: searchParams.toString(),
-      key: 'pool',
-      value: pool,
-    });
+  // useEffect(() => {
+  //   const newUrl = formUrlQuery({
+  //     params: searchParams.toString(),
+  //     key: 'pool',
+  //     value: pool,
+  //   });
 
-    router.push(newUrl, { scroll: false });
-  }, [pool, router, searchParams]);
+  //   router.push(newUrl, { scroll: false });
+  // }, [pool, router, searchParams]);
 
   return (
     <Tabs defaultValue="cluj-napoca" className="space-y-4">
