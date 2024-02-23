@@ -1,16 +1,7 @@
 import React from 'react';
 
 import DashboardTabs from '@/components/dashboard-tabs';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui';
+import { Card } from '@/components/ui';
 import { Pool, URLProps } from '@/types/types';
 
 const pools: Pool[] = [
@@ -28,7 +19,7 @@ const DashboardPage = async ({ params, searchParams }: URLProps) => {
       <div className="flex flex-col justify-between gap-5">
         <div className="flex flex-col justify-normal gap-4 md:flex-row md:justify-between">
           <Card className="w-full md:w-3/5">
-            <DashboardTabs pools={pools} />
+            {/* <DashboardTabs pools={pools} /> */}
           </Card>
         </div>
       </div>
