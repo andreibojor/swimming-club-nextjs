@@ -1,12 +1,11 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import ForgotPassword from '@/components/AuthForms/ForgotPassword';
-import OauthSignIn from '@/components/AuthForms/OauthSignIn';
-import PasswordSignIn from '@/components/AuthForms/PasswordSignIn';
-import Separator from '@/components/AuthForms/Separator';
-import SignUp from '@/components/AuthForms/Signup';
-import UpdatePassword from '@/components/AuthForms/UpdatePassword';
+import ForgotPassword from '@/components/auth-forms/forgot-password';
+import OauthSignIn from '@/components/auth-forms/oauth-signIn';
+import PasswordSignIn from '@/components/auth-forms/password-signIn';
+import SignUp from '@/components/auth-forms/signup';
+import UpdatePassword from '@/components/auth-forms/update-password';
 import * as Icons from '@/components/icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import {
@@ -17,13 +16,7 @@ import {
 } from '@/utils/auth-helpers/settings';
 import { createClient } from '@/utils/supabase/server';
 
-export default async function SignIn({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { disable_button: boolean };
-}) {
+export default async function SignIn({ params }: { params: { id: string } }) {
   const { allowOauth, allowEmail, allowPassword } = getAuthTypes();
   const viewTypes = getViewTypes();
   const redirectMethod = getRedirectMethod();

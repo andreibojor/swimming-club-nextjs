@@ -19,6 +19,7 @@ export default function PasswordSignIn({
   allowEmail,
   redirectMethod,
 }: PasswordSignInProps) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = redirectMethod === 'client' ? useRouter() : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
