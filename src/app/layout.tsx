@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import LocalFont from 'next/font/local';
 
 import '../styles/globals.css';
-
+import { Analytics } from "@vercel/analytics/react"
 import { ThemeProvider } from '@/components/theme-provider';
 import { TailwindIndicator } from '@/components/ui';
 import { cn } from '@/utils/cn';
@@ -40,6 +40,7 @@ export default function RootLayout({
           {children}
           <TailwindIndicator />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
