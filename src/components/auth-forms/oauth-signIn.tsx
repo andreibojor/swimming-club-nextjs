@@ -16,14 +16,19 @@ type OAuthProviders = {
 export default function OauthSignIn() {
   const oAuthProviders: OAuthProviders[] = [
     {
-      name: 'github',
-      displayName: 'GitHub',
-      icon: <Icons.GitHub className="size-5" />,
-    },
-    {
       name: 'google',
       displayName: 'Google',
       icon: <Icons.Google className="size-5" />,
+    },
+    {
+      name: 'facebook',
+      displayName: 'Facebook',
+      icon: <Icons.Facebook className="size-5" />,
+    },
+    {
+      name: 'apple',
+      displayName: 'Apple',
+      icon: <Icons.Apple className="size-5" />,
     },
     /* Add desired OAuth providers here */
   ];
