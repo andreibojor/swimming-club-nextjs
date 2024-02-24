@@ -34,8 +34,8 @@ const DashboardTabs = ({ pools, students }: DashboardTabsProps) => {
 
   return (
     <Tabs defaultValue="cluj-napoca" className="space-y-4">
-      <CardHeader>
-        <CardTitle>Overview</CardTitle>
+      <CardHeader className="flex-row items-center justify-between">
+        <CardTitle>Dashboard</CardTitle>
         <TabsList>
           {pools.map((pool) => (
             <TabsTrigger
