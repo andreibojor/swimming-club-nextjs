@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import LocalFont from 'next/font/local';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import '../styles/globals.css';
-import { Analytics } from "@vercel/analytics/react"
+
+import { Analytics } from '@vercel/analytics/react';
+
 import { ThemeProvider } from '@/components/theme-provider';
 import { TailwindIndicator } from '@/components/ui';
 import { cn } from '@/utils/cn';
@@ -41,6 +44,7 @@ export default function RootLayout({
           <TailwindIndicator />
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
