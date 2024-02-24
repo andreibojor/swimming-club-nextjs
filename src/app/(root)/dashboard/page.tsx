@@ -12,8 +12,8 @@ const pools: Pool[] = [
 ];
 
 const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
-  const { data } = await getStudents({
-    pool: searchParams.pool,
+  const students = await getStudents({
+    pool: searchParams.pool!,
   });
 
   return (
@@ -21,7 +21,7 @@ const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
       <div className="flex flex-col justify-between gap-5">
         <div className="flex flex-col justify-normal gap-4 md:flex-row md:justify-between">
           <Card className="w-full md:w-3/5">
-            <DashboardTabs pools={pools} students={data} />
+            <DashboardTabs pools={pools} students={students} />
           </Card>
         </div>
       </div>
