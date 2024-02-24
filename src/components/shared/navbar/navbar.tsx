@@ -14,22 +14,30 @@ const Navbar = async () => {
   } = await supabase.auth.getUser();
 
   return (
-    <nav className="container z-50 flex h-16 w-full items-center justify-between gap-5 border-b bg-background sm:px-12">
-      <Link href="/" className="flex items-center gap-1">
-        <Image src="/vercel.svg" width={80} height={60} alt="CSC" />
+    <div className="fixed inset-x-0 z-50 h-16 w-full bg-background">
+      <nav className="container mx-auto flex h-16 w-full items-center justify-between border-b bg-background sm:px-12">
+        <Link href="/" className="flex items-center gap-1">
+          <Image src="/vercel.svg" width={80} height={60} alt="CSC" />
 
-        <p className="max-sm:hidden">CSC</p>
-      </Link>
-      {user ? (
-        <Link href="/signin" className={buttonVariants({ variant: 'outline' })}>
-          Dashboard <Icons.ChevronRight className="ml-1 h-4 w-4" />
+          <p className="max-sm:hidden">CSC</p>
         </Link>
-      ) : (
-        <Link href="/signin" className={buttonVariants({ variant: 'outline' })}>
-          Sign In <Icons.ChevronRight className="ml-1 h-4 w-4" />
-        </Link>
-      )}
-    </nav>
+        {user ? (
+          <Link
+            href="/signin"
+            className={buttonVariants({ variant: 'outline' })}
+          >
+            Dashboard <Icons.ChevronRight className="ml-1 h-4 w-4" />
+          </Link>
+        ) : (
+          <Link
+            href="/signin"
+            className={buttonVariants({ variant: 'outline' })}
+          >
+            Sign In <Icons.ChevronRight className="ml-1 h-4 w-4" />
+          </Link>
+        )}
+      </nav>
+    </div>
   );
 };
 
