@@ -16,7 +16,7 @@ import {
 export default function Home() {
   return (
     <>
-      <div className="z-10 flex min-h-[70vh] w-full flex-col justify-center bg-[url('/images/swimming-pool-homepage.webp')] bg-scroll px-5 pb-0 md:pb-40 xl:px-0">
+      <div className="z-10 flex min-h-[70vh] w-full flex-col justify-center bg-[url('/images/swimming-pool-homepage.webp')] bg-scroll px-5 pb-0 md:pb-32 xl:px-0">
         <h1
           className="animate-fade-up bg-gradient-to-br text-center text-5xl font-bold tracking-[-0.02em] text-slate-100 opacity-0 drop-shadow-sm md:text-7xl/[5rem]"
           style={{ animationDelay: '0.20s', animationFillMode: 'forwards' }}

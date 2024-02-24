@@ -14,12 +14,12 @@ const Navbar = async () => {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="fixed inset-x-0 z-50 h-16 w-full bg-background">
-      <nav className="container mx-auto flex h-16 w-full items-center justify-between border-b bg-background sm:px-12">
+    <div className="fixed z-50 h-16 w-full bg-background">
+      <nav className="z-51 container flex h-16 w-full items-center justify-between border-b bg-background sm:px-12">
         <Link href="/" className="flex items-center gap-1">
           <Image src="/vercel.svg" width={80} height={60} alt="CSC" />
 
-          <p className="max-sm:hidden">CSC</p>
+          <p>CSC</p>
         </Link>
         {user ? (
           <Link
