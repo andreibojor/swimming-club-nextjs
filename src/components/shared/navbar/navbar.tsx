@@ -20,18 +20,15 @@ const Navbar = async () => {
 
         <p className="max-sm:hidden">CSC</p>
       </Link>
-      if(user)
-      {
+      {user ? (
         <Link href="/signin" className={buttonVariants({ variant: 'outline' })}>
           Dashboard <Icons.ChevronRight className="ml-1 h-4 w-4" />
         </Link>
-      }
-      else
-      {
+      ) : (
         <Link href="/signin" className={buttonVariants({ variant: 'outline' })}>
           Sign In <Icons.ChevronRight className="ml-1 h-4 w-4" />
         </Link>
-      }
+      )}
     </nav>
   );
 };
