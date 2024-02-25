@@ -36,6 +36,7 @@ export const GraduationCap = Lucide.GraduationCap;
 export const Help = Lucide.HelpCircle;
 export const Key = Lucide.Key;
 export const Logo = Lucide.Command;
+export const LogOut = Lucide.LogOut;
 export const MixerHorizontal = Lucide.SlidersHorizontal;
 export const Moon = Lucide.Moon;
 export const Organization = Lucide.Building;

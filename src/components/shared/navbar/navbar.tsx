@@ -3,7 +3,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import * as Icons from '@/components/icons';
-import { buttonVariants } from '@/components/ui';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  buttonVariants,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui';
 import { createClient } from '@/utils/supabase/server';
 
 const Navbar = async () => {
@@ -12,6 +25,13 @@ const Navbar = async () => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  const initials = user?.user_metadata.full_name
+    .split(' ')
+    .map((n: string) => n[0])
+    .join('');
+
+  console.log(user?.user_metadata);
 
   return (
     <div className="fixed z-50 h-16 w-full bg-background">
@@ -23,7 +43,7 @@ const Navbar = async () => {
         </Link>
         {user ? (
           <Link
-            href="/signin"
+            href="/dashboard"
             className={buttonVariants({ variant: 'outline' })}
           >
             Dashboard <Icons.ChevronRight className="ml-1 h-4 w-4" />
@@ -36,6 +56,55 @@ const Navbar = async () => {
             Sign In <Icons.ChevronRight className="ml-1 h-4 w-4" />
           </Link>
         )}
+
+        {/* Avatar User After Login */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative size-9 rounded-full">
+              <Avatar className="size-9">
+                <AvatarImage
+                  src={user?.user_metadata.avatar_url}
+                  alt={user?.user_metadata.full_name ?? ''}
+                />
+                <AvatarFallback>{initials}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">
+                  {user?.user_metadata.full_name}
+                </p>
+                <p className="text-xs leading-none text-muted-foreground">
+                  {user?.user_metadata.email}
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <Link href={`/${user.id}/settings`}>
+                  <Icons.User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${user.id}/billing`}>
+                  <Icons.CreditCard className="mr-2 h-4 w-4" />
+                  <span>Billing</span>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/signout">
+                <Icons.LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </nav>
     </div>
   );
