@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui';
 import { createClient } from '@/utils/supabase/server';
+import SignOut from './sign-out';
 
 const Navbar = async () => {
   const supabase = createClient();
@@ -96,10 +97,7 @@ const Navbar = async () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/signout">
-                <Icons.LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </Link>
+              <SignOut />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
