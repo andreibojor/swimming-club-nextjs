@@ -27,3 +27,8 @@ export interface DashboardTabsProps {
   pools: Pool[];
   students: Tables<'students'>[];
 }
+
+export interface ProfileTabsProps {
+  studentDetails: Tables<'students'> | null;
+  userDetails: Tables<'users'> | null;
+}

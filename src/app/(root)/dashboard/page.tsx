@@ -3,7 +3,7 @@ import React from 'react';
 import DashboardTabs from '@/components/dashboard-tabs';
 import { Card } from '@/components/ui';
 import { Pool, SearchParamsProps } from '@/types/types';
-import { getStudents } from '@/utils/actions/students';
+import { getStudentsByPool } from '@/utils/actions/student';
 
 const pools: Pool[] = [
   { id: 1, name: 'Cluj-Napoca', value: 'cluj-napoca' },
@@ -12,13 +12,13 @@ const pools: Pool[] = [
 ];
 
 const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
-  const students = await getStudents({
+  const students = await getStudentsByPool({
     pool: searchParams.pool!,
   });
 
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
-      <Card>
+      <Card className="shadow-md md:shadow-xl">
         <DashboardTabs pools={pools} students={students} />
       </Card>
     </div>

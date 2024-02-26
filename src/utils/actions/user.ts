@@ -2,22 +2,23 @@
 
 import { createClient } from '@/utils/supabase/server';
 
-interface GetStudentsParams {
-  pool: string;
+interface GetUserDetailsParams {
+  userId: string;
 }
 
-export async function getStudents(params: GetStudentsParams) {
+export async function getUserDetails(params: GetUserDetailsParams) {
   try {
     const supabase = createClient();
 
-    const { pool } = params;
+    const { userId } = params;
 
     const { data } = await supabase
-      .from('students')
+      .from('users')
       .select('*')
-      .eq('pool', pool);
+      .eq('id', userId)
+      .single();
 
-    return data || [];
+    return data || null;
   } catch (error) {
     console.log(error);
     throw error;

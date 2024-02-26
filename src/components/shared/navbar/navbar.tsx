@@ -31,8 +31,6 @@ const Navbar = async () => {
     .map((n: string) => n[0])
     .join('');
 
-  console.log(user?.user_metadata);
-
   return (
     <div className="fixed z-50 h-16 w-full bg-background">
       <nav className="z-51 container flex h-16 w-full items-center justify-between border-b bg-background sm:px-12">
@@ -84,13 +82,13 @@ const Navbar = async () => {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link href={`/${user.id}/settings`}>
+                <Link href={`/profile/${user?.id}`}>
                   <Icons.User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/${user.id}/billing`}>
+                <Link href={`/${user?.id}/billing`}>
                   <Icons.CreditCard className="mr-2 h-4 w-4" />
                   <span>Billing</span>
                 </Link>
