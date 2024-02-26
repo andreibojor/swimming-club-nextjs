@@ -60,8 +60,8 @@ const Navbar = async () => {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative size-9 rounded-full">
-              <Avatar className="size-9">
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+              <Avatar className="h-8 w-8">
                 <AvatarImage
                   src={user?.user_metadata.avatar_url}
                   alt={user?.user_metadata.full_name ?? ''}
@@ -90,10 +90,18 @@ const Navbar = async () => {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/${user?.id}/billing`}>
+                <Link href={`#`}>
                   <Icons.CreditCard className="mr-2 h-4 w-4" />
                   <span>Billing</span>
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                <Icons.Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                <Icons.PlusCircle className="mr-2 h-4 w-4" />
+                <span>New Team</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
