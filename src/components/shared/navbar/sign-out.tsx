@@ -1,23 +1,32 @@
-'use client';
-
-import { usePathname, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import * as Icons from '@/components/icons';
 import { Button } from '@/components/ui';
-import { handleRequest } from '@/utils/auth-helpers/client';
-import { SignOut } from '@/utils/auth-helpers/server';
-import { getRedirectMethod } from '@/utils/auth-helpers/settings';
+import { createClient } from '@/utils/supabase/server';
 
-export default function SignOutButton() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const router = getRedirectMethod() === 'client' ? useRouter() : null;
+export default async function SignOut() {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const signOut = async () => {
+    'use server';
+
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    return redirect('/');
+  };
 
   return (
-    <form onSubmit={(e) => handleRequest(e, SignOut, router)}>
-      <input type="hidden" name="pathName" value={usePathname()} />
-      <Button type="submit">
+    <form action={signOut}>
+      <Button
+        variant={'ghost'}
+        className="w-full flex-1 justify-start px-2 py-1.5 text-sm font-[400]"
+      >
         <Icons.LogOut className="mr-2 h-4 w-4" />
-        <span>Sign out</span>
+        <span>Log out</span>
       </Button>
     </form>
   );

@@ -57,6 +57,7 @@ const Navbar = async () => {
         )}
 
         {/* Avatar User After Login */}
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative size-9 rounded-full">
