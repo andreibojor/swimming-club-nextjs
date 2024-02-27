@@ -1,7 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 
-import ProfileTabs from '@/components/profile-tabs';
+import ProfileTabs from '@/components/profile/profile-tabs-card';
 import { Card } from '@/components/ui';
 import { URLProps } from '@/types/types';
 import { getStudentDetails } from '@/utils/actions/student';

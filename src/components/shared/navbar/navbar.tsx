@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui';
 import { createClient } from '@/utils/supabase/server';
-import SignOut from './sign-out';
+import SignOut from '../../auth-forms/sign-out';
 
 const Navbar = async () => {
   const supabase = createClient();
