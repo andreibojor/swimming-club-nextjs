@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { DashboardTabsProps } from '@/types/types';
 import { formUrlQuery } from '@/utils/urlQuery';
+import DashboardFullCalendar from './full-calendar';
 import {
   CardContent,
   CardHeader,
@@ -33,37 +34,40 @@ const DashboardTabs = ({ pools, students }: DashboardTabsProps) => {
   }, [pool, router, searchParams]);
 
   return (
-    <Tabs defaultValue="cluj-napoca" className="space-y-4">
-      <CardHeader className="flex-row items-center justify-between">
-        <CardTitle>Dashboard</CardTitle>
-        <TabsList>
+    <>
+      <Tabs defaultValue="cluj-napoca" className="space-y-4">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle>Dashboard</CardTitle>
+          <TabsList>
+            {pools.map((pool) => (
+              <TabsTrigger
+                key={pool.id}
+                value={pool.value}
+                // onClick={() => setPool(pool.value)}
+              >
+                {pool.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </CardHeader>
+        <CardContent>
+          {students &&
+            students.map((student) => (
+              <p key={student.id}>{student.full_name}</p>
+            ))}
           {pools.map((pool) => (
-            <TabsTrigger
-              key={pool.id}
-              value={pool.value}
-              onClick={() => setPool(pool.value)}
-            >
-              {pool.name}
-            </TabsTrigger>
+            <TabsContent key={pool.id} value={pool.value} className="space-y-4">
+              <div className="flex flex-col justify-between md:flex-row">
+                {/* <CustomCalendar /> */}
+                <DashboardFullCalendar />
+              </div>
+              <h1>{pool.name}</h1>
+              {/* <AttendancePanel students={sortedStudents} /> */}
+            </TabsContent>
           ))}
-        </TabsList>
-      </CardHeader>
-      <CardContent>
-        {students &&
-          students.map((student) => (
-            <p key={student.id}>{student.full_name}</p>
-          ))}
-        {pools.map((pool) => (
-          <TabsContent key={pool.id} value={pool.value} className="space-y-4">
-            <div className="flex flex-col justify-between md:flex-row">
-              {/* <CustomCalendar /> */}
-            </div>
-            <h1>{pool.name}</h1>
-            {/* <AttendancePanel students={sortedStudents} /> */}
-          </TabsContent>
-        ))}
-      </CardContent>
-    </Tabs>
+        </CardContent>
+      </Tabs>
+    </>
   );
 };
 
