@@ -45,6 +45,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
         <TabsList>
           <TabsTrigger value="child1">Child 1</TabsTrigger>
           <TabsTrigger value="child2">Child 2</TabsTrigger>
+          <TabsTrigger value="child3">+</TabsTrigger>
         </TabsList>
       </CardHeader>
       <CardContent>
@@ -72,7 +73,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                       Phone:
                     </p>
                     <p className="flex items-end text-sm font-medium leading-none">
-                      Olivia Martin
+                      Oli Marti
                     </p>
                   </div>
 
@@ -81,7 +82,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                       <Icons.Waves className="mr-1 size-4 text-primary" /> Pool:
                     </p>
                     <p className="flex items-end text-sm font-medium leading-none">
-                      Olivia Martin
+                      Oli Marti
                     </p>
                   </div>
                   <div className="flex items-center justify-between space-x-4">
@@ -89,7 +90,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                       <Icons.User className="mr-1 size-4 text-primary" /> Role:
                     </p>
                     <p className="flex items-end text-sm font-medium leading-none">
-                      Olivia Martin
+                      Oli Marti
                     </p>
                   </div>
                   <div className="flex items-center justify-between space-x-4">
@@ -98,7 +99,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                       <span>Status:</span>
                     </p>
                     <p className="flex items-end text-sm font-medium leading-none">
-                      Olivia Martin
+                      Oli Marti
                     </p>
                   </div>
                   <div className="flex items-center justify-between space-x-4">
@@ -107,18 +108,24 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                       Lessons left:
                     </p>
                     <p className="flex items-end text-sm font-medium leading-none">
-                      Olivia Martin
+                      Oli Marti
                     </p>
                   </div>
                 </div>
               </div>
             </CardContent>
+            <CardFooter>
+              <Button>Complete registration</Button>
+            </CardFooter>
           </Card>
 
           <Card className="w-2/3">
-            <TabsContent value="child2">child1</TabsContent>
+            <TabsContent value="child2">child2</TabsContent>
             <TabsContent value="child1" className="flex justify-between">
-              <StudentCalendar />
+              <div className="flex flex-col">
+                <StudentCalendar />
+                <Button>Schedule lesson</Button>
+              </div>
               <Card className="border-none">
                 <CardHeader className="pb-4 pt-3">
                   <CardTitle className="text-center">child 1</CardTitle>
@@ -133,7 +140,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                           Nume:
                         </p>
                         <p className="flex items-end text-sm font-medium leading-none">
-                          Olivia Martin
+                          Oli Marti
                         </p>
                       </div>
                       <div className="flex items-center justify-between space-x-4">
@@ -142,7 +149,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                           Phone:
                         </p>
                         <p className="flex items-end text-sm font-medium leading-none">
-                          Olivia Martin
+                          Oli Marti
                         </p>
                       </div>
 
@@ -152,7 +159,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                           Pool:
                         </p>
                         <p className="flex items-end text-sm font-medium leading-none">
-                          Olivia Martin
+                          Oli Marti
                         </p>
                       </div>
                       <div className="flex items-center justify-between space-x-4">
@@ -161,7 +168,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                           Swimmer Level:
                         </p>
                         <p className="flex items-end text-sm font-medium leading-none">
-                          Olivia Martin
+                          Oli Marti
                         </p>
                       </div>
                       <div className="flex items-center justify-between space-x-4">
@@ -170,7 +177,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                           <span>Status:</span>
                         </p>
                         <p className="flex items-end text-sm font-medium leading-none">
-                          Olivia Martin
+                          Oli Marti
                         </p>
                       </div>
                       <div className="flex items-center justify-between space-x-4">
@@ -179,7 +186,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                           Lessons left:
                         </p>
                         <p className="flex items-end text-sm font-medium leading-none">
-                          Olivia Martin
+                          Oli Marti
                         </p>
                       </div>
                     </div>
@@ -193,7 +200,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
           <div className="none md:w-1/3"></div>
           <Card className="w-2/3">
             <CardHeader>
-              <CardTitle>Acess</CardTitle>
+              <CardTitle>Access</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
               <Card>
