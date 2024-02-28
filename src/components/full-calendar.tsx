@@ -5,7 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction'; // needed for dayClic
 import FullCalendar from '@fullcalendar/react';
 
 const DashboardFullCalendar = () => {
-  const handleDateClick = (arg) => {
+  const handleDateClick = (arg: any) => {
     alert(arg.dateStr);
   };
 
