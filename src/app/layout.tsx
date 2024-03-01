@@ -5,10 +5,11 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import '../styles/globals.css';
 
+import { Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 
 import { ThemeProvider } from '@/components/theme-provider';
-import { TailwindIndicator } from '@/components/ui';
+import { TailwindIndicator, Toaster } from '@/components/ui';
 import { cn } from '@/utils/cn';
 
 const fontSans = Inter({
@@ -45,6 +46,9 @@ export default function RootLayout({
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
+        <Suspense>
+          <Toaster />
+        </Suspense>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 
+import RegistrationForm from '@/components/forms/registration-form';
 import ProfileTabs from '@/components/profile/profile-tabs-card';
 import { Card } from '@/components/ui';
 import { URLProps } from '@/types/types';
@@ -28,6 +29,9 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-md md:shadow-xl">
+        <div className="p-6">
+          <RegistrationForm />
+        </div>
         <ProfileTabs
           studentDetails={studentDetails}
           userDetails={userDetails}

@@ -1,11 +1,11 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import ForgotPassword from '@/components/auth-forms/forgot-password';
-import OauthSignIn from '@/components/auth-forms/oauth-signIn';
-import PasswordSignIn from '@/components/auth-forms/password-signIn';
-import SignUp from '@/components/auth-forms/signup';
-import UpdatePassword from '@/components/auth-forms/update-password';
+import ForgotPassword from '@/components/forms/auth-forms/forgot-password';
+import OauthSignIn from '@/components/forms/auth-forms/oauth-signIn';
+import PasswordSignIn from '@/components/forms/auth-forms/password-signIn';
+import SignUp from '@/components/forms/auth-forms/signup';
+import UpdatePassword from '@/components/forms/auth-forms/update-password';
 import * as Icons from '@/components/icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import {
@@ -16,7 +16,13 @@ import {
 } from '@/utils/auth-helpers/settings';
 import { createClient } from '@/utils/supabase/server';
 
-export default async function SignIn({ params }: { params: { id: string } }) {
+export default async function SignIn({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { disable_button: boolean };
+}) {
   const { allowOauth, allowEmail, allowPassword } = getAuthTypes();
   const viewTypes = getViewTypes();
   const redirectMethod = getRedirectMethod();
@@ -36,13 +42,14 @@ export default async function SignIn({ params }: { params: { id: string } }) {
 
   // Check if the user is already logged in and redirect to the account page if so
   const supabase = createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
 
-  if (session && viewProp !== 'update_password') {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user && viewProp !== 'update_password') {
     return redirect('/');
-  } else if (!session && viewProp === 'update_password') {
+  } else if (!user && viewProp === 'update_password') {
     return redirect('/signin');
   }
 
