@@ -57,7 +57,7 @@ const DashboardTabs = ({ pools, students }: DashboardTabsProps) => {
             ))}
           {pools.map((pool) => (
             <TabsContent key={pool.id} value={pool.value} className="space-y-4">
-              <div className="flex flex-col justify-between md:flex-row">
+              <div className="flex w-full flex-col justify-between md:flex-row">
                 {/* <CustomCalendar /> */}
                 <DashboardFullCalendar />
               </div>

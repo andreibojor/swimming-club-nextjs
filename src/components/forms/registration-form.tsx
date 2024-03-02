@@ -27,7 +27,7 @@ import { createClient } from '@/utils/supabase/client';
 
 interface Props {
   type?: 'create' | 'edit';
-  mongoUserId: string;
+  userId: string;
   questionDetails?: string;
 }
 
@@ -61,7 +61,7 @@ const RegistrationSchema = z.object({
     ),
 });
 
-const RegistrationForm = ({ type, mongoUserId, questionDetails }: Props) => {
+const RegistrationForm = ({ userId, questionDetails }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -79,17 +79,28 @@ const RegistrationForm = ({ type, mongoUserId, questionDetails }: Props) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof RegistrationSchema>) {
     setIsSubmitting(true);
+    const selectedRole = form.watch('role');
 
     try {
       const supabase = createClient();
       const { role, phoneNumber, swimmerLevel, pool, medicalCertificate } =
         values;
 
-      await supabase.from('users').update({
-        phone: phoneNumber,
-        role: role,
-        completed_registration: true,
-      });
+      await supabase
+        .from('users')
+        .update({
+          phone: phoneNumber,
+          role: role,
+          completed_registration: true,
+        })
+        .eq('id', userId);
+
+      await supabase.storage
+        .from('medical-certificates')
+        .upload(`mc-${userId}`, medicalCertificate, {
+          cacheControl: '3600',
+          upsert: false,
+        });
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -190,32 +201,33 @@ const RegistrationForm = ({ type, mongoUserId, questionDetails }: Props) => {
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="medicalCertificate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Medical Certificate</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept=".pdf"
-                  placeholder="MedicalCertificate.pdf"
-                  // Use event.target.files to access the uploaded file
-                  onChange={(e) => {
-                    // Update the form state with the selected file
-                    field.onChange(e.target.files?.[0]);
-                  }}
-                />
-              </FormControl>
-              <FormDescription>
-                Please upload your medical certificate in .pdf format.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {form.watch('role') === 'student' && (
+          <FormField
+            control={form.control}
+            name="medicalCertificate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Medical Certificate</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept=".pdf"
+                    placeholder="MedicalCertificate.pdf"
+                    // Use event.target.files to access the uploaded file
+                    onChange={(e) => {
+                      // Update the form state with the selected file
+                      field.onChange(e.target.files?.[0]);
+                    }}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Please upload your medical certificate in .pdf format.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting && (
             <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />

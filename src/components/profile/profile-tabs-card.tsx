@@ -59,7 +59,9 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
                     alt={userDetails?.full_name || ''}
                   />
                   {/* // TODO: AvatarFallback sa fie logo-ul de la CSC cu background opus albastru */}
-                  <AvatarFallback>CSC</AvatarFallback>
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    CSC
+                  </AvatarFallback>
                 </Avatar>
               </CardTitle>
             </CardHeader>

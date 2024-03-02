@@ -8,7 +8,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 
 const DashboardFullCalendar = () => {
   return (
-    <div className="relative flex w-full">
+    <div className="relative w-full">
       <FullCalendar
         plugins={[interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin]}
         initialView="dayGridMonth"
