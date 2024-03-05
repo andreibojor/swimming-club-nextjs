@@ -36,7 +36,7 @@ const DashboardTabs = ({ pools, students }: DashboardTabsProps) => {
   return (
     <>
       <Tabs defaultValue="cluj-napoca" className="space-y-4">
-        <CardHeader className="flex-row items-center justify-between">
+        <CardHeader className="flex-col items-center justify-between md:flex-row">
           <CardTitle>Dashboard</CardTitle>
           <TabsList>
             {pools.map((pool) => (

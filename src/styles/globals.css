@@ -69,6 +69,8 @@
 }
 
 .fc-header-toolbar {
+  @apply flex-col md:flex-row;
+
   .fc-toolbar-chunk:first-child > div {
     @apply flex items-center;
 
