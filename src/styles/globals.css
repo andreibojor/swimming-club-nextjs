@@ -75,11 +75,11 @@
     @apply flex items-center;
 
     .fc-prev-button {
-      @apply order-1 border-none bg-transparent text-foreground;
+      @apply order-1 border-none bg-transparent text-foreground focus:ring-0;
     }
 
     .fc-next-button {
-      @apply order-2 border-none bg-transparent text-foreground;
+      @apply order-2 border-none bg-transparent text-foreground focus:ring-0;
     }
 
     .fc-toolbar-title {
@@ -88,10 +88,18 @@
   }
 
   .fc-toolbar-chunk:last-child > .fc-button-group {
-    @apply inline-flex h-10 items-center justify-center rounded-md !bg-muted p-1 !text-muted-foreground;
+    @apply h-10 rounded-md bg-muted p-1;
 
     > button {
-      @apply inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm;
+      @apply rounded-sm border-none px-3 py-1.5 text-sm font-medium capitalize transition-all focus:ring-0;
+    }
+
+    > button[aria-pressed='false'] {
+      @apply bg-transparent text-foreground opacity-50;
+    }
+
+    > button[aria-pressed='true'] {
+      @apply bg-background text-foreground shadow-sm;
     }
   }
 }

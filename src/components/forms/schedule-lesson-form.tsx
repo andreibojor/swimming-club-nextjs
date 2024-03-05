@@ -68,7 +68,7 @@ const RegistrationSchema = z.object({
     ),
 });
 
-const RegistrationForm = ({ userId, questionDetails }: Props) => {
+const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -275,4 +275,4 @@ const RegistrationForm = ({ userId, questionDetails }: Props) => {
   );
 };
 
-export default RegistrationForm;
+export default ScheduleLessonForm;
