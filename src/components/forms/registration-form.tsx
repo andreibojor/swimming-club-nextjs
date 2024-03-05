@@ -34,7 +34,7 @@ import { createClient } from '@/utils/supabase/client';
 
 interface Props {
   type?: 'create' | 'edit';
-  userId: string | null;
+  userId: string;
   questionDetails?: string;
 }
 

@@ -34,7 +34,7 @@ import { createClient } from '@/utils/supabase/client';
 
 interface Props {
   type?: 'create' | 'edit';
-  userId: string | null;
+  userId: string;
   questionDetails?: string;
 }
 
@@ -123,7 +123,7 @@ const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

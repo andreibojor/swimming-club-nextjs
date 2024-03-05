@@ -1,9 +1,7 @@
 import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 
 import * as Icons from '@/components/icons';
 import { ProfileTabsProps } from '@/types/types';
-import { formUrlQuery } from '@/utils/urlQuery';
 import RegistrationForm from '../forms/registration-form';
 import ScheduleLessonForm from '../forms/schedule-lesson-form';
 import StudentCalendar from '../shared/calendar';
@@ -17,15 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
   Input,
-  Label,
   Tabs,
   TabsContent,
   TabsList,
@@ -127,7 +117,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
               </div>
             </CardContent>
             <CardFooter>
-              <RegistrationForm userId={userDetails.id} />
+              <RegistrationForm userId={userDetails?.id} />
             </CardFooter>
           </Card>
 
@@ -136,7 +126,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
             <TabsContent value="child1" className="flex justify-between">
               <div className="flex flex-col">
                 <StudentCalendar />
-                <ScheduleLessonForm userId={userDetails.id} />
+                <ScheduleLessonForm userId={userDetails?.id} />
               </div>
               <Card className="border-none">
                 <CardHeader className="pb-4 pt-3">
