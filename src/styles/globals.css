@@ -64,9 +64,9 @@
 }
 
 /* FULL CALENDAR STYLES */
-:root {
+/* :root {
   --fc-today-bg-color: rgba(230, 244, 255, 1);
-}
+} */
 
 .fc-header-toolbar {
   @apply flex-col md:flex-row;
@@ -104,9 +104,12 @@
   }
 }
 
+/* Table */
+
+/* DayGrid */
 .fc-daygrid-day-number,
 .fc-col-header-cell-cushion {
-  @apply !font-normal !text-black !text-opacity-75;
+  @apply !font-normal !text-foreground;
 }
 
 .fc-event {
@@ -114,7 +117,7 @@
 
   .fc-event-title,
   .fc-event-time {
-    @apply text-xs !font-normal text-black text-opacity-65;
+    @apply text-xs !font-normal text-foreground text-opacity-65;
   }
 }
 
@@ -126,14 +129,14 @@
   }
   .fc-event-title,
   .fc-event-time {
-    @apply text-xs !font-normal text-white;
+    @apply text-xs !font-normal text-foreground;
   }
 }
 
 .fc-timegrid-slot-label-cushion,
 .fc-list-day-text,
 .fc-list-day-side-text {
-  @apply text-black text-opacity-75;
+  @apply text-foreground text-opacity-75;
 }
 
 .fc-list-day {
