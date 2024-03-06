@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { DashboardTabsProps } from '@/types/types';
 import { formUrlQuery } from '@/utils/urlQuery';
-import OpenHoursForm from './forms/open-hours-form';
 import DashboardFullCalendar from './full-calendar';
 import {
   CardContent,
