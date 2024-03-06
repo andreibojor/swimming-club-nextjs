@@ -2,17 +2,14 @@ import React from 'react';
 
 import DashboardTabs from '@/components/dashboard-tabs';
 import { Card } from '@/components/ui';
-import { Pool, SearchParamsProps } from '@/types/types';
+import { SearchParamsProps } from '@/types/types';
 import { getOpenHoursByPool } from '@/utils/actions/open-hours';
+import { getPools } from '@/utils/actions/pool';
 import { getStudentsByPool } from '@/utils/actions/student';
 
-const pools: Pool[] = [
-  { id: 1, name: 'Cluj-Napoca', value: 'cluj-napoca' },
-  { id: 2, name: 'Dej', value: 'dej' },
-  { id: 3, name: 'Sancraiu', value: 'sancraiu' },
-];
-
 const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
+  const pools = await getPools();
+
   const students = await getStudentsByPool({
     pool: searchParams.pool!,
   });
