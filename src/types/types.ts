@@ -24,7 +24,7 @@ export interface Pool {
 // PAGE     PROPS //
 
 export interface DashboardTabsProps {
-  pools: Pool[];
+  pools: Tables<'pools'>[];
   students: Tables<'students'>[];
 }
 
