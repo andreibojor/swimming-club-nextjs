@@ -118,7 +118,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
               </div>
             </CardContent>
             <CardFooter>
-              <RegistrationForm userId={userDetails?.id} />
+              <RegistrationForm userId={userDetails!.id} />
             </CardFooter>
           </Card>
 
