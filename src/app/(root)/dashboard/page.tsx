@@ -3,6 +3,7 @@ import React from 'react';
 import DashboardTabs from '@/components/dashboard-tabs';
 import { Card } from '@/components/ui';
 import { Pool, SearchParamsProps } from '@/types/types';
+import { getOpenHoursByPool } from '@/utils/actions/open-hours';
 import { getStudentsByPool } from '@/utils/actions/student';
 
 const pools: Pool[] = [

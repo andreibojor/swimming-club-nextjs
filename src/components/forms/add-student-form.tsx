@@ -68,7 +68,7 @@ const RegistrationSchema = z.object({
     ),
 });
 
-const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
+const RegistrationForm = ({ userId, questionDetails }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -117,7 +117,7 @@ const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Schedule Lesson</Button>
+        <Button>Complete Registration</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -275,4 +275,4 @@ const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
   );
 };
 
-export default ScheduleLessonForm;
+export default RegistrationForm;

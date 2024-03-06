@@ -1,5 +1,6 @@
 'use client';
 
+import roLocale from '@fullcalendar/core/locales/ro';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
@@ -29,6 +30,7 @@ const DashboardFullCalendar = () => {
         }}
         slotMinTime={'09:00'}
         slotMaxTime={'21:30'}
+        locale={roLocale}
       />
     </div>
   );

@@ -68,8 +68,6 @@ const DashboardTabs = ({ pools, students }: DashboardTabsProps) => {
           ))}
         </CardContent>
       </Tabs>
-
-      <OpenHoursForm />
     </>
   );
 };

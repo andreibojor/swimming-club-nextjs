@@ -4,6 +4,8 @@ import LocalFont from 'next/font/local';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import '../styles/globals.css';
+import '@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css';
+import 'react-clock/dist/Clock.css';
 
 import { Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';

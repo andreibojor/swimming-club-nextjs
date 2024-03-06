@@ -5,6 +5,7 @@ import { ProfileTabsProps } from '@/types/types';
 import RegistrationForm from '../forms/registration-form';
 import ScheduleLessonForm from '../forms/schedule-lesson-form';
 import StudentCalendar from '../shared/calendar';
+import { DateTimePickerDemo } from '../time-picker/date-time-picker-demo';
 import {
   Avatar,
   AvatarFallback,
@@ -126,7 +127,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
             <TabsContent value="child1" className="flex justify-between">
               <div className="flex flex-col">
                 <StudentCalendar />
-                <ScheduleLessonForm userId={userDetails?.id} />
+                <DateTimePickerDemo />
               </div>
               <Card className="border-none">
                 <CardHeader className="pb-4 pt-3">
