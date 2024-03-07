@@ -7,7 +7,17 @@ import listPlugin from '@fullcalendar/list';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
-const DashboardFullCalendar = ({ events }) => {
+interface DashboardFullCalendarProps {
+  events: {
+    id: string;
+    date: string;
+    student_id: string;
+    type: string;
+    status: string;
+  };
+}
+
+const DashboardFullCalendar = ({ events }: DashboardFullCalendarProps) => {
   console.log(events);
   return (
     <div className="relative w-full">
