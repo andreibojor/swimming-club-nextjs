@@ -7,17 +7,15 @@ import listPlugin from '@fullcalendar/list';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
-const DashboardFullCalendar = () => {
+const DashboardFullCalendar = ({ events }) => {
+  console.log(events);
   return (
     <div className="relative w-full">
       <FullCalendar
         plugins={[interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin]}
         initialView="dayGridMonth"
         weekends={true}
-        events={[
-          { title: 'event 1', date: '2024-02-06' },
-          { title: 'event 2', date: '2024-02-07' },
-        ]}
+        events={events}
         headerToolbar={{
           start: 'title,prev,next',
           end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',

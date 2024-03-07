@@ -26,6 +26,7 @@ export interface Pool {
 export interface DashboardTabsProps {
   pools: Tables<'pools'>[];
   students: Tables<'students'>[];
+  appointments: Tables<'attendance_record'>[];
 }
 
 export interface ProfileTabsProps {

@@ -118,7 +118,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
               </div>
             </CardContent>
             <CardFooter>
-              <RegistrationForm userId={userDetails!.id} />
+              {userDetails?.id && <RegistrationForm userId={userDetails.id} />}
             </CardFooter>
           </Card>
 
@@ -127,7 +127,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
             <TabsContent value="child1" className="flex justify-between">
               <div className="flex flex-col">
                 <StudentCalendar />
-                <DateTimePickerDemo />
+                <DateTimePickerDemo studentId={userDetails!.id} />
               </div>
               <Card className="border-none">
                 <CardHeader className="pb-4 pt-3">

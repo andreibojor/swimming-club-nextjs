@@ -16,7 +16,11 @@ import {
   TabsTrigger,
 } from './ui';
 
-const DashboardTabs = ({ pools, students }: DashboardTabsProps) => {
+const DashboardTabs = ({
+  pools,
+  students,
+  appointments,
+}: DashboardTabsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams.get('pool');
@@ -59,7 +63,7 @@ const DashboardTabs = ({ pools, students }: DashboardTabsProps) => {
             <TabsContent key={pool.id} value={pool.value} className="space-y-4">
               <div className="flex w-full flex-col justify-between md:flex-row">
                 {/* <CustomCalendar /> */}
-                <DashboardFullCalendar />
+                <DashboardFullCalendar events={appointments} />
               </div>
               <h1>{pool.name}</h1>
               {/* <AttendancePanel students={sortedStudents} /> */}
