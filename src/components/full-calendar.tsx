@@ -9,11 +9,11 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 
 interface DashboardFullCalendarProps {
   events: {
-    id: string;
     date: string;
+    id: string;
+    status: 'scheduled' | 'present' | 'absent';
     student_id: string;
-    type: string;
-    status: string;
+    type: 'appointment' | 'attendance';
   };
 }
 

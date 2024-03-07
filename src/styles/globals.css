@@ -68,6 +68,7 @@
   --fc-today-bg-color: rgba(230, 244, 255, 1);
 } */
 
+/* Toolbar */
 .fc-header-toolbar {
   @apply flex-col md:flex-row;
 
@@ -146,3 +147,5 @@
 .fc-event-title-container {
   @apply px-2;
 }
+
+/* List */
