@@ -29,7 +29,12 @@ export interface DashboardTabsProps {
   appointments: Tables<'attendance_record'>[];
 }
 
-export interface ProfileTabsProps {
+export interface ParentProfileTabsProps {
+  studentDetails: Tables<'students'> | null;
+  userDetails: Tables<'users'> | null;
+}
+
+export interface StudentProfileTabsProps {
   studentDetails: Tables<'students'> | null;
   userDetails: Tables<'users'> | null;
 }

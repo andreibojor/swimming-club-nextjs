@@ -1,7 +1,7 @@
 import React from 'react';
 
 import * as Icons from '@/components/icons';
-import { ProfileTabsProps } from '@/types/types';
+import { StudentProfileTabsProps } from '@/types/types';
 import RegistrationForm from '../forms/registration-form';
 import ScheduleLessonForm from '../forms/schedule-lesson-form';
 import StudentCalendar from '../shared/calendar';
@@ -17,13 +17,12 @@ import {
   CardHeader,
   CardTitle,
   Input,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
 } from '../ui';
 
-const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
+const StudentProfileTabs = ({
+  studentDetails,
+  userDetails,
+}: StudentProfileTabsProps) => {
   // const router = useRouter();
   // const searchParams = useSearchParams();
   // const query = searchParams.get('student');
@@ -40,14 +39,9 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
 
   // console.log(userDetails);
   return (
-    <Tabs defaultValue="child1" className="space-y-4">
+    <>
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle>Bună, {`${userDetails?.full_name}`}!</CardTitle>
-        <TabsList>
-          <TabsTrigger value="child1">Child 1</TabsTrigger>
-          <TabsTrigger value="child2">Child 2</TabsTrigger>
-          <TabsTrigger value="child3">+</TabsTrigger>
-        </TabsList>
       </CardHeader>
       <CardContent>
         <div className="mb-4 flex gap-4">
@@ -125,80 +119,10 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
           </Card>
 
           <Card className="w-2/3">
-            <TabsContent value="child2">child2</TabsContent>
-            <TabsContent value="child1" className="flex justify-between">
-              <div className="flex flex-col">
-                <StudentCalendar />
-                <DateTimePickerDemo studentId={userDetails!.id} />
-              </div>
-              <Card className="border-none">
-                <CardHeader className="pb-4 pt-3">
-                  <CardTitle className="text-center">child 1</CardTitle>
-                </CardHeader>
-                {/* // TODO: Asta e student card!!!  */}
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid gap-6">
-                      <div className="flex items-center justify-between space-x-4">
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          <Icons.Phone className="mr-1 size-4 text-primary" />
-                          Nume:
-                        </p>
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          Oli Marti
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between space-x-4">
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          <Icons.Phone className="mr-1 size-4 text-primary" />
-                          Phone:
-                        </p>
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          Oli Marti
-                        </p>
-                      </div>
-
-                      <div className="flex items-center justify-between space-x-4">
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          <Icons.Waves className="mr-1 size-4 text-primary" />{' '}
-                          Pool:
-                        </p>
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          Oli Marti
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between space-x-4">
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          <Icons.User className="mr-1 size-4 text-primary" />{' '}
-                          Swimmer Level:
-                        </p>
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          Oli Marti
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between space-x-4">
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          <Icons.Waves className="mr-1 size-4 text-primary" />
-                          <span>Status:</span>
-                        </p>
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          Oli Marti
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between space-x-4">
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          <Icons.Waves className="mr-1 size-4 text-primary" />{' '}
-                          Lessons left:
-                        </p>
-                        <p className="flex items-end text-sm font-medium leading-none">
-                          Oli Marti
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+            <div className="flex flex-col">
+              <StudentCalendar />
+              <DateTimePickerDemo studentId={userDetails!.id} />
+            </div>
           </Card>
         </div>
         <div className="flex w-full gap-4">
@@ -207,7 +131,7 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
             <CardHeader>
               <CardTitle>Access</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4">
+            <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Card>
                 <CardHeader>
                   <CardTitle>Subscription</CardTitle>
@@ -256,8 +180,8 @@ const ProfileTabs = ({ studentDetails, userDetails }: ProfileTabsProps) => {
           <div className="space-y-4"></div>
         </div>
       </div>
-    </Tabs>
+    </>
   );
 };
 
-export default ProfileTabs;
+export default StudentProfileTabs;

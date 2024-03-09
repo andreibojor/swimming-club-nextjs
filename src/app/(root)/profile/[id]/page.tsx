@@ -2,7 +2,8 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 
 import RegistrationForm from '@/components/forms/registration-form';
-import ProfileTabs from '@/components/profile/profile-tabs-card';
+import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
+import StudentProfileTabs from '@/components/profile/student-profile-tabs';
 import {
   Button,
   Card,
@@ -31,21 +32,33 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const userDetails = await getUserDetails({
     userId: params.id,
   });
-  console.log(userDetails);
 
   const studentDetails = await getStudentDetails({
     studentId: params.id,
   });
 
+  console.log('userDetails:', userDetails);
+  console.log('studentDetails:', studentDetails);
+
+  console.log(userDetails);
   if (!user) redirect('/signin');
 
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-sm md:shadow-md">
-        <ProfileTabs
-          studentDetails={studentDetails}
-          userDetails={userDetails}
-        />
+        {userDetails?.role === 'parent' && (
+          <ParentProfileTabs
+            studentDetails={studentDetails}
+            userDetails={userDetails}
+          />
+        )}
+
+        {userDetails?.role === 'student' && (
+          <StudentProfileTabs
+            studentDetails={studentDetails}
+            userDetails={userDetails}
+          />
+        )}
       </Card>
     </div>
   );
