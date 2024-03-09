@@ -118,7 +118,7 @@
 
   .fc-event-title,
   .fc-event-time {
-    @apply text-xs !font-normal text-foreground text-opacity-65;
+    @apply text-xs !font-normal text-foreground;
   }
 }
 
@@ -137,7 +137,7 @@
 .fc-timegrid-slot-label-cushion,
 .fc-list-day-text,
 .fc-list-day-side-text {
-  @apply text-foreground text-opacity-75;
+  @apply text-foreground;
 }
 
 .fc-list-day {
@@ -149,3 +149,19 @@
 }
 
 /* List */
+
+.fc-theme-standard {
+  @apply border-none;
+
+  .fc-list {
+    @apply !rounded-lg !border;
+  }
+}
+
+.fc-list-day > th {
+  @apply !bg-muted;
+}
+
+.fc-cell-shaded {
+  @apply !bg-transparent;
+}

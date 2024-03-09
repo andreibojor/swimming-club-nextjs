@@ -61,11 +61,9 @@ const DashboardTabs = ({
             ))}
           {pools.map((pool) => (
             <TabsContent key={pool.id} value={pool.value} className="space-y-4">
-              <div className="flex w-full flex-col justify-between md:flex-row">
-                {/* <CustomCalendar /> */}
-                <DashboardFullCalendar events={appointments} />
-              </div>
-              <h1>{pool.name}</h1>
+              {/* <CustomCalendar /> */}
+              <DashboardFullCalendar events={appointments} />
+
               {/* <AttendancePanel students={sortedStudents} /> */}
             </TabsContent>
           ))}

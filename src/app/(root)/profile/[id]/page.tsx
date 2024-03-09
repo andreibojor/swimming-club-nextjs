@@ -31,6 +31,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const userDetails = await getUserDetails({
     userId: params.id,
   });
+  console.log(userDetails);
 
   const studentDetails = await getStudentDetails({
     studentId: params.id,

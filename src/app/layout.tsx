@@ -49,7 +49,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <Suspense>
-          <Toaster />
+          <Toaster closeButton />
         </Suspense>
       </body>
     </html>

@@ -117,7 +117,7 @@ const RegistrationForm = ({ userId, questionDetails }: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Complete Registration</Button>
+        <Button>Add Student</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

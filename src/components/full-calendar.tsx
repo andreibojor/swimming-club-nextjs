@@ -14,7 +14,7 @@ interface DashboardFullCalendarProps {
     status: 'scheduled' | 'present' | 'absent';
     student_id: string;
     type: 'appointment' | 'attendance';
-  };
+  }[];
 }
 
 const DashboardFullCalendar = ({ events }: DashboardFullCalendarProps) => {
