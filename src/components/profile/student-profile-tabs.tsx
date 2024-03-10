@@ -2,8 +2,9 @@ import React from 'react';
 
 import * as Icons from '@/components/icons';
 import { StudentProfileTabsProps } from '@/types/types';
-import RegistrationForm from '../forms/registration-form';
+import { formatCityName } from '@/utils/helpers';
 import ScheduleLessonForm from '../forms/schedule-lesson-form';
+import StudentRegistrationForm from '../forms/student-registration-form';
 import StudentCalendar from '../shared/calendar';
 import { DateTimePickerDemo } from '../time-picker/date-time-picker-demo';
 import {
@@ -53,7 +54,6 @@ const StudentProfileTabs = ({
                     src={userDetails?.avatar_url || ''}
                     alt={userDetails?.full_name || ''}
                   />
-                  {/* // TODO: AvatarFallback sa fie logo-ul de la CSC cu background opus albastru */}
                   <AvatarFallback className="bg-primary text-primary-foreground">
                     CSC
                   </AvatarFallback>
@@ -70,7 +70,7 @@ const StudentProfileTabs = ({
                       Phone:
                     </p>
                     <p className="flex items-end text-sm font-medium leading-none">
-                      Oli Marti
+                      {userDetails?.phone}
                     </p>
                   </div>
 
@@ -79,7 +79,8 @@ const StudentProfileTabs = ({
                       <Icons.Waves className="mr-1 size-4 text-primary" /> Pool:
                     </p>
                     <p className="flex items-end text-sm font-medium leading-none">
-                      Oli Marti
+                      {studentDetails?.pool &&
+                        formatCityName(studentDetails?.pool)}
                     </p>
                   </div>
                   <div className="flex items-center justify-between space-x-4">
@@ -87,33 +88,37 @@ const StudentProfileTabs = ({
                       <Icons.User className="mr-1 size-4 text-primary" /> Role:
                     </p>
                     <p className="flex items-end text-sm font-medium leading-none">
-                      Oli Marti
+                      {userDetails?.role}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between space-x-4">
-                    <p className="flex items-end text-sm font-medium leading-none">
-                      <Icons.Waves className="mr-1 size-4 text-primary" />
-                      <span>Status:</span>
-                    </p>
-                    <p className="flex items-end text-sm font-medium leading-none">
-                      Oli Marti
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between space-x-4">
-                    <p className="flex items-end text-sm font-medium leading-none">
-                      <Icons.Waves className="mr-1 size-4 text-primary" />{' '}
-                      Lessons left:
-                    </p>
-                    <p className="flex items-end text-sm font-medium leading-none">
-                      Oli Marti
-                    </p>
-                  </div>
+                  {studentDetails?.swimmer_level === 'beginner' && (
+                    <div className="flex items-center justify-between space-x-4">
+                      <p className="flex items-end text-sm font-medium leading-none">
+                        <Icons.Waves className="mr-1 size-4 text-primary" />
+                        <span>Lessons left:</span>
+                      </p>
+                      <p className="flex items-end text-sm font-medium leading-none">
+                        Oli Marti
+                      </p>
+                    </div>
+                  )}
+                  {userDetails?.completed_registration && (
+                    <div className="flex items-center justify-between space-x-4">
+                      <p className="flex items-end text-sm font-medium leading-none">
+                        <Icons.Waves className="mr-1 size-4 text-primary" />{' '}
+                        Abonament:
+                      </p>
+                      <p className="flex items-end text-sm font-medium leading-none">
+                        23 data 2024
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>
             <CardFooter>
               {userDetails?.id && (
-                <RegistrationForm userDetails={userDetails} />
+                <StudentRegistrationForm userDetails={userDetails} />
               )}
             </CardFooter>
           </Card>

@@ -131,3 +131,35 @@ export const getErrorRedirect = (
     disableButton,
     arbitraryParams,
   );
+
+export const formatCityName = (city: string) => {
+  // Split the city name into an array of words
+  const words = city.split('-');
+
+  // Capitalize the first letter of each word
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+  );
+
+  // Join the words back together with hyphens
+  const formattedCity = capitalizedWords.join('-');
+
+  return formattedCity;
+};
+
+export const convertBase64ToBlob = (base64: string): Blob => {
+  const byteCharacters = atob(base64.split(',')[1]);
+  const uint8Array = new Uint8Array(byteCharacters.length);
+
+  for (let i = 0; i < byteCharacters.length; i++) {
+    uint8Array[i] = byteCharacters.charCodeAt(i);
+  }
+
+  return new Blob([uint8Array], { type: 'application/pdf' });
+};
+
+export const convertBlobToBase64 = (blob: Blob): string => {
+  const reader = new FileReader();
+  reader.readAsDataURL(blob);
+  return reader.result as string;
+};

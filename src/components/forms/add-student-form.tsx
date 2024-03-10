@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import * as z from 'zod';
 
 import * as Icons from '@/components/icons';
@@ -30,12 +31,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui';
+import { Json } from '@/types/types_db';
 import { createClient } from '@/utils/supabase/client';
+import { DialogClose } from '../ui/dialog';
 
 interface Props {
   type?: 'create' | 'edit';
-  userId: string;
-  questionDetails?: string;
+  userDetails: {
+    id: string;
+    full_name: string | null;
+    avatar_url: string | null;
+    billing_address: Json;
+    payment_method: Json;
+    role: string | null;
+    phone: string | null;
+    completed_registration: boolean;
+    email: string | null;
+  };
 }
 
 const phoneRegex = new RegExp(
@@ -53,6 +65,7 @@ const ALLOWED_FILE_TYPES = [
 
 const RegistrationSchema = z.object({
   role: z.string(),
+  fullStudentName: z.string(),
   phoneNumber: z.string().regex(phoneRegex, 'Invalid Number!'),
   swimmerLevel: z.string(),
   pool: z.string(),
@@ -68,8 +81,9 @@ const RegistrationSchema = z.object({
     ),
 });
 
-const RegistrationForm = ({ userId, questionDetails }: Props) => {
+const AddStudentForm = ({ userDetails }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -77,6 +91,8 @@ const RegistrationForm = ({ userId, questionDetails }: Props) => {
   const form = useForm<z.infer<typeof RegistrationSchema>>({
     resolver: zodResolver(RegistrationSchema),
     defaultValues: {
+      fullStudentName: '',
+      phoneNumber: '',
       role: '',
       swimmerLevel: '',
       pool: '',
@@ -90,8 +106,14 @@ const RegistrationForm = ({ userId, questionDetails }: Props) => {
 
     try {
       const supabase = createClient();
-      const { role, phoneNumber, swimmerLevel, pool, medicalCertificate } =
-        values;
+      const {
+        role,
+        phoneNumber,
+        swimmerLevel,
+        pool,
+        medicalCertificate,
+        fullStudentName,
+      } = values;
 
       await supabase
         .from('users')
@@ -100,24 +122,40 @@ const RegistrationForm = ({ userId, questionDetails }: Props) => {
           role: role,
           completed_registration: true,
         })
-        .eq('id', userId);
+        .eq('id', userDetails.id);
 
-      await supabase.storage
-        .from('medical-certificates')
-        .upload(`mc-${userId}`, medicalCertificate, {
-          cacheControl: '3600',
-          upsert: false,
-        });
+      if (selectedRole === 'student') {
+        await supabase
+          .from('students')
+          .update({
+            parent_id: userDetails.id,
+            full_name: fullStudentName,
+            swimmer_level: swimmerLevel,
+            pool: pool,
+            student_phone: phoneNumber,
+            medical_certificate_path: `mc-${userDetails.id}`,
+          })
+          .eq('id', userDetails.id);
+
+        // await supabase.storage
+        //   .from('medical-certificates')
+        //   .upload(`mc-${userDetails.id}`, medicalCertificate, {
+        //     cacheControl: '3600',
+        //     upsert: false,
+        //   });
+      }
     } catch (error) {
     } finally {
       setIsSubmitting(false);
+      setIsOpen(false);
+      toast.success('Event has been created');
     }
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Add Student</Button>
+        <Button>Complete Registration</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -159,6 +197,22 @@ const RegistrationForm = ({ userId, questionDetails }: Props) => {
             <FormDescription>
               Select the desired payment method.
             </FormDescription>
+            {form.watch('role') === 'student' && (
+              <FormField
+                control={form.control}
+                name="fullStudentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nume</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Nume si prenume student" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={form.control}
@@ -260,19 +314,21 @@ const RegistrationForm = ({ userId, questionDetails }: Props) => {
                 )}
               />
             )}
+            <DialogFooter>
+              {/* <DialogClose> */}
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting && (
+                  <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Register
+              </Button>
+              {/* </DialogClose> */}
+            </DialogFooter>
           </form>
         </Form>
-        <DialogFooter>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting && (
-              <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Register
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default RegistrationForm;
+export default AddStudentForm;

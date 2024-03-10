@@ -1,6 +1,9 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import { createClient } from '@/utils/supabase/server';
+import { convertBase64ToBlob } from '../helpers';
 
 interface GetStudentsParams {
   pool: string;
@@ -12,6 +15,16 @@ interface GetStudentDetailsParams {
 
 interface GetStudentsByParentParams {
   parentId: string;
+}
+
+interface RegisterStudentParams {
+  userId: string;
+  role: string;
+  phoneNumber: string;
+  swimmerLevel: string;
+  pool: string;
+  medicalCertificate: string;
+  path: string;
 }
 
 export async function getStudentDetails(params: GetStudentDetailsParams) {
@@ -65,6 +78,55 @@ export async function getStudentsByParent(params: GetStudentsByParentParams) {
     return data || [];
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+}
+
+export async function registerStudent(params: RegisterStudentParams) {
+  try {
+    const supabase = createClient();
+    const {
+      userId,
+      role,
+      phoneNumber,
+      swimmerLevel,
+      pool,
+      medicalCertificate,
+      path,
+    } = params;
+
+    // Convert the medicalCertificate base64-encoded string back to a Blob
+    const medicalCertificateBlob = convertBase64ToBlob(medicalCertificate);
+
+    await supabase
+      .from('users')
+      .update({
+        phone: phoneNumber,
+        role: role,
+        completed_registration: true,
+      })
+      .eq('id', userId);
+
+    await supabase
+      .from('students')
+      .update({
+        swimmer_level: swimmerLevel,
+        pool: pool,
+        student_phone: phoneNumber,
+        medical_certificate_path: `mc-${userId}`,
+      })
+      .eq('id', userId);
+
+    await supabase.storage
+      .from('medical-certificates')
+      .upload(`mc-${userId}`, medicalCertificateBlob, {
+        cacheControl: '3600',
+        upsert: false,
+      });
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log('error', error);
     throw error;
   }
 }

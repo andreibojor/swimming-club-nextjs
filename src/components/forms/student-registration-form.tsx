@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -32,8 +32,8 @@ import {
   SelectValue,
 } from '@/components/ui';
 import { Json } from '@/types/types_db';
-import { createClient } from '@/utils/supabase/client';
-import { DialogClose } from '../ui/dialog';
+import { registerStudent } from '@/utils/actions/student';
+import { convertBlobToBase64 } from '@/utils/helpers';
 
 interface Props {
   type?: 'create' | 'edit';
@@ -63,9 +63,7 @@ const ALLOWED_FILE_TYPES = [
   'application/pdf',
 ];
 
-const RegistrationSchema = z.object({
-  role: z.string(),
-  fullStudentName: z.string(),
+const StudentRegistrationSchema = z.object({
   phoneNumber: z.string().regex(phoneRegex, 'Invalid Number!'),
   swimmerLevel: z.string(),
   pool: z.string(),
@@ -81,74 +79,48 @@ const RegistrationSchema = z.object({
     ),
 });
 
-const RegistrationForm = ({ userDetails }: Props) => {
+const StudentRegistrationForm = ({ userDetails }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+
   const pathname = usePathname();
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof RegistrationSchema>>({
-    resolver: zodResolver(RegistrationSchema),
+  const form = useForm<z.infer<typeof StudentRegistrationSchema>>({
+    resolver: zodResolver(StudentRegistrationSchema),
     defaultValues: {
-      fullStudentName: '',
       phoneNumber: '',
-      role: '',
       swimmerLevel: '',
       pool: '',
     },
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof RegistrationSchema>) {
+  async function onSubmit(values: z.infer<typeof StudentRegistrationSchema>) {
     setIsSubmitting(true);
-    const selectedRole = form.watch('role');
+    // const selectedRole = form.watch('role');
+    const { phoneNumber, swimmerLevel, pool, medicalCertificate } = values;
+    // Convert the medicalCertificate Blob to a base64-encoded string
+    const medicalCertificateBase64 = convertBlobToBase64(medicalCertificate);
 
     try {
-      const supabase = createClient();
-      const {
-        role,
-        phoneNumber,
-        swimmerLevel,
-        pool,
-        medicalCertificate,
-        fullStudentName,
-      } = values;
+      await registerStudent({
+        userId: userDetails.id,
+        role: 'student',
+        phoneNumber: phoneNumber,
+        swimmerLevel: swimmerLevel,
+        pool: pool,
+        medicalCertificate: medicalCertificateBase64,
+        path: pathname,
+      });
 
-      await supabase
-        .from('users')
-        .update({
-          phone: phoneNumber,
-          role: role,
-          completed_registration: true,
-        })
-        .eq('id', userDetails.id);
-
-      if (selectedRole === 'student') {
-        await supabase
-          .from('students')
-          .update({
-            parent_id: userDetails.id,
-            full_name: fullStudentName,
-            swimmer_level: swimmerLevel,
-            pool: pool,
-            student_phone: phoneNumber,
-            medical_certificate_path: `mc-${userDetails.id}`,
-          })
-          .eq('id', userDetails.id);
-
-        // await supabase.storage
-        //   .from('medical-certificates')
-        //   .upload(`mc-${userDetails.id}`, medicalCertificate, {
-        //     cacheControl: '3600',
-        //     upsert: false,
-        //   });
-      }
+      toast.success('Event has been created');
     } catch (error) {
+      console.log('error', error);
+      throw Error;
     } finally {
       setIsSubmitting(false);
       setIsOpen(false);
-      toast.success('Event has been created');
     }
   }
 
@@ -169,51 +141,6 @@ const RegistrationForm = ({ userDetails }: Props) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className=" grid space-y-8"
           >
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Select your role</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your user role" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="parent">Parent</SelectItem>
-                      <SelectItem value="student">Student</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription></FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormDescription>
-              Select the desired payment method.
-            </FormDescription>
-            {form.watch('role') === 'student' && (
-              <FormField
-                control={form.control}
-                name="fullStudentName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nume</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nume si prenume student" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-
             <FormField
               control={form.control}
               name="phoneNumber"
@@ -287,42 +214,40 @@ const RegistrationForm = ({ userDetails }: Props) => {
                 </FormItem>
               )}
             />
-            {form.watch('role') === 'student' && (
-              <FormField
-                control={form.control}
-                name="medicalCertificate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Medical Certificate</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        accept=".pdf"
-                        placeholder="MedicalCertificate.pdf"
-                        // Use event.target.files to access the uploaded file
-                        onChange={(e) => {
-                          // Update the form state with the selected file
-                          field.onChange(e.target.files?.[0]);
-                        }}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Please upload your medical certificate in .pdf format.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+
+            <FormField
+              control={form.control}
+              name="medicalCertificate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Medical Certificate</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept=".pdf"
+                      placeholder="MedicalCertificate.pdf"
+                      // Use event.target.files to access the uploaded file
+                      onChange={(e) => {
+                        // Update the form state with the selected file
+                        field.onChange(e.target.files?.[0]);
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Please upload your medical certificate in .pdf format.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <DialogFooter>
-              {/* <DialogClose> */}
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && (
                   <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 Register
               </Button>
-              {/* </DialogClose> */}
             </DialogFooter>
           </form>
         </Form>
@@ -331,4 +256,4 @@ const RegistrationForm = ({ userDetails }: Props) => {
   );
 };
 
-export default RegistrationForm;
+export default StudentRegistrationForm;

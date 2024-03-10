@@ -2,8 +2,8 @@ import React from 'react';
 
 import * as Icons from '@/components/icons';
 import { ParentProfileTabsProps } from '@/types/types';
-import RegistrationForm from '../forms/registration-form';
 import ScheduleLessonForm from '../forms/schedule-lesson-form';
+import RegistrationForm from '../forms/student-registration-form';
 import StudentCalendar from '../shared/calendar';
 import { DateTimePickerDemo } from '../time-picker/date-time-picker-demo';
 import {

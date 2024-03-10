@@ -1,7 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 
-import RegistrationForm from '@/components/forms/registration-form';
+import RegistrationForm from '@/components/forms/student-registration-form';
 import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
 import StudentProfileTabs from '@/components/profile/student-profile-tabs';
 import {
@@ -37,10 +37,6 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     studentId: params.id,
   });
 
-  console.log('userDetails:', userDetails);
-  console.log('studentDetails:', studentDetails);
-
-  console.log(userDetails);
   if (!user) redirect('/signin');
 
   return (
