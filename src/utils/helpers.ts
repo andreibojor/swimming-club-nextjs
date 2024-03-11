@@ -163,3 +163,19 @@ export const convertBlobToBase64 = (blob: Blob): string => {
   reader.readAsDataURL(blob);
   return reader.result as string;
 };
+
+export const formatDate = (inputDate: string): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZone: 'UTC',
+  };
+
+  const date = new Date(inputDate);
+  const formattedDate = date.toLocaleDateString('ro-RO', options);
+
+  return formattedDate;
+};

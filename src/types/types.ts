@@ -37,4 +37,5 @@ export interface ParentProfileTabsProps {
 export interface StudentProfileTabsProps {
   studentDetails: Tables<'students'> | null;
   userDetails: Tables<'users'> | null;
+  studentAppointments: Tables<'attendance_record'>[];
 }

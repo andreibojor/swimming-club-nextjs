@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as Icons from '@/components/icons';
 import { StudentProfileTabsProps } from '@/types/types';
-import { formatCityName } from '@/utils/helpers';
+import { formatCityName, formatDate } from '@/utils/helpers';
 import ScheduleLessonForm from '../forms/schedule-lesson-form';
 import StudentRegistrationForm from '../forms/student-registration-form';
 import StudentCalendar from '../shared/calendar';
@@ -23,11 +23,12 @@ import {
 const StudentProfileTabs = ({
   studentDetails,
   userDetails,
+  studentAppointments,
 }: StudentProfileTabsProps) => {
   // const router = useRouter();
   // const searchParams = useSearchParams();
   // const query = searchParams.get('student');
-
+  console.log(studentAppointments);
   // useEffect(() => {
   //   const newUrl = formUrlQuery({
   //     params: searchParams.toString(),
@@ -45,8 +46,8 @@ const StudentProfileTabs = ({
         <CardTitle>Bună, {`${userDetails?.full_name}`}!</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex gap-4">
-          <Card className="w-1/3">
+        <div className="mb-4 flex flex-col gap-4 md:flex-row">
+          <Card className="w-full md:w-1/3">
             <CardHeader>
               <CardTitle>
                 <Avatar className="mx-auto h-[80px] w-[80px]">
@@ -123,16 +124,16 @@ const StudentProfileTabs = ({
             </CardFooter>
           </Card>
 
-          <Card className="w-2/3">
+          <Card className="w-full md:w-2/3">
             <div className="flex flex-col">
               <StudentCalendar />
               <DateTimePickerDemo studentId={userDetails!.id} />
             </div>
           </Card>
         </div>
-        <div className="flex w-full gap-4">
+        <div className="flex w-full gap-0 md:gap-4">
           <div className="none md:w-1/3"></div>
-          <Card className="w-2/3">
+          <Card className="w-full md:w-2/3">
             <CardHeader>
               <CardTitle>Access</CardTitle>
             </CardHeader>
@@ -177,10 +178,14 @@ const StudentProfileTabs = ({
       <div className="p-4">
         <div className="grid items-center justify-center gap-4">
           <div className="space-y-2 text-center">
-            <h1 className="text-2xl font-bold">Buy Individual Lessons</h1>
-            <p className="text-gray-500 dark:text-gray-400">
-              Pay as you go for specific courses
-            </p>
+            {/* <p className="text-gray-500 dark:text-gray-400">
+            </p> */}
+            {studentAppointments &&
+              studentAppointments.map((appointment) => (
+                <h1 key={appointment.id} className="text-2xl font-bold">
+                  {formatDate(appointment.date)}
+                </h1>
+              ))}
           </div>
           <div className="space-y-4"></div>
         </div>

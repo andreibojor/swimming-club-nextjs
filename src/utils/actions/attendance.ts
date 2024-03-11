@@ -7,6 +7,10 @@ interface SetAppointmentParams {
   date: string;
 }
 
+interface StudentAppointmentsParams {
+  studentId: string;
+}
+
 export async function setAppointment(params: SetAppointmentParams) {
   try {
     const supabase = createClient();
@@ -34,6 +38,27 @@ export async function getAppointments() {
     return data || [];
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+}
+
+export async function getStudentAppointments(
+  params: StudentAppointmentsParams,
+) {
+  try {
+    const supabase = createClient();
+
+    const { studentId } = params;
+
+    const { data } = await supabase
+      .from('attendance_record')
+      .select('*')
+      .eq('student_id', studentId)
+      .eq('status', 'scheduled');
+
+    return data || [];
+  } catch (error) {
+    console.error(error);
     throw error;
   }
 }

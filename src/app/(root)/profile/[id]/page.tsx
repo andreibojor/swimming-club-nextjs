@@ -18,6 +18,7 @@ import {
   Label,
 } from '@/components/ui';
 import { URLProps } from '@/types/types';
+import { getStudentAppointments } from '@/utils/actions/attendance';
 import { getStudentDetails } from '@/utils/actions/student';
 import { getUserDetails } from '@/utils/actions/user';
 import { createClient } from '@/utils/supabase/server';
@@ -37,6 +38,10 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     studentId: params.id,
   });
 
+  const studentAppointments = await getStudentAppointments({
+    studentId: params.id,
+  });
+
   if (!user) redirect('/signin');
 
   return (
@@ -53,6 +58,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
           <StudentProfileTabs
             studentDetails={studentDetails}
             userDetails={userDetails}
+            studentAppointments={studentAppointments}
           />
         )}
       </Card>
