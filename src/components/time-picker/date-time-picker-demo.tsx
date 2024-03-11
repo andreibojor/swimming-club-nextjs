@@ -14,7 +14,7 @@ import {
 import { cn } from '@/utils/cn';
 import { TimePickerDemo } from './time-picker-demo';
 
-export function DateTimePickerDemo({ studentId }) {
+export function DateTimePickerDemo({ studentId }: { studentId: string }) {
   const [date, setDate] = React.useState<Date>();
 
   return (
