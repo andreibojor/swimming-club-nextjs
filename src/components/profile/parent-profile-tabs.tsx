@@ -41,7 +41,6 @@ const ParentProfileTabs = ({
   //   router.push(newUrl, { scroll: false });
   // }, [pool, router, searchParams]);
 
-  // console.log(userDetails);
   return (
     <Tabs defaultValue="child1" className="space-y-4">
       <CardHeader className="flex-row items-center justify-between">

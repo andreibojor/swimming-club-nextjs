@@ -42,9 +42,7 @@ export async function getAppointments() {
   }
 }
 
-export async function getStudentAppointments(
-  params: StudentAppointmentsParams,
-) {
+export async function getStudentActivity(params: StudentAppointmentsParams) {
   try {
     const supabase = createClient();
 
@@ -53,9 +51,9 @@ export async function getStudentAppointments(
     const { data } = await supabase
       .from('attendance_record')
       .select('*')
-      .eq('student_id', studentId)
-      .eq('status', 'scheduled');
+      .eq('student_id', studentId);
 
+    console.log(data);
     return data || [];
   } catch (error) {
     console.error(error);

@@ -7,7 +7,7 @@ export async function getPools() {
     const supabase = createClient();
 
     const { data } = await supabase.from('pools').select('*');
-    console.log(data);
+
     return data || [];
   } catch (error) {
     console.log(error);

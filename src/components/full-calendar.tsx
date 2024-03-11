@@ -18,7 +18,6 @@ interface DashboardFullCalendarProps {
 }
 
 const DashboardFullCalendar = ({ events }: DashboardFullCalendarProps) => {
-  console.log(events);
   return (
     <div className="relative w-full">
       <FullCalendar

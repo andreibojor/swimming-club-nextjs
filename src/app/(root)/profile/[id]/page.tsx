@@ -4,21 +4,9 @@ import { redirect } from 'next/navigation';
 import RegistrationForm from '@/components/forms/student-registration-form';
 import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
 import StudentProfileTabs from '@/components/profile/student-profile-tabs';
-import {
-  Button,
-  Card,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  Input,
-  Label,
-} from '@/components/ui';
+import { Card } from '@/components/ui';
 import { URLProps } from '@/types/types';
-import { getStudentAppointments } from '@/utils/actions/attendance';
+import { getStudentActivity } from '@/utils/actions/attendance';
 import { getStudentDetails } from '@/utils/actions/student';
 import { getUserDetails } from '@/utils/actions/user';
 import { createClient } from '@/utils/supabase/server';
@@ -38,7 +26,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     studentId: params.id,
   });
 
-  const studentAppointments = await getStudentAppointments({
+  const studentActivity = await getStudentActivity({
     studentId: params.id,
   });
 
@@ -58,7 +46,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
           <StudentProfileTabs
             studentDetails={studentDetails}
             userDetails={userDetails}
-            studentAppointments={studentAppointments}
+            studentActivity={studentActivity}
           />
         )}
       </Card>

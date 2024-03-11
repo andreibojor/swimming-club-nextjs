@@ -23,12 +23,12 @@ import {
 const StudentProfileTabs = ({
   studentDetails,
   userDetails,
-  studentAppointments,
+  studentActivity,
 }: StudentProfileTabsProps) => {
   // const router = useRouter();
   // const searchParams = useSearchParams();
   // const query = searchParams.get('student');
-  console.log(studentAppointments);
+
   // useEffect(() => {
   //   const newUrl = formUrlQuery({
   //     params: searchParams.toString(),
@@ -39,7 +39,6 @@ const StudentProfileTabs = ({
   //   router.push(newUrl, { scroll: false });
   // }, [pool, router, searchParams]);
 
-  // console.log(userDetails);
   return (
     <>
       <CardHeader className="flex-row items-center justify-between">
@@ -126,7 +125,7 @@ const StudentProfileTabs = ({
 
           <Card className="w-full md:w-2/3">
             <div className="flex flex-col">
-              <StudentCalendar />
+              <StudentCalendar studentActivity={studentActivity} />
               <DateTimePickerDemo studentId={userDetails!.id} />
             </div>
           </Card>
@@ -180,8 +179,8 @@ const StudentProfileTabs = ({
           <div className="space-y-2 text-center">
             {/* <p className="text-gray-500 dark:text-gray-400">
             </p> */}
-            {studentAppointments &&
-              studentAppointments.map((appointment) => (
+            {studentActivity &&
+              studentActivity.map((appointment) => (
                 <h1 key={appointment.id} className="text-2xl font-bold">
                   {formatDate(appointment.date)}
                 </h1>
