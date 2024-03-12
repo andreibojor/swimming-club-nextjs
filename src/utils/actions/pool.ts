@@ -36,3 +36,36 @@ export async function getOpenHoursByPool(params: GetOpenHoursByPoolParams) {
     throw error;
   }
 }
+
+interface ChangeOpenHoursParams {
+  dayId: string;
+  time: string;
+  isOpenTime: boolean;
+}
+
+export async function changeOpenHours(params: ChangeOpenHoursParams) {
+  try {
+    const supabase = createClient();
+
+    const { dayId, time, isOpenTime } = params;
+    console.log(params);
+    // if (isOpenTime) {
+    //   await supabase
+    //     .from('open_hours')
+    //     .update({
+    //       open_time: time,
+    //     })
+    //     .eq('id', dayId);
+    // } else {
+    //   await supabase
+    //     .from('open_hours')
+    //     .update({
+    //       close_time: time,
+    //     })
+    //     .eq('id', dayId);
+    // }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

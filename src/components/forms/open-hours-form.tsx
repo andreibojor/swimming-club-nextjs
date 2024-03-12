@@ -40,6 +40,7 @@ import {
   Textarea,
 } from '@/components/ui';
 import { Json } from '@/types/types_db';
+import { changeOpenHours } from '@/utils/actions/pool';
 import { createClient } from '@/utils/supabase/client';
 import { DialogClose } from '../ui/dialog';
 
@@ -107,51 +108,23 @@ const OpenHoursPoolForm = ({ openHours }: Props) => {
     }
   }
 
-  // useEffect(() => {
-  //   const delayDebounceFn = setTimeout(() => {
-  //     if (search) {
-  //       const newUrl = formUrlQuery({
-  //         params: searchParams.toString(),
-  //         key: 'q',
-  //         value: search,
-  //       });
-  //       router.push(newUrl, { scroll: false });
-  //     } else {
-  //       if (pathname === route) {
-  //         const newUrl = removeKeysFromQuery({
-  //           params: searchParams.toString(),
-  //           keysToRemove: ['q'],
-  //         });
+  const [openHoursChange, setOpenHoursChange] = useState({
+    dayId: '',
+    time: '',
+    isOpenTime: false,
+  });
 
-  //         router.push(newUrl, { scroll: false });
-  //       }
-  //     }
-  //   }, 300);
-
-  //   return () => clearTimeout(delayDebounceFn);
-  // }, [search, route, pathname, router, searchParams, query]);
-
-  const [openHoursState, setOpenHoursState] = useState<Props[]>(openHours);
-  console.log(openHoursState);
-  const handleTimeChange = (
-    dayId: string,
-    time: string,
-    isOpenTime: boolean,
-  ) => {
-    setOpenHoursState((prevOpenHours) =>
-      prevOpenHours.map((day) =>
-        day.id === dayId
-          ? {
-              ...day,
-              // If it's the opening time, update the open_time property.
-              // If it's the closing time, update the close_time property.
-              ...(isOpenTime ? { open_time: time } : { close_time: time }),
-            }
-          : day,
-      ),
-    );
-    console.log(`Time for day ${dayId} has been changed to ${time}`);
-  };
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      //     await changeOpenHours({
+      //       dayId: dayId,
+      //       time: openHoursChange,
+      //       isOpenTime,
+      //     });
+      console.log(openHoursChange);
+    }, 300);
+    return () => clearTimeout(delayDebounceFn);
+  }, [openHoursChange]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -177,7 +150,11 @@ const OpenHoursPoolForm = ({ openHours }: Props) => {
                   type="time"
                   value={day.open_time.slice(0, 5)}
                   onChange={(e) =>
-                    handleTimeChange(day.id, e.target.value, true)
+                    setOpenHoursChange({
+                      dayId: day.id,
+                      time: e.target.value,
+                      isOpenTime: false,
+                    })
                   }
                 />
               </div>
@@ -187,7 +164,11 @@ const OpenHoursPoolForm = ({ openHours }: Props) => {
                   type="time"
                   value={day.close_time.slice(0, 5)}
                   onChange={(e) =>
-                    handleTimeChange(day.id, e.target.value, true)
+                    setOpenHoursChange({
+                      dayId: day.id,
+                      time: e.target.value,
+                      isOpenTime: false,
+                    })
                   }
                 />
               </div>

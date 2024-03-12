@@ -42,15 +42,6 @@ const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
 );
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB in bytes
-const ALLOWED_FILE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-  'application/pdf',
-];
-
 const RegistrationSchema = z.object({
   role: z.string(),
   phoneNumber: z.string().regex(phoneRegex, 'Invalid Number!'),
