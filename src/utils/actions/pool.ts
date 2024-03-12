@@ -14,3 +14,25 @@ export async function getPools() {
     throw error;
   }
 }
+
+interface GetOpenHoursByPoolParams {
+  poolId: string;
+}
+
+export async function getOpenHoursByPool(params: GetOpenHoursByPoolParams) {
+  try {
+    const supabase = createClient();
+
+    const { poolId } = params;
+
+    const { data } = await supabase
+      .from('open_hours')
+      .select('*')
+      .eq('pool_id', poolId);
+    console.log(data);
+    return data || [];
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

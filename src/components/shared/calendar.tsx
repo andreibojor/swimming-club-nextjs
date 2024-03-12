@@ -1,15 +1,21 @@
+'use client';
+
 import React from 'react';
 
 import { Calendar } from '@/components/ui';
+import { StudentCalendarProps } from '@/types/types';
 
-const StudentCalendar = ({ studentActivity }) => {
-  console.log(studentActivity);
+const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
+  const dates = studentActivity.map((date) => new Date(date.date));
+
   return (
     <>
-      {studentActivity.map((student) => (
-        <h1 key={student.id}>{student.date}</h1>
-      ))}
-      <Calendar />
+      <Calendar
+        mode="multiple"
+        selected={dates}
+        fromYear={2024}
+        onDayClick={() => console.log(dates)}
+      />
     </>
   );
 };

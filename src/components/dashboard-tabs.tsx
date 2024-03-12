@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { DashboardTabsProps } from '@/types/types';
 import { formUrlQuery } from '@/utils/urlQuery';
+import OpenHoursPoolForm from './forms/open-hours-form';
 import DashboardFullCalendar from './full-calendar';
 import {
   CardContent,
@@ -20,6 +21,7 @@ const DashboardTabs = ({
   pools,
   students,
   appointments,
+  poolOpenHours,
 }: DashboardTabsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -65,6 +67,7 @@ const DashboardTabs = ({
               <DashboardFullCalendar events={appointments} />
 
               {/* <AttendancePanel students={sortedStudents} /> */}
+              <OpenHoursPoolForm openHours={poolOpenHours} />
             </TabsContent>
           ))}
         </CardContent>

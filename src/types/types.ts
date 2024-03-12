@@ -27,6 +27,7 @@ export interface DashboardTabsProps {
   pools: Tables<'pools'>[];
   students: Tables<'students'>[];
   appointments: Tables<'attendance_record'>[];
+  poolOpenHours: Tables<'open_hours'>[];
 }
 
 export interface ParentProfileTabsProps {
@@ -37,5 +38,9 @@ export interface ParentProfileTabsProps {
 export interface StudentProfileTabsProps {
   studentDetails: Tables<'students'> | null;
   userDetails: Tables<'users'> | null;
+  studentActivity: Tables<'attendance_record'>[];
+}
+
+export interface StudentCalendarProps {
   studentActivity: Tables<'attendance_record'>[];
 }

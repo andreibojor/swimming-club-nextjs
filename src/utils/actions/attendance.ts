@@ -53,7 +53,6 @@ export async function getStudentActivity(params: StudentAppointmentsParams) {
       .select('*')
       .eq('student_id', studentId);
 
-    console.log(data);
     return data || [];
   } catch (error) {
     console.error(error);
