@@ -64,10 +64,10 @@ const DashboardTabs = ({
           {pools.map((pool) => (
             <TabsContent key={pool.id} value={pool.value} className="space-y-4">
               {/* <CustomCalendar /> */}
+              <OpenHoursPoolForm openHours={poolOpenHours} />
               <DashboardFullCalendar events={appointments} />
 
               {/* <AttendancePanel students={sortedStudents} /> */}
-              <OpenHoursPoolForm openHours={poolOpenHours} />
             </TabsContent>
           ))}
         </CardContent>

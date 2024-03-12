@@ -9,18 +9,18 @@ import { getStudentsByPool } from '@/utils/actions/student';
 
 const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
   const pools = await getPools();
+  const selectedPool = pools.find((pool) => pool.value === searchParams.pool);
+  const poolOpenHours = await getOpenHoursByPool({
+    poolId: selectedPool?.id!,
+  });
+
+  console.log(poolOpenHours);
 
   const students = await getStudentsByPool({
     pool: searchParams.pool!,
   });
 
   const appointments = await getAppointments();
-
-  const poolOpenHours = await getOpenHoursByPool({
-    poolId: searchParams.pool!,
-  });
-
-  console.log(pools);
 
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col p-5 xl:px-0">
