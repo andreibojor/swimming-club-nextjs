@@ -49,7 +49,7 @@ const DashboardTabs = ({
               <TabsTrigger
                 key={pool.id}
                 value={pool.value}
-                // onClick={() => setPool(pool.value)}
+                onClick={() => setPool(pool.value)}
               >
                 {pool.name}
               </TabsTrigger>

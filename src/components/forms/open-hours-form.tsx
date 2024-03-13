@@ -1,21 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
 import * as Icons from '@/components/icons';
 import {
   Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -25,24 +19,14 @@ import {
   DialogTrigger,
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
   Input,
   Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Textarea,
 } from '@/components/ui';
-import { Json } from '@/types/types_db';
 import { changeOpenHours } from '@/utils/actions/pool';
-import { createClient } from '@/utils/supabase/client';
-import { DialogClose } from '../ui/dialog';
 
 interface Props {
   openHours: {
@@ -55,76 +39,50 @@ interface Props {
 }
 
 const OpenHoursSchema = z.object({
-  mondayOpen: z.string(),
-  tuesday: z.string(),
-  wednesday: z.string(),
-  thursday: z.string(),
-  friday: z.string(),
-  saturday: z.string(),
-  sunday: z.string(),
+  openHoursFields: z.array(
+    z.object({
+      id: z.string(),
+      pool_id: z.string(),
+      day: z.string(),
+      open_time: z.string(),
+      close_time: z.string(),
+    }),
+  ),
 });
 
-const OpenHoursPoolForm = ({ openHours }: Props) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
-  const pathname = usePathname();
-  console.log(openHours);
+const useDynamicForm = ({ openHours }: Props) => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof OpenHoursSchema>>({
     resolver: zodResolver(OpenHoursSchema),
-    defaultValues: {
-      mondayOpen: '',
-      tuesday: '',
-      wednesday: '',
-      thursday: '',
-      friday: '',
-      saturday: '',
-      sunday: '',
-    },
+    defaultValues: { openHoursFields: openHours || [] },
+    // mode: 'onChange',
+  });
+  const { fields } = useFieldArray({
+    control: form.control,
+    name: 'openHoursFields',
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof OpenHoursSchema>) {
-    setIsSubmitting(true);
-
+    const { openHoursFields } = values;
     try {
-      const supabase = createClient();
+      await changeOpenHours(openHoursFields);
 
-      await supabase.from('users').update({
-        role: role,
-      });
-
-      await supabase.from('students').update({
-        full_name: fullStudentName,
-        swimmer_level: swimmerLevel,
-        pool: pool,
-      });
+      toast.success('Open hours updated successfully');
     } catch (error) {
-    } finally {
-      setIsSubmitting(false);
-      setIsOpen(false);
-      toast.success('Event has been created');
+      console.error(error);
+      toast.error('Failed to update open hours. Please try again.');
     }
   }
 
-  const [openHoursChange, setOpenHoursChange] = useState({
-    dayId: '',
-    time: '',
-    isOpenTime: false,
-  });
+  return { form, onSubmit, openHoursFields: fields };
+};
 
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      //     await changeOpenHours({
-      //       dayId: dayId,
-      //       time: openHoursChange,
-      //       isOpenTime,
-      //     });
-      console.log(openHoursChange);
-    }, 300);
-    return () => clearTimeout(delayDebounceFn);
-  }, [openHoursChange]);
+const OpenHoursPoolForm = ({ openHours }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { form, onSubmit, openHoursFields } = useDynamicForm({ openHours });
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -133,48 +91,85 @@ const OpenHoursPoolForm = ({ openHours }: Props) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl">
-            Orar bazin {`${openHours.id}`}
-          </DialogTitle>
+          <DialogTitle className="text-2xl">Orar bazin</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        {openHours.map((day) => (
-          <div key={day.id}>
-            <CardTitle className="text-xl">{day.day}</CardTitle>
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor={`area-${day.id}`}>De la</Label>
-                <Input
-                  type="time"
-                  value={day.open_time.slice(0, 5)}
-                  onChange={(e) =>
-                    setOpenHoursChange({
-                      dayId: day.id,
-                      time: e.target.value,
-                      isOpenTime: false,
-                    })
-                  }
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className=" grid space-y-8"
+          >
+            {openHoursFields.map((day, index) => (
+              <div key={day.id} className="flex justify-between ">
+                <h1>{day.day}</h1>
+                <FormField
+                  control={form.control}
+                  name={`openHoursFields.${index}.id`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input type="hidden" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`openHoursFields.${index}.pool_id`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input type="hidden" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`openHoursFields.${index}.open_time`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>De la</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`openHoursFields.${index}.close_time`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Pana la</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </div>
-              <div className="flex flex-col">
-                <Label htmlFor={`area-${day.id}`}>Pana la</Label>
-                <Input
-                  type="time"
-                  value={day.close_time.slice(0, 5)}
-                  onChange={(e) =>
-                    setOpenHoursChange({
-                      dayId: day.id,
-                      time: e.target.value,
-                      isOpenTime: false,
-                    })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+            ))}
+            <DialogFooter>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting && (
+                  <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Register
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

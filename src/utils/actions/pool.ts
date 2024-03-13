@@ -28,8 +28,9 @@ export async function getOpenHoursByPool(params: GetOpenHoursByPoolParams) {
     const { data } = await supabase
       .from('open_hours')
       .select('*')
-      .eq('pool_id', poolId);
-    console.log(data);
+      .eq('pool_id', poolId)
+      .order('dayIndex', { ascending: true });
+
     return data || [];
   } catch (error) {
     console.log(error);
@@ -43,27 +44,20 @@ interface ChangeOpenHoursParams {
   isOpenTime: boolean;
 }
 
-export async function changeOpenHours(params: ChangeOpenHoursParams) {
+export async function changeOpenHours(openHours) {
   try {
     const supabase = createClient();
 
-    const { dayId, time, isOpenTime } = params;
-    console.log(params);
-    // if (isOpenTime) {
-    //   await supabase
-    //     .from('open_hours')
-    //     .update({
-    //       open_time: time,
-    //     })
-    //     .eq('id', dayId);
-    // } else {
-    //   await supabase
-    //     .from('open_hours')
-    //     .update({
-    //       close_time: time,
-    //     })
-    //     .eq('id', dayId);
-    // }
+    const updates = openHours.map((stuff) => {
+      return supabase
+        .from('open_hours')
+        .update({
+          open_time: stuff.open_time,
+          close_time: stuff.close_time,
+        })
+        .eq('id', stuff.id);
+    });
+    await Promise.all(updates);
   } catch (error) {
     console.log(error);
     throw error;

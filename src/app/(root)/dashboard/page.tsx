@@ -14,8 +14,6 @@ const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
     poolId: selectedPool?.id!,
   });
 
-  console.log(poolOpenHours);
-
   const students = await getStudentsByPool({
     pool: searchParams.pool!,
   });
