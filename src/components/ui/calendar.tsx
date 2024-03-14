@@ -1,22 +1,69 @@
 'use client';
 
 import * as React from 'react';
+import { useRef } from 'react';
+import { format } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { DayPicker } from 'react-day-picker';
+import {
+  Button,
+  DayPicker,
+  useDayPicker,
+  useDayRender,
+} from 'react-day-picker';
 
 import { buttonVariants } from '@/components/ui/button';
+import { StudentCalendarProps } from '@/types/types';
 import { cn } from '@/utils/cn';
+import { Popover, PopoverContent, PopoverTrigger } from '.';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+
+export type CombinedCalendarProps = CalendarProps & StudentCalendarProps;
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  studentActivity,
   ...props
-}: CalendarProps) {
+}: CombinedCalendarProps) {
+  const getActivities = (studentActivity) => {
+    const activities = {};
+
+    for (let activity of studentActivity) {
+      const date = new Date(activity.date).toISOString().split('T')[0];
+      if (activities[date]) {
+        activities[date].push(activity.status);
+      } else {
+        activities[date] = [activity.status];
+      }
+    }
+
+    return activities;
+  };
+
+  const activities = getActivities(studentActivity);
+
+  const modifiers = {
+    scheduled: (date) => {
+      const dateStr = date.toISOString().split('T')[0];
+      return activities[dateStr]?.includes('scheduled');
+    },
+    present: (date) => {
+      const dateStr = date.toISOString().split('T')[0];
+      return activities[dateStr]?.includes('present');
+    },
+  };
+
+  const modifiersClassNames = {
+    scheduled: 'bg-yellow-400',
+    present: 'bg-blue-500',
+  };
   return (
     <DayPicker
+      onDayClick={(day) => console.log(day)}
+      modifiers={modifiers}
+      modifiersClassNames={modifiersClassNames}
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
       classNames={{
@@ -32,11 +79,12 @@ function Calendar({
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
         table: 'w-full border-collapse space-y-1',
-        head_row: 'flex',
+        head_row: 'flex justify-between',
         head_cell:
           'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]',
-        row: 'flex w-full mt-2',
-        cell: 'h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
+        row: 'flex w-full mt-2 justify-between',
+        // 👇 previously had [&:has([aria-selected])]:bg-accent . Maybe this was good for range selecting
+        cell: 'h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-transparent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
         day: cn(
           buttonVariants({ variant: 'ghost' }),
           'h-9 w-9 p-0 font-normal aria-selected:opacity-100',
@@ -56,6 +104,52 @@ function Calendar({
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+        Day: ({ ...props }) => {
+          const buttonRef = useRef<HTMLButtonElement>(null);
+          const dayRender = useDayRender(
+            props.date,
+            props.displayMonth,
+            buttonRef,
+          );
+
+          if (dayRender.isHidden) {
+            return <div role="gridcell"></div>;
+          }
+          if (!dayRender.isButton) {
+            return <div {...dayRender.divProps} />;
+          }
+
+          return (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  name="day"
+                  ref={buttonRef}
+                  {...dayRender.buttonProps}
+                  onClick={() => console.log(props)}
+                />
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium leading-none">Dimensions</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {format(props.date, 'dd-MM-yyyy')}
+                    </p>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          );
+        },
+        DayContent: ({ ...props }) => {
+          const {
+            locale,
+            formatters: { formatDay },
+          } = useDayPicker();
+
+          return <>{formatDay(props.date, { locale })}</>;
+        },
       }}
       {...props}
     />
