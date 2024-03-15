@@ -21,12 +21,6 @@ export function TimePickerDemo({
   const minuteRef = React.useRef<HTMLInputElement>(null);
   const hourRef = React.useRef<HTMLInputElement>(null);
 
-  const handleClick = async (date: Date) => {
-    if (date) {
-      await setAppointment({ studentId, date: date.toISOString() });
-    }
-  };
-
   return (
     <div className="flex items-end gap-2">
       <div className="grid gap-1 text-center">
@@ -54,7 +48,7 @@ export function TimePickerDemo({
         />
       </div>
       <div className="flex h-10 items-center">
-        <Button onClick={() => handleClick(date!)}>Confirm</Button>
+        {/* <Button onClick={() => handleClick(date!)}>Confirm</Button> */}
         <Clock className="ml-2 h-4 w-4" />
       </div>
     </div>

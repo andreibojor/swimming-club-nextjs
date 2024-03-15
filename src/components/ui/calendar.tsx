@@ -1,69 +1,49 @@
 'use client';
 
 import * as React from 'react';
-import { useRef } from 'react';
-import { format } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import {
-  Button,
-  DayPicker,
-  useDayPicker,
-  useDayRender,
-} from 'react-day-picker';
+import { DayPicker } from 'react-day-picker';
 
 import { buttonVariants } from '@/components/ui/button';
 import { StudentCalendarProps } from '@/types/types';
 import { cn } from '@/utils/cn';
-import { Popover, PopoverContent, PopoverTrigger } from '.';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-export type CombinedCalendarProps = CalendarProps & StudentCalendarProps;
+// export type CombinedCalendarProps = CalendarProps & StudentCalendarProps;
+
+const studentActivity = [
+  {
+    id: 'd4bd9ea5-d079-4171-ba74-eb10c406d6b4',
+    date: '2024-03-22T14:45:00+00:00',
+    student_id: '355aacf9-7265-4706-921c-405e9a4fec4a',
+    type: 'appointment',
+    status: 'scheduled',
+  },
+  {
+    id: 'aa37c7b0-c589-4010-a301-548029bcec31',
+    date: '2024-03-12T10:12:00+00:00',
+    student_id: '355aacf9-7265-4706-921c-405e9a4fec4a',
+    type: 'attendance',
+    status: 'present',
+  },
+  {
+    id: '3d3d49f7-3d20-4ce3-b938-43f82f12a651',
+    date: '2024-03-25T21:56:00+00:00',
+    student_id: '355aacf9-7265-4706-921c-405e9a4fec4a',
+    type: 'attendance',
+    status: 'absent',
+  },
+];
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
-  studentActivity,
   ...props
-}: CombinedCalendarProps) {
-  const getActivities = (studentActivity) => {
-    const activities = {};
-
-    for (let activity of studentActivity) {
-      const date = new Date(activity.date).toISOString().split('T')[0];
-      if (activities[date]) {
-        activities[date].push(activity.status);
-      } else {
-        activities[date] = [activity.status];
-      }
-    }
-
-    return activities;
-  };
-
-  const activities = getActivities(studentActivity);
-
-  const modifiers = {
-    scheduled: (date) => {
-      const dateStr = date.toISOString().split('T')[0];
-      return activities[dateStr]?.includes('scheduled');
-    },
-    present: (date) => {
-      const dateStr = date.toISOString().split('T')[0];
-      return activities[dateStr]?.includes('present');
-    },
-  };
-
-  const modifiersClassNames = {
-    scheduled: 'bg-yellow-400',
-    present: 'bg-blue-500',
-  };
+}: CalendarProps) {
   return (
     <DayPicker
-      onDayClick={(day) => console.log(day)}
-      modifiers={modifiers}
-      modifiersClassNames={modifiersClassNames}
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
       classNames={{
@@ -90,8 +70,9 @@ function Calendar({
           'h-9 w-9 p-0 font-normal aria-selected:opacity-100',
         ),
         day_range_end: 'day-range-end',
+        // 👇 removed bg-primary from here. It is added in modifiersClassNames
         day_selected:
-          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+          'text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
         day_today: 'bg-accent text-accent-foreground',
         day_outside:
           'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
@@ -104,52 +85,6 @@ function Calendar({
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
-        Day: ({ ...props }) => {
-          const buttonRef = useRef<HTMLButtonElement>(null);
-          const dayRender = useDayRender(
-            props.date,
-            props.displayMonth,
-            buttonRef,
-          );
-
-          if (dayRender.isHidden) {
-            return <div role="gridcell"></div>;
-          }
-          if (!dayRender.isButton) {
-            return <div {...dayRender.divProps} />;
-          }
-
-          return (
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  name="day"
-                  ref={buttonRef}
-                  {...dayRender.buttonProps}
-                  onClick={() => console.log(props)}
-                />
-              </PopoverTrigger>
-              <PopoverContent>
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium leading-none">Dimensions</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {format(props.date, 'dd-MM-yyyy')}
-                    </p>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          );
-        },
-        DayContent: ({ ...props }) => {
-          const {
-            locale,
-            formatters: { formatDay },
-          } = useDayPicker();
-
-          return <>{formatDay(props.date, { locale })}</>;
-        },
       }}
       {...props}
     />

@@ -1,15 +1,8 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { getUnixTime } from 'date-fns';
-import {
-  Button,
-  Day,
-  DayContent,
-  useDayPicker,
-  useDayRender,
-  WeekNumber,
-} from 'react-day-picker';
+import React from 'react';
+import { format, isAfter } from 'date-fns';
+import { Button, useDayPicker, useDayRender } from 'react-day-picker';
 
 import {
   Calendar,
@@ -18,58 +11,108 @@ import {
   PopoverTrigger,
 } from '@/components/ui';
 import { StudentCalendarProps } from '@/types/types';
-import { cn } from '@/utils/cn';
+import ScheduleLessonForm from '../forms/schedule-lesson-form';
 
 const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
-  console.log(studentActivity);
+  const activities = {};
+  studentActivity.map((activity) => {
+    const date = new Date(activity.date).toISOString().split('T')[0];
+    activities[date] = activities[date]
+      ? [...activities[date], activity.status]
+      : [activity.status];
+  });
+
+  const modifiers = {
+    scheduled: (date) => {
+      const dateStr = date.toISOString().split('T')[0];
+      return activities[dateStr]?.includes('scheduled');
+    },
+    present: (date) => {
+      const dateStr = date.toISOString().split('T')[0];
+      return activities[dateStr]?.includes('present');
+    },
+    absent: (date) => {
+      const dateStr = date.toISOString().split('T')[0];
+      return activities[dateStr]?.includes('absent');
+    },
+  };
+
+  const modifiersClassNames = {
+    scheduled: 'bg-primary',
+    present: 'bg-green-700',
+    absent: 'bg-red-500',
+  };
 
   return (
     <>
       <Calendar
-        studentActivity={studentActivity}
-        // mode="multiple"
-        // selected={dates}
+        modifiers={modifiers}
+        modifiersClassNames={modifiersClassNames}
         fromYear={2024}
+        mode="multiple"
+        components={{
+          Day: ({ ...props }) => {
+            const buttonRef = React.useRef<HTMLButtonElement>(null);
+            const dayRender = useDayRender(
+              props.date,
+              props.displayMonth,
+              buttonRef,
+            );
 
-        // components={{
-        //   Row: ({ ...props }) => {
-        //     const { styles, classNames, showWeekNumber, components } =
-        //       useDayPicker();
+            if (dayRender.isHidden) {
+              return <div role="gridcell"></div>;
+            }
+            if (!dayRender.isButton) {
+              return <div {...dayRender.divProps} />;
+            }
 
-        //     const DayComponent = components?.Day ?? Day;
-        //     const WeeknumberComponent = components?.WeekNumber ?? WeekNumber;
+            const dateStr = props.date.toISOString().split('T')[0];
 
-        //     let weekNumberCell;
-        //     if (showWeekNumber) {
-        //       weekNumberCell = (
-        //         <td className={classNames.cell} style={styles.cell}>
-        //           <WeeknumberComponent
-        //             number={props.weekNumber}
-        //             dates={props.dates}
-        //           />
-        //         </td>
-        //       );
-        //     }
+            const activityStatus = activities[dateStr] || 'No activity';
 
-        //     return (
-        //       <tr className={classNames.row} style={styles.row}>
-        //         {weekNumberCell}
-        //         {props.dates.map((date) => (
-        //           <td
-        //             className={cn(classNames.cell)}
-        //             style={styles.cell}
-        //             key={getUnixTime(date)}
-        //             role="presentation"
-        //           >
-        //             <DayComponent
-        //               displayMonth={props.displayMonth}
-        //               date={date}
-        //             />
-        //           </td>
-        //         ))}
-        //       </tr>
-        //     );
-        //   },
+            // Inside the Day component
+            const currentDate = new Date();
+            const isFutureDate = isAfter(props.date, currentDate);
+
+            return (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    name="day"
+                    ref={buttonRef}
+                    {...dayRender.buttonProps}
+                  />
+                </PopoverTrigger>
+
+                {activityStatus[0] === 'present' ||
+                activityStatus[0] === 'scheduled' ||
+                activityStatus[0] === 'absent' ? (
+                  <PopoverContent>
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <h4 className="font-medium leading-none">
+                          Status: {activityStatus}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {format(props.date, 'dd-MM-yyyy')}
+                        </p>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                ) : (
+                  isFutureDate && (
+                    <PopoverContent>
+                      <ScheduleLessonForm
+                        userId={studentActivity[0].student_id}
+                        appointmentDate={format(props.date, 'dd-MM-yyyy')}
+                      />
+                    </PopoverContent>
+                  )
+                )}
+              </Popover>
+            );
+          },
+        }}
       />
     </>
   );

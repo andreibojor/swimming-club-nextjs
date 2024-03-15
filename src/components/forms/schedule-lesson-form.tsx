@@ -30,12 +30,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui';
+import { setAppointment } from '@/utils/actions/attendance';
 import { createClient } from '@/utils/supabase/client';
 
 interface Props {
   type?: 'create' | 'edit';
   userId: string;
   questionDetails?: string;
+  appointmentDate: string;
 }
 
 const phoneRegex = new RegExp(
@@ -47,19 +49,13 @@ const RegistrationSchema = z.object({
   phoneNumber: z.string().regex(phoneRegex, 'Invalid Number!'),
   swimmerLevel: z.string(),
   pool: z.string(),
-  medicalCertificate: z
-    .instanceof(Blob, { message: 'Medical Certificate is required' })
-    .refine(
-      (file) => file.size <= MAX_FILE_SIZE,
-      'File size should be less than 5 MB.',
-    )
-    .refine(
-      (file) => ALLOWED_FILE_TYPES.includes(file.type),
-      'Only .pdf files are allowed',
-    ),
 });
 
-const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
+const ScheduleLessonForm = ({
+  userId,
+  questionDetails,
+  appointmentDate,
+}: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -70,7 +66,6 @@ const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
     defaultValues: {
       role: '',
       swimmerLevel: '',
-      pool: '',
     },
   });
 
@@ -78,27 +73,11 @@ const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
   async function onSubmit(values: z.infer<typeof RegistrationSchema>) {
     setIsSubmitting(true);
     const selectedRole = form.watch('role');
-
+    console.log(values);
     try {
-      const supabase = createClient();
-      const { role, phoneNumber, swimmerLevel, pool, medicalCertificate } =
-        values;
-
-      await supabase
-        .from('users')
-        .update({
-          phone: phoneNumber,
-          role: role,
-          completed_registration: true,
-        })
-        .eq('id', userId);
-
-      await supabase.storage
-        .from('medical-certificates')
-        .upload(`mc-${userId}`, medicalCertificate, {
-          cacheControl: '3600',
-          upsert: false,
-        });
+      //   if (values.date) {
+      //     await setAppointment({ studentId, date: date.toISOString() });
+      // }
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -112,9 +91,9 @@ const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Programati o lectie de inot</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+            Alegeti o ora pentru a va programama la data de {appointmentDate}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -166,91 +145,9 @@ const ScheduleLessonForm = ({ userId, questionDetails }: Props) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="swimmerLevel"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Performance Level</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select the level of your performance" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="beginner">Beginner</SelectItem>
-                      <SelectItem value="advanced">Advanced</SelectItem>
-                      <SelectItem value="pro">Performance</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    You can request your swimming teacher to promote you
-                    {/* <Link href="/examples/forms">email settings</Link>. */}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* {form.watch('role') === 'student' && ( */}
 
-            <FormField
-              control={form.control}
-              name="pool"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pool Location</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select the level of your performance" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="cluj-napoca">Cluj-Napoca</SelectItem>
-                      <SelectItem value="dej">Dej</SelectItem>
-                      <SelectItem value="sancraiu">Sâncraiu</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    You can request your swimming teacher to promote you
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {form.watch('role') === 'student' && (
-              <FormField
-                control={form.control}
-                name="medicalCertificate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Medical Certificate</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        accept=".pdf"
-                        placeholder="MedicalCertificate.pdf"
-                        // Use event.target.files to access the uploaded file
-                        onChange={(e) => {
-                          // Update the form state with the selected file
-                          field.onChange(e.target.files?.[0]);
-                        }}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Please upload your medical certificate in .pdf format.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+            {/* )} */}
           </form>
         </Form>
         <DialogFooter>
