@@ -1,5 +1,6 @@
 // @ts-nocheck
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 
 const WheelPickerComponent = ({
   dateItems,
@@ -66,6 +67,12 @@ const WheelPickerComponent = ({
   const visibleItemsCount = Math.floor(containerHeight / itemHeight);
   const offset = Math.round((visibleItemsCount + 1) / 2) + 1;
   const maxScrollOffset = (containerHeight - itemHeight) / 2;
+
+  // State variables for storing selected values
+  const [selectedDate, setSelectedDate] = useState(dateValue);
+  const [selectedHour, setSelectedHour] = useState(hourValue);
+  const [selectedMinute, setSelectedMinute] = useState(minuteValue);
+  const [selectedAmpm, setSelectedAmpm] = useState(ampmValue);
 
   function rerenderDateElements(
     selectedElement,
@@ -246,159 +253,7 @@ const WheelPickerComponent = ({
     };
   }, [dateItemsContRef.current]);
 
-  useEffect(() => {
-    let isAnimating = false;
-
-    function handleMinuteScroll(event) {
-      if (!isAnimating) {
-        isAnimating = true;
-
-        requestAnimationFrame(() => {
-          const scrollTop = Math.max(event.target.scrollTop, 0);
-          const selectedElement = Math.min(
-            Math.max(Math.floor(scrollTop / itemHeight), 0),
-            minuteItems.length - 1,
-          );
-          window.clearTimeout(isScrolling.current);
-          rerenderMinuteElements(selectedElement, scrollTop);
-
-          currentMinuteValue.current = selectedElement;
-          isScrolling.current = setTimeout(function () {
-            handleMinuteChange(minuteItems[selectedElement].value);
-          }, 20);
-
-          isAnimating = false;
-        });
-      }
-    }
-
-    minuteItemsContRef.current?.addEventListener('scroll', handleMinuteScroll);
-    minuteRefs.current[currentDateValue.current]?.scrollIntoView({
-      block: 'center',
-    });
-    rerenderMinuteElements(
-      currentMinuteValue.current,
-      minuteItemsContRef.current?.scrollTop,
-      0,
-      minuteRefs.length,
-    );
-    return () => {
-      minuteItemsContRef.current?.removeEventListener(
-        'scroll',
-        handleMinuteScroll,
-      );
-    };
-  }, [minuteItemsContRef.current]);
-
-  useEffect(() => {
-    let isAnimating = false;
-
-    function handleAmpmScroll(event) {
-      if (!isAnimating) {
-        isAnimating = true;
-
-        requestAnimationFrame(() => {
-          const scrollTop = Math.max(event.target.scrollTop, 0);
-          const selectedElement = Math.min(
-            Math.max(Math.floor(scrollTop / itemHeight), 0),
-            ampmItems.length - 1,
-          );
-          window.clearTimeout(isScrolling.current);
-          rerenderAmpmElements(selectedElement, scrollTop);
-
-          currentAmpmValue.current = selectedElement;
-          isScrolling.current = setTimeout(function () {
-            handleAmpmChange(ampmItems[selectedElement].value);
-          }, 20);
-
-          isAnimating = false;
-        });
-      }
-    }
-
-    ampmItemsContRef.current?.addEventListener('scroll', handleAmpmScroll);
-    ampmRefs.current[currentDateValue.current]?.scrollIntoView({
-      block: 'center',
-    });
-    rerenderAmpmElements(
-      currentAmpmValue.current,
-      ampmItemsContRef.current?.scrollTop,
-      0,
-      ampmRefs.length,
-    );
-    return () => {
-      ampmItemsContRef.current?.removeEventListener('scroll', handleAmpmScroll);
-    };
-  }, [ampmItemsContRef.current]);
-
-  useEffect(() => {
-    const index = dateItemsMap.get(dateValue);
-    if (index !== currentDateValue.current) {
-      currentDateValue.current = index;
-      dateRefs.current[index]?.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth',
-      });
-      rerenderDateElements(
-        currentDateValue.current,
-        dateItemsContRef.current?.scrollTop,
-        0,
-        dateItems.length,
-      );
-    }
-  }, [dateValue]);
-
-  useEffect(() => {
-    const index = hourItemsMap.get(hourValue);
-    if (index !== currentHourValue.current) {
-      currentHourValue.current = index;
-      hourRefs.current[index]?.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth',
-      });
-      rerenderDateElements(
-        currentHourValue.current,
-        hourItemsContRef.current?.scrollTop,
-        0,
-        hourItems.length,
-      );
-    }
-  }, [hourValue]);
-
-  useEffect(() => {
-    const index = minuteItemsMap.get(minuteValue);
-    if (index !== currentMinuteValue.current) {
-      currentMinuteValue.current = index;
-      minuteRefs.current[index]?.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth',
-      });
-      rerenderDateElements(
-        currentMinuteValue.current,
-        minuteItemsContRef.current?.scrollTop,
-        0,
-        minuteItems.length,
-      );
-    }
-  }, [minuteValue]);
-
-  useEffect(() => {
-    const index = ampmItemsMap.get(ampmValue);
-    if (index !== currentAmpmValue.current) {
-      currentAmpmValue.current = index;
-      ampmRefs.current[index]?.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth',
-      });
-      rerenderDateElements(
-        currentAmpmValue.current,
-        ampmItemsContRef.current?.scrollTop,
-        0,
-        ampmItems.length,
-      );
-    }
-  }, [ampmValue]);
-
+  console.log(selectedDate);
   return (
     <div
       className="container-wheel after:right:0 relative flex w-52 after:absolute after:left-0 after:top-1/2 after:h-8 after:w-full after:rounded-sm after:bg-black"
