@@ -1,6 +1,4 @@
 .container-wheel {
-  display: flex;
-  width: 210px;
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -19,9 +17,6 @@
   content: '';
 
   transform: translateY(-50%);
-
-  width: 100%;
-  height: 32px;
 
   pointer-events: none;
   z-index: -1;

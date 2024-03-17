@@ -13,7 +13,7 @@ const WheelPickerComponent = ({
   ampmItems,
   ampmValue,
   onAmpmChange: handleAmpmChange,
-  containerHeight = 210,
+  containerHeight = 200,
   itemHeight = 32,
 }) => {
   const hourItemsContRef = useRef();
@@ -400,7 +400,7 @@ const WheelPickerComponent = ({
 
   return (
     <div
-      className="container-wheel after:right:0 relative flex w-52 after:absolute after:left-0 after:top-1/2 after:rounded-sm after:bg-black"
+      className="container-wheel after:right:0 relative flex w-52 after:absolute after:left-0 after:top-1/2 after:h-8 after:w-full after:rounded-sm after:bg-black"
       style={{
         height: `${containerHeight}px`,
       }}
