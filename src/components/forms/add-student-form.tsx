@@ -31,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui';
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from '@/constants';
 import { Json } from '@/types/types_db';
 import { createClient } from '@/utils/supabase/client';
 import { DialogClose } from '../ui/dialog';
