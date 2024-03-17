@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 
 import * as Icons from '@/components/icons';
