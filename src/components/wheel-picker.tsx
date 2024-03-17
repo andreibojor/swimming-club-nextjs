@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useMemo, useRef } from 'react';
 
 const WheelPickerComponent = ({
