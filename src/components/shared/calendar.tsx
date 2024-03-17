@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { format, isAfter } from 'date-fns';
+import { format, isAfter, isEqual } from 'date-fns';
 import { Button, useDayPicker, useDayRender } from 'react-day-picker';
 
 import {
@@ -14,27 +14,19 @@ import { StudentCalendarProps } from '@/types/types';
 import ScheduleLessonForm from '../forms/schedule-lesson-form';
 
 const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
-  const activities = {};
-  studentActivity.map((activity) => {
+  const activities = studentActivity.reduce((acc, activity) => {
     const date = new Date(activity.date).toISOString().split('T')[0];
-    activities[date] = activities[date]
-      ? [...activities[date], activity.status]
-      : [activity.status];
-  });
+    acc[date] = activity;
+    return acc;
+  }, {});
 
   const modifiers = {
-    scheduled: (date) => {
-      const dateStr = date.toISOString().split('T')[0];
-      return activities[dateStr]?.includes('scheduled');
-    },
-    present: (date) => {
-      const dateStr = date.toISOString().split('T')[0];
-      return activities[dateStr]?.includes('present');
-    },
-    absent: (date) => {
-      const dateStr = date.toISOString().split('T')[0];
-      return activities[dateStr]?.includes('absent');
-    },
+    scheduled: (date) =>
+      activities[date.toISOString().split('T')[0]]?.status === 'scheduled',
+    present: (date) =>
+      activities[date.toISOString().split('T')[0]]?.status === 'present',
+    absent: (date) =>
+      activities[date.toISOString().split('T')[0]]?.status === 'absent',
   };
 
   const modifiersClassNames = {
@@ -59,20 +51,18 @@ const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
               buttonRef,
             );
 
+            const dateStr = props.date.toISOString().split('T')[0];
+
+            const activityStatus = activities[dateStr] || 'No activity';
+
+            const currentDate = new Date();
+
             if (dayRender.isHidden) {
               return <div role="gridcell"></div>;
             }
             if (!dayRender.isButton) {
               return <div {...dayRender.divProps} />;
             }
-
-            const dateStr = props.date.toISOString().split('T')[0];
-
-            const activityStatus = activities[dateStr] || 'No activity';
-
-            // Inside the Day component
-            const currentDate = new Date();
-            const isFutureDate = isAfter(props.date, currentDate);
 
             return (
               <Popover>
@@ -84,14 +74,12 @@ const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
                   />
                 </PopoverTrigger>
 
-                {activityStatus[0] === 'present' ||
-                activityStatus[0] === 'scheduled' ||
-                activityStatus[0] === 'absent' ? (
+                {activityStatus.status ? (
                   <PopoverContent>
                     <div className="grid gap-4">
                       <div className="space-y-2">
                         <h4 className="font-medium leading-none">
-                          Status: {activityStatus}
+                          Status: {activityStatus.status}
                         </h4>
                         <p className="text-sm text-muted-foreground">
                           {format(props.date, 'dd-MM-yyyy')}
@@ -100,14 +88,7 @@ const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
                     </div>
                   </PopoverContent>
                 ) : (
-                  isFutureDate && (
-                    <PopoverContent>
-                      <ScheduleLessonForm
-                        userId={studentActivity[0].student_id}
-                        appointmentDate={format(props.date, 'dd-MM-yyyy')}
-                      />
-                    </PopoverContent>
-                  )
+                  ''
                 )}
               </Popover>
             );

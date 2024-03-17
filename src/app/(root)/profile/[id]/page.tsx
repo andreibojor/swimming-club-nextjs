@@ -4,15 +4,17 @@ import { redirect } from 'next/navigation';
 import RegistrationForm from '@/components/forms/student-registration-form';
 import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
 import StudentProfileTabs from '@/components/profile/student-profile-tabs';
-import { Card } from '@/components/ui';
+import { Card, Input } from '@/components/ui';
 import { URLProps } from '@/types/types';
 import { getStudentActivity } from '@/utils/actions/attendance';
+import { getOpenHoursByPool, getPools } from '@/utils/actions/pool';
 import { getStudentDetails } from '@/utils/actions/student';
 import { getUserDetails } from '@/utils/actions/user';
 import { createClient } from '@/utils/supabase/server';
 
 const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const supabase = createClient();
+  const pools = await getPools();
 
   const {
     data: { user },
@@ -25,12 +27,14 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const studentDetails = await getStudentDetails({
     studentId: params.id,
   });
-
+  const studentPool = pools.find((pool) => pool.value === studentDetails?.pool);
   const studentActivity = await getStudentActivity({
     studentId: params.id,
   });
 
-  if (!user) redirect('/signin');
+  const poolOpenHours = await getOpenHoursByPool({
+    poolId: studentPool?.id,
+  });
 
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">

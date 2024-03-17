@@ -1,4 +1,7 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
+import dayjs from 'dayjs';
 
 import * as Icons from '@/components/icons';
 import { StudentProfileTabsProps } from '@/types/types';
@@ -19,28 +22,60 @@ import {
   CardTitle,
   Input,
 } from '../ui';
+import { WheelPicker } from '../wheel-picker';
 
 const StudentProfileTabs = ({
   studentDetails,
   userDetails,
   studentActivity,
 }: StudentProfileTabsProps) => {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const query = searchParams.get('student');
+  const hourItems = Array.from({ length: 12 }, (_, index) => ({
+    value: index + 1,
+    label: index + 1,
+  }));
 
-  // useEffect(() => {
-  //   const newUrl = formUrlQuery({
-  //     params: searchParams.toString(),
-  //     key: 'student',
-  //     value: pool,
-  //   });
+  const minuteItems = Array.from({ length: 4 }, (_, index) => ({
+    value: `${(index * 15).toString().padStart(2, '0')}`,
+    label: `${(index * 15).toString().padStart(2, '0')}`,
+  }));
 
-  //   router.push(newUrl, { scroll: false });
-  // }, [pool, router, searchParams]);
+  const ampmItems = [
+    { value: 'AM', label: 'AM' },
+    { value: 'PM', label: 'PM' },
+  ];
+
+  const currentDaysInMonth = dayjs().daysInMonth();
+  const dateItems = Array.from({ length: currentDaysInMonth * 2 }, (_, i) => {
+    const date = dayjs().add(-currentDaysInMonth, 'days').add(i, 'days');
+    return {
+      value: date.startOf('day').format('YYYY-MM-DD'),
+      label: currentDaysInMonth === i ? 'Today' : date.format('ddd DD MMM'),
+    };
+  });
+
+  const [date, setDate] = useState(dateItems[currentDaysInMonth].value);
+  const [hour, setHour] = useState(hourItems[5].value);
+  const [minute, setMinute] = useState(minuteItems[2].value);
+  const [ampm, setAmpm] = useState(ampmItems[0].value);
 
   return (
     <>
+      <div className="flex w-full items-center justify-center">
+        <WheelPicker
+          dateItems={dateItems}
+          dateValue={date}
+          onDateChange={setDate}
+          hourItems={hourItems}
+          hourValue={hour}
+          onHourChange={setHour}
+          minuteItems={minuteItems}
+          minuteValue={minute}
+          onMinuteChange={setMinute}
+          ampmItems={ampmItems}
+          ampmValue={ampm}
+          onAmpmChange={setAmpm}
+        />
+      </div>
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle>Bună, {`${userDetails?.full_name}`}!</CardTitle>
       </CardHeader>

@@ -14,6 +14,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { TailwindIndicator, Toaster } from '@/components/ui';
 import { cn } from '@/utils/cn';
 
+import '../styles/wheel-picker.css';
+
 const fontSans = Inter({
   subsets: ['latin'],
   variable: '--font-sans',

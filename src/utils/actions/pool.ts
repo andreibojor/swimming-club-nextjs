@@ -16,7 +16,7 @@ export async function getPools() {
 }
 
 interface GetOpenHoursByPoolParams {
-  poolId: string;
+  poolId?: string;
 }
 
 export async function getOpenHoursByPool(params: GetOpenHoursByPoolParams) {
