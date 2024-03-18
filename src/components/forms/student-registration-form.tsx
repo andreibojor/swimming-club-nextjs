@@ -71,7 +71,7 @@ const StudentRegistrationSchema = z.object({
     ),
 });
 
-const StudentRegistrationForm = ({ userDetails }: Props) => {
+const StudentRegistrationForm = ({ userDetails, poolOpenHours }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 

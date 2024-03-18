@@ -31,7 +31,6 @@ import {
   SelectValue,
 } from '@/components/ui';
 import { setAppointment } from '@/utils/actions/attendance';
-import { createClient } from '@/utils/supabase/client';
 
 interface Props {
   type?: 'create' | 'edit';
@@ -45,39 +44,69 @@ const phoneRegex = new RegExp(
 );
 
 const RegistrationSchema = z.object({
-  role: z.string(),
-  phoneNumber: z.string().regex(phoneRegex, 'Invalid Number!'),
-  swimmerLevel: z.string(),
-  pool: z.string(),
+  hour: z.string(),
+  date: z.string(),
 });
 
 const ScheduleLessonForm = ({
   userId,
   questionDetails,
   appointmentDate,
+  poolOpenHours,
+  openDate,
+  studentDetails,
 }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
+  function getOpenHoursFormat(openTime, closeTime) {
+    // Convert strings into date
+    let start = new Date(`${openDate} ${openTime}`);
+    let end = new Date(`${openDate} ${closeTime}`);
+    // Subtract one hour from the close time
+    end.setHours(end.getHours() - 1);
+    // Array to hold results
+    let timeSlots = [];
+
+    // Iterate until we reach the close time
+    while (start <= end) {
+      // Push formatted time into array
+      timeSlots.push(
+        ('0' + start.getHours()).slice(-2) +
+          ':' +
+          ('0' + start.getMinutes()).slice(-2),
+      );
+
+      // Add 15 minutes
+      start.setMinutes(start.getMinutes() + 15);
+    }
+
+    return timeSlots;
+  }
+  const openHoursSelectList = getOpenHoursFormat('09:00', '21:00');
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof RegistrationSchema>>({
     resolver: zodResolver(RegistrationSchema),
     defaultValues: {
-      role: '',
-      swimmerLevel: '',
+      hour: '',
+      date: openDate,
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof RegistrationSchema>) {
     setIsSubmitting(true);
-    const selectedRole = form.watch('role');
-    console.log(values);
+
+    // Convert hour and date to timestampz format
+    const timestampzHour = `${values.date} ${values.hour}:00`;
+    console.log('Timestampz format:', timestampzHour);
     try {
-      //   if (values.date) {
-      //     await setAppointment({ studentId, date: date.toISOString() });
-      // }
+      setAppointment({
+        studentId: studentDetails.id,
+        date: timestampzHour,
+      });
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -89,7 +118,7 @@ const ScheduleLessonForm = ({
       <DialogTrigger asChild>
         <Button>Schedule Lesson</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[325px]">
         <DialogHeader>
           <DialogTitle>Programati o lectie de inot</DialogTitle>
           <DialogDescription>
@@ -103,10 +132,22 @@ const ScheduleLessonForm = ({
           >
             <FormField
               control={form.control}
-              name="role"
+              name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Select your role</FormLabel>
+                  <FormControl>
+                    <Input {...field} className="hidden" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hour"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Selectati ora</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -117,8 +158,11 @@ const ScheduleLessonForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="parent">Parent</SelectItem>
-                      <SelectItem value="student">Student</SelectItem>
+                      {openHoursSelectList.map((selectHour) => (
+                        <SelectItem key={selectHour} value={selectHour}>
+                          {selectHour}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormDescription></FormDescription>
@@ -126,38 +170,16 @@ const ScheduleLessonForm = ({
                 </FormItem>
               )}
             />
-            <FormDescription>
-              Select the desired payment method.
-            </FormDescription>
-
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
-                  <FormControl>
-                    <Input placeholder="0751123456" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* {form.watch('role') === 'student' && ( */}
-
-            {/* )} */}
+            <DialogFooter>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting && (
+                  <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Register
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
-        <DialogFooter>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting && (
-              <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Register
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

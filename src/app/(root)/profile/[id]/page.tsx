@@ -36,6 +36,8 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     poolId: studentPool?.id,
   });
 
+  console.log(poolOpenHours);
+
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-sm md:shadow-md">
@@ -51,6 +53,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
             studentDetails={studentDetails}
             userDetails={userDetails}
             studentActivity={studentActivity}
+            poolOpenHours={poolOpenHours}
           />
         )}
       </Card>

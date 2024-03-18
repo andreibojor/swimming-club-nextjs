@@ -22,12 +22,12 @@ import {
   CardTitle,
   Input,
 } from '../ui';
-import { WheelPicker } from '../wheel-picker';
 
 const StudentProfileTabs = ({
   studentDetails,
   userDetails,
   studentActivity,
+  poolOpenHours,
 }: StudentProfileTabsProps) => {
   const hourItems = Array.from({ length: 12 }, (_, index) => ({
     value: index + 1,
@@ -44,38 +44,8 @@ const StudentProfileTabs = ({
     { value: 'PM', label: 'PM' },
   ];
 
-  const currentDaysInMonth = dayjs().daysInMonth();
-  const dateItems = Array.from({ length: currentDaysInMonth * 2 }, (_, i) => {
-    const date = dayjs().add(-currentDaysInMonth, 'days').add(i, 'days');
-    return {
-      value: date.startOf('day').format('YYYY-MM-DD'),
-      label: currentDaysInMonth === i ? 'Today' : date.format('ddd DD MMM'),
-    };
-  });
-
-  const [date, setDate] = useState(dateItems[currentDaysInMonth].value);
-  const [hour, setHour] = useState(hourItems[5].value);
-  const [minute, setMinute] = useState(minuteItems[2].value);
-  const [ampm, setAmpm] = useState(ampmItems[0].value);
-
   return (
     <>
-      <div className="flex w-full items-center justify-center">
-        <WheelPicker
-          dateItems={dateItems}
-          dateValue={date}
-          onDateChange={setDate}
-          hourItems={hourItems}
-          hourValue={hour}
-          onHourChange={setHour}
-          minuteItems={minuteItems}
-          minuteValue={minute}
-          onMinuteChange={setMinute}
-          ampmItems={ampmItems}
-          ampmValue={ampm}
-          onAmpmChange={setAmpm}
-        />
-      </div>
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle>Bună, {`${userDetails?.full_name}`}!</CardTitle>
       </CardHeader>
@@ -160,7 +130,11 @@ const StudentProfileTabs = ({
 
           <Card className="w-full md:w-2/3">
             <div className="flex flex-col">
-              <StudentCalendar studentActivity={studentActivity} />
+              <StudentCalendar
+                studentActivity={studentActivity}
+                poolOpenHours={poolOpenHours}
+                studentDetails={studentDetails}
+              />
               <DateTimePickerDemo studentId={userDetails!.id} />
             </div>
           </Card>

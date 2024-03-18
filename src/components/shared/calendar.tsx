@@ -14,7 +14,11 @@ import {
 import { StudentCalendarProps } from '@/types/types';
 import ScheduleLessonForm from '../forms/schedule-lesson-form';
 
-const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
+const StudentCalendar = ({
+  studentActivity,
+  poolOpenHours,
+  studentDetails,
+}: StudentCalendarProps) => {
   const activities = studentActivity.reduce((acc, activity) => {
     const date = new Date(activity.date).toISOString().split('T')[0];
     acc[date] = activity;
@@ -43,6 +47,7 @@ const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
         modifiersClassNames={modifiersClassNames}
         fromYear={2024}
         mode="multiple"
+        weekStartsOn={1}
         components={{
           Day: ({ ...props }) => {
             const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -89,7 +94,23 @@ const StudentCalendar = ({ studentActivity }: StudentCalendarProps) => {
                     </div>
                   </PopoverContent>
                 ) : (
-                  ''
+                  <PopoverContent>
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <h4 className="font-medium leading-none">
+                          Status: {activityStatus.status}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {format(props.date, 'dd-MM-yyyy')}
+                          <ScheduleLessonForm
+                            poolOpenHours={poolOpenHours}
+                            openDate={format(props.date, 'MM/dd/yyyy')}
+                            studentDetails={studentDetails}
+                          />
+                        </p>
+                      </div>
+                    </div>
+                  </PopoverContent>
                 )}
               </Popover>
             );
