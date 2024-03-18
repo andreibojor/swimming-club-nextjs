@@ -1,15 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import dayjs from 'dayjs';
+import React from 'react';
 
 import * as Icons from '@/components/icons';
 import { StudentProfileTabsProps } from '@/types/types';
 import { formatCityName, formatDate } from '@/utils/helpers';
-import ScheduleLessonForm from '../forms/schedule-lesson-form';
 import StudentRegistrationForm from '../forms/student-registration-form';
 import StudentCalendar from '../shared/calendar';
-import { DateTimePickerDemo } from '../time-picker/date-time-picker-demo';
 import {
   Avatar,
   AvatarFallback,
@@ -29,21 +26,6 @@ const StudentProfileTabs = ({
   studentActivity,
   poolOpenHours,
 }: StudentProfileTabsProps) => {
-  const hourItems = Array.from({ length: 12 }, (_, index) => ({
-    value: index + 1,
-    label: index + 1,
-  }));
-
-  const minuteItems = Array.from({ length: 4 }, (_, index) => ({
-    value: `${(index * 15).toString().padStart(2, '0')}`,
-    label: `${(index * 15).toString().padStart(2, '0')}`,
-  }));
-
-  const ampmItems = [
-    { value: 'AM', label: 'AM' },
-    { value: 'PM', label: 'PM' },
-  ];
-
   return (
     <>
       <CardHeader className="flex-row items-center justify-between">
@@ -103,7 +85,7 @@ const StudentProfileTabs = ({
                         <span>Lessons left:</span>
                       </p>
                       <p className="flex items-end text-sm font-medium leading-none">
-                        Oli Marti
+                        {studentDetails?.lessons_left}
                       </p>
                     </div>
                   )}
@@ -135,7 +117,6 @@ const StudentProfileTabs = ({
                 poolOpenHours={poolOpenHours}
                 studentDetails={studentDetails}
               />
-              <DateTimePickerDemo studentId={userDetails!.id} />
             </div>
           </Card>
         </div>

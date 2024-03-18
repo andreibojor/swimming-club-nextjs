@@ -39,18 +39,12 @@ interface Props {
   appointmentDate: string;
 }
 
-const phoneRegex = new RegExp(
-  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
-);
-
 const RegistrationSchema = z.object({
   hour: z.string(),
   date: z.string(),
 });
 
 const ScheduleLessonForm = ({
-  userId,
-  questionDetails,
   appointmentDate,
   poolOpenHours,
   openDate,
@@ -126,10 +120,7 @@ const ScheduleLessonForm = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className=" grid space-y-8"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="grid">
             <FormField
               control={form.control}
               name="date"
