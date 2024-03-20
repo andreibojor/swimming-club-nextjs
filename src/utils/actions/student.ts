@@ -27,6 +27,11 @@ interface RegisterStudentParams {
   path: string;
 }
 
+interface UpdateStudentLessonsParams {
+  studentId: string;
+  quantity: number;
+}
+
 export async function getStudentDetails(params: GetStudentDetailsParams) {
   try {
     const supabase = createClient();
@@ -131,7 +136,7 @@ export async function registerStudent(params: RegisterStudentParams) {
   }
 }
 
-export async function updateStudentLessons(params) {
+export async function updateStudentLessons(params: UpdateStudentLessonsParams) {
   try {
     const supabase = createClient();
 

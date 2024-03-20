@@ -36,7 +36,7 @@ interface SubscriptionWithProduct extends Subscription {
 interface Props {
   user: User | null | undefined;
   products: ProductWithPrices[];
-  subscription: SubscriptionWithProduct | null;
+  // subscription: SubscriptionWithProduct | null;
   studentLevel: string;
   studentId: string;
 }

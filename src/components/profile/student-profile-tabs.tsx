@@ -9,16 +9,14 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  Button,
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-  Input,
 } from '@/components/ui';
 import { StudentProfileTabsProps } from '@/types/types';
-import { formatCityName, formatDate } from '@/utils/helpers';
+import { formatCityName } from '@/utils/helpers';
 import Pricing from '../pricing';
 
 const StudentProfileTabs = ({

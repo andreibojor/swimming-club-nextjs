@@ -42,17 +42,11 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   });
 
   // Stripe stuff
-  const { subscription } = await getSubscriptions();
+  const subscription = await getSubscriptions();
 
   const products = await getProducts({
-    studentLevel: studentDetails?.swimmer_level,
+    studentLevel: studentDetails?.swimmer_level!,
   });
-
-  const { data: students, error } = await supabase
-    .from('students')
-    .select('*')
-    .eq('id', studentDetails.id)
-    .single();
 
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">

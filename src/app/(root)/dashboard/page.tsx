@@ -1,7 +1,6 @@
 import React from 'react';
 
 import DashboardTabs from '@/components/dashboard-tabs';
-import DashboardFullCalendar from '@/components/full-calendar';
 import { Card } from '@/components/ui';
 import { SearchParamsProps } from '@/types/types';
 import { getAppointments } from '@/utils/actions/attendance';
@@ -19,8 +18,8 @@ const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
     pool: searchParams.pool!,
   });
 
-  const appointments = await getAppointments({ pool: searchParams.pool! });
-  console.log(appointments);
+  const appointments = await getAppointments({ poolValue: searchParams.pool! });
+
   // const [pools, selectedPool, poolOpenHours, students, appointments] =
   //   await Promise.all([
   //     getPools(),

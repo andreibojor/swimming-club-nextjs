@@ -11,6 +11,10 @@ interface StudentAppointmentsParams {
   studentId: string;
 }
 
+interface GetAppointmentParams {
+  poolValue: string;
+}
+
 export async function setAppointment(params: SetAppointmentParams) {
   try {
     const supabase = createClient();
@@ -29,16 +33,16 @@ export async function setAppointment(params: SetAppointmentParams) {
   }
 }
 
-export async function getAppointments(params) {
+export async function getAppointments(params: GetAppointmentParams) {
   try {
     const supabase = createClient();
 
-    const { pool } = params;
+    const { poolValue } = params;
 
     const { data } = await supabase
       .from('attendance_record')
       .select('*, students(*)')
-      .eq('students.pool', pool);
+      .eq('students.pool', poolValue);
 
     return data || [];
   } catch (error) {
