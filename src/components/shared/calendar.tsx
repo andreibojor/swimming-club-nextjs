@@ -61,8 +61,6 @@ const StudentCalendar = ({
 
             const activityStatus = activities[dateStr] || 'No activity';
 
-            const currentDate = new Date();
-
             if (dayRender.isHidden) {
               return <div role="gridcell"></div>;
             }

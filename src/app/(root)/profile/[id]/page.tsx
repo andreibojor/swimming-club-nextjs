@@ -2,12 +2,17 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 
 import RegistrationForm from '@/components/forms/student-registration-form';
+import Pricing from '@/components/pricing';
 import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
 import StudentProfileTabs from '@/components/profile/student-profile-tabs';
 import { Card, Input } from '@/components/ui';
 import { URLProps } from '@/types/types';
 import { getStudentActivity } from '@/utils/actions/attendance';
 import { getOpenHoursByPool, getPools } from '@/utils/actions/pool';
+import {
+  getProducts,
+  getSubscriptions,
+} from '@/utils/actions/products-and-prices';
 import { getStudentDetails } from '@/utils/actions/student';
 import { getUserDetails } from '@/utils/actions/user';
 import { createClient } from '@/utils/supabase/server';
@@ -36,6 +41,21 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     poolId: studentPool?.id,
   });
 
+  // Stripe stuff
+  const { subscription } = await getSubscriptions();
+
+  const products = await getProducts({
+    studentLevel: studentDetails?.swimmer_level,
+  });
+
+  const { data: students, error } = await supabase
+    .from('students')
+    .select('*')
+    .eq('id', studentDetails.id)
+    .single();
+
+  console.log(students);
+
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-sm md:shadow-md">
@@ -47,12 +67,18 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
         )}
 
         {userDetails?.role === 'student' && (
-          <StudentProfileTabs
-            studentDetails={studentDetails}
-            userDetails={userDetails}
-            studentActivity={studentActivity}
-            poolOpenHours={poolOpenHours}
-          />
+          <>
+            <StudentProfileTabs
+              studentDetails={studentDetails}
+              userDetails={userDetails}
+              studentActivity={studentActivity}
+              poolOpenHours={poolOpenHours}
+              // for stripe
+              user={userDetails.id}
+              products={products ?? []}
+              subscription={subscription}
+            />
+          </>
         )}
       </Card>
     </div>

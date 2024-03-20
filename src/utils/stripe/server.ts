@@ -11,6 +11,7 @@ import {
 import { stripe } from '@/utils/stripe/config';
 import { createOrRetrieveCustomer } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
+import { updateStudentLessons } from '../actions/student';
 
 type Price = Tables<'prices'>;
 
@@ -22,6 +23,8 @@ type CheckoutResponse = {
 export async function checkoutWithStripe(
   price: Price,
   redirectPath: string = '/account',
+  quantity: number,
+  studentId: string,
 ): Promise<CheckoutResponse> {
   try {
     // Get the user from Supabase auth
@@ -58,10 +61,10 @@ export async function checkoutWithStripe(
       line_items: [
         {
           price: price.id,
-          quantity: 1,
+          quantity: price.type === 'one_time' ? quantity : 1,
         },
       ],
-      cancel_url: getURL(),
+      cancel_url: getURL(redirectPath),
       success_url: getURL(redirectPath),
     };
 
@@ -95,6 +98,8 @@ export async function checkoutWithStripe(
 
     // Instead of returning a Response, just return the data or error.
     if (session) {
+      // Call the server action to update student lessons after successful payment
+      await updateStudentLessons({ studentId, quantity });
       return { sessionId: session.id };
     } else {
       throw new Error('Unable to create checkout session.');

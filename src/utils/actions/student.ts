@@ -130,3 +130,37 @@ export async function registerStudent(params: RegisterStudentParams) {
     throw error;
   }
 }
+
+export async function updateStudentLessons(params) {
+  try {
+    const supabase = createClient();
+
+    const { studentId, quantity } = params;
+
+    // Retrieve the student data
+    const { data: student, error } = await supabase
+      .from('students')
+      .select('*')
+      .eq('id', studentId)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    if (!student) {
+      throw new Error('Student not found');
+    }
+
+    // Calculate new lessons left
+    const updatedLessonsLeft = student.lessons_left + quantity;
+
+    await supabase
+      .from('students')
+      .update({ lessons_left: updatedLessonsLeft })
+      .eq('id', studentId);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
