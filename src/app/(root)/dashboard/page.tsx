@@ -19,8 +19,8 @@ const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
     pool: searchParams.pool!,
   });
 
-  const appointments = await getAppointments();
-
+  const appointments = await getAppointments({ pool: searchParams.pool! });
+  console.log(appointments);
   // const [pools, selectedPool, poolOpenHours, students, appointments] =
   //   await Promise.all([
   //     getPools(),

@@ -50,8 +50,6 @@ const ScheduleLessonForm = ({
   onDate,
   studentDetails,
 }: Props) => {
-  console.log(poolOpenHours);
-  console.log('onDate:', onDate);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -80,6 +78,11 @@ const ScheduleLessonForm = ({
 
     return timeSlots;
   }
+  const formattedDate = onDate.toLocaleDateString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+  });
 
   const openHoursSelectList = getOpenHoursFormat(
     onDate.toISOString().slice(0, 10), // Convert onDate to YYYY-MM-DD format
@@ -92,7 +95,7 @@ const ScheduleLessonForm = ({
     resolver: zodResolver(RegistrationSchema),
     defaultValues: {
       hour: '',
-      date: onDate,
+      date: formattedDate,
     },
   });
 
@@ -101,12 +104,12 @@ const ScheduleLessonForm = ({
     setIsSubmitting(true);
 
     // Convert hour and date to timestampz format
-    const timestampzHour = `${values.date} ${values.hour}:00`;
-    console.log('Timestampz format:', timestampzHour);
+    const timestamptzHour = `${values.date} ${values.hour}:00`;
+    console.log('Timestampz format:', timestamptzHour);
     try {
       setAppointment({
         studentId: studentDetails.id,
-        date: timestampzHour,
+        date: timestamptzHour,
       });
     } catch (error) {
     } finally {
@@ -128,18 +131,6 @@ const ScheduleLessonForm = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid">
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} className="hidden" />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="hour"

@@ -38,6 +38,7 @@ const DashboardTabs = ({
 
     router.push(newUrl, { scroll: false });
   }, [pool, router, searchParams]);
+  console.log(appointments);
 
   return (
     <>
@@ -64,7 +65,7 @@ const DashboardTabs = ({
           {pools.map((pool) => (
             <TabsContent key={pool.id} value={pool.value} className="space-y-4">
               <OpenHoursPoolForm openHours={poolOpenHours} />
-              <DashboardFullCalendar events={appointments} />
+              <DashboardFullCalendar appointments={appointments} />
               {/* <AttendancePanel students={sortedStudents} /> */}
             </TabsContent>
           ))}

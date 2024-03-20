@@ -8,7 +8,7 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
 interface DashboardFullCalendarProps {
-  events: {
+  appointments: {
     date: string;
     id: string;
     status: 'scheduled' | 'present' | 'absent';
@@ -17,8 +17,19 @@ interface DashboardFullCalendarProps {
   }[];
 }
 
-const DashboardFullCalendar = ({ events }: DashboardFullCalendarProps) => {
-  console.log(events);
+const DashboardFullCalendar = ({
+  appointments,
+}: DashboardFullCalendarProps) => {
+  const events = appointments.map((appointment) => ({
+    id: appointment.id,
+    title: appointment.students.full_name,
+    start: appointment.date,
+    end: appointment.date,
+    color: 'red',
+  }));
+
+  appointments.map((app) => console.log(app));
+
   return (
     <div className="relative w-full">
       <FullCalendar
@@ -39,6 +50,8 @@ const DashboardFullCalendar = ({ events }: DashboardFullCalendarProps) => {
         slotMinTime={'09:00'}
         slotMaxTime={'21:30'}
         locale={roLocale}
+        timeZone="UTC"
+        height={600}
       />
     </div>
   );

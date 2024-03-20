@@ -29,11 +29,16 @@ export async function setAppointment(params: SetAppointmentParams) {
   }
 }
 
-export async function getAppointments() {
+export async function getAppointments(params) {
   try {
     const supabase = createClient();
 
-    const { data } = await supabase.from('attendance_record').select('*');
+    const { pool } = params;
+
+    const { data } = await supabase
+      .from('attendance_record')
+      .select('*, students(*)')
+      .eq('students.pool', pool);
 
     return data || [];
   } catch (error) {
