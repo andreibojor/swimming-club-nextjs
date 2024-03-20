@@ -7,6 +7,8 @@ import listPlugin from '@fullcalendar/list';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
+import { Tables } from '@/types/types_db';
+
 interface DashboardFullCalendarProps {
   appointments: {
     date: string;
@@ -14,6 +16,7 @@ interface DashboardFullCalendarProps {
     status: 'scheduled' | 'present' | 'absent';
     student_id: string;
     type: 'appointment' | 'attendance';
+    students: Tables<'students'>;
   }[];
 }
 
