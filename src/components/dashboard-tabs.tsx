@@ -41,7 +41,7 @@ const DashboardTabs = ({
 
   return (
     <>
-      <Tabs defaultValue="cluj-napoca" className="space-y-4">
+      <Tabs defaultValue={pool} className="space-y-4">
         <CardHeader className="flex-col items-center justify-between md:flex-row">
           <CardTitle>Dashboard</CardTitle>
           <TabsList>
@@ -63,10 +63,8 @@ const DashboardTabs = ({
             ))}
           {pools.map((pool) => (
             <TabsContent key={pool.id} value={pool.value} className="space-y-4">
-              {/* <CustomCalendar /> */}
               <OpenHoursPoolForm openHours={poolOpenHours} />
               <DashboardFullCalendar events={appointments} />
-
               {/* <AttendancePanel students={sortedStudents} /> */}
             </TabsContent>
           ))}

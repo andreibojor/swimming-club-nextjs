@@ -69,6 +69,30 @@
 } */
 
 /* Toolbar */
+
+.fc-theme-standard .fc-scrollgrid {
+  @apply rounded-lg !border;
+}
+
+.fc-theme-standard {
+  td,
+  th {
+    @apply border bg-transparent text-card-foreground;
+  }
+}
+
+.fc-theme-standard th:last-child {
+  @apply rounded-t-lg;
+}
+
+.fc-scroller .fc-scroller-liquid {
+  @apply rounded-lg;
+}
+
+.fc-theme-standard tr:last-child td:first-child {
+  @apply rounded-b-lg;
+}
+
 .fc-header-toolbar {
   @apply flex-col md:flex-row;
 
@@ -159,7 +183,7 @@
 }
 
 .fc-list-day > th {
-  @apply !bg-muted;
+  @apply rounded-t-lg !bg-muted;
 }
 
 .fc-cell-shaded {
