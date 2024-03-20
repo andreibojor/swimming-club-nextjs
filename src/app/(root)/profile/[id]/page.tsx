@@ -21,9 +21,9 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const supabase = createClient();
   const pools = await getPools();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
 
   const userDetails = await getUserDetails({
     userId: params.id,

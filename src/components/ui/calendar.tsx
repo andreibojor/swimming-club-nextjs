@@ -5,36 +5,9 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
 
 import { buttonVariants } from '@/components/ui/button';
-import { StudentCalendarProps } from '@/types/types';
 import { cn } from '@/utils/cn';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
-
-// export type CombinedCalendarProps = CalendarProps & StudentCalendarProps;
-
-const studentActivity = [
-  {
-    id: 'd4bd9ea5-d079-4171-ba74-eb10c406d6b4',
-    date: '2024-03-22T14:45:00+00:00',
-    student_id: '355aacf9-7265-4706-921c-405e9a4fec4a',
-    type: 'appointment',
-    status: 'scheduled',
-  },
-  {
-    id: 'aa37c7b0-c589-4010-a301-548029bcec31',
-    date: '2024-03-12T10:12:00+00:00',
-    student_id: '355aacf9-7265-4706-921c-405e9a4fec4a',
-    type: 'attendance',
-    status: 'present',
-  },
-  {
-    id: '3d3d49f7-3d20-4ce3-b938-43f82f12a651',
-    date: '2024-03-25T21:56:00+00:00',
-    student_id: '355aacf9-7265-4706-921c-405e9a4fec4a',
-    type: 'attendance',
-    status: 'absent',
-  },
-];
 
 function Calendar({
   className,

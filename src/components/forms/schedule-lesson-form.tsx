@@ -47,17 +47,19 @@ const RegistrationSchema = z.object({
 const ScheduleLessonForm = ({
   appointmentDate,
   poolOpenHours,
-  openDate,
+  onDate,
   studentDetails,
 }: Props) => {
+  console.log(poolOpenHours);
+  console.log('onDate:', onDate);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  function getOpenHoursFormat(openTime, closeTime) {
+  function getOpenHoursFormat(onDate, openTime, closeTime) {
     // Convert strings into date
-    let start = new Date(`${openDate} ${openTime}`);
-    let end = new Date(`${openDate} ${closeTime}`);
+    let start = new Date(`${onDate} ${openTime}`);
+    let end = new Date(`${onDate} ${closeTime}`);
     // Subtract one hour from the close time
     end.setHours(end.getHours() - 1);
     // Array to hold results
@@ -78,14 +80,19 @@ const ScheduleLessonForm = ({
 
     return timeSlots;
   }
-  const openHoursSelectList = getOpenHoursFormat('09:00', '21:00');
+
+  const openHoursSelectList = getOpenHoursFormat(
+    onDate.toISOString().slice(0, 10), // Convert onDate to YYYY-MM-DD format
+    poolOpenHours[onDate.getDay()].open_time,
+    poolOpenHours[onDate.getDay()].close_time,
+  );
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof RegistrationSchema>>({
     resolver: zodResolver(RegistrationSchema),
     defaultValues: {
       hour: '',
-      date: openDate,
+      date: onDate,
     },
   });
 
