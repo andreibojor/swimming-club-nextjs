@@ -23,33 +23,33 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // const userDetails = await getUserDetails({
-  //   userId: params.id,
-  // });
+  const userDetails = await getUserDetails({
+    userId: params.id,
+  });
 
-  // const studentDetails = await getStudentDetails({
-  //   studentId: params.id,
-  // });
-  // const studentPool = pools.find((pool) => pool.value === studentDetails?.pool);
-  // const studentActivity = await getStudentActivity({
-  //   studentId: params.id,
-  // });
+  const studentDetails = await getStudentDetails({
+    studentId: params.id,
+  });
+  const studentPool = pools.find((pool) => pool.value === studentDetails?.pool);
+  const studentActivity = await getStudentActivity({
+    studentId: params.id,
+  });
 
-  // const poolOpenHours = await getOpenHoursByPool({
-  //   poolId: studentPool?.id,
-  // });
+  const poolOpenHours = await getOpenHoursByPool({
+    poolId: studentPool?.id,
+  });
 
-  // // Stripe stuff
-  // const subscription = await getSubscriptions();
+  // Stripe stuff
+  const subscription = await getSubscriptions();
 
-  // const products = await getProducts({
-  //   studentLevel: studentDetails?.swimmer_level!,
-  // });
+  const products = await getProducts({
+    studentLevel: studentDetails?.swimmer_level!,
+  });
 
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-sm md:shadow-md">
-        {/* {userDetails?.role === 'parent' && (
+        {userDetails?.role === 'parent' && (
           <ParentProfileTabs
             studentDetails={studentDetails}
             userDetails={userDetails}
@@ -69,7 +69,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
               subscription={subscription}
             />
           </>
-        )} */}
+        )}
       </Card>
     </div>
   );
