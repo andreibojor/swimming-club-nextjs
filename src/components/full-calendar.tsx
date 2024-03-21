@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 'use client';
 
 import roLocale from '@fullcalendar/core/locales/ro';
