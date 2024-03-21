@@ -39,7 +39,7 @@ const DashboardFullCalendar = ({
         plugins={[interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin]}
         initialView="dayGridMonth"
         weekends={true}
-        // events={events}
+        events={events}
         headerToolbar={{
           start: 'title,prev,next',
           end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
