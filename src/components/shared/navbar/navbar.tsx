@@ -26,7 +26,7 @@ const Navbar = async () => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
+  console.log('user', user);
   const initials = user?.user_metadata.full_name
     .split(' ')
     .map((n: string) => n[0])
