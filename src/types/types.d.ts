@@ -1,3 +1,5 @@
+import { User } from '@supabase/supabase-js';
+
 import { Tables } from './types_db';
 
 export interface ParamsProps {
@@ -39,6 +41,10 @@ export interface StudentProfileTabsProps {
   studentDetails: Tables<'students'> | null;
   userDetails: Tables<'users'> | null;
   studentActivity: Tables<'attendance_record'>[];
+  poolOpenHours: Tables<'open_hours'>[];
+  user: User;
+  products: Tables<'products'>[];
+  subscription: Tables<'subscriptions'>[];
 }
 
 export interface StudentCalendarProps {

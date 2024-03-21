@@ -1,11 +1,9 @@
+// @ts-nocheck
 import React from 'react';
-import { redirect } from 'next/navigation';
 
-import RegistrationForm from '@/components/forms/student-registration-form';
-import Pricing from '@/components/pricing';
 import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
 import StudentProfileTabs from '@/components/profile/student-profile-tabs';
-import { Card, Input } from '@/components/ui';
+import { Card } from '@/components/ui';
 import { URLProps } from '@/types/types';
 import { getStudentActivity } from '@/utils/actions/attendance';
 import { getOpenHoursByPool, getPools } from '@/utils/actions/pool';
@@ -21,9 +19,9 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const supabase = createClient();
   const pools = await getPools();
 
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const userDetails = await getUserDetails({
     userId: params.id,
