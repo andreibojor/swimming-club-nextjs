@@ -58,10 +58,6 @@ const DashboardTabs = ({
           </TabsList>
         </CardHeader>
         <CardContent>
-          {students &&
-            students.map((student) => (
-              <p key={student.id}>{student.full_name}</p>
-            ))}
           {pools.map((pool) => (
             <TabsContent key={pool.id} value={pool.value} className="space-y-4">
               <OpenHoursPoolForm openHours={poolOpenHours} />

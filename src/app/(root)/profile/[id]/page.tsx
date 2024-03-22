@@ -43,12 +43,13 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-sm md:shadow-md">
-        {/* {userDetails?.role === 'parent' && (
-          <ParentProfileTabs
-            studentDetails={studentDetails}
-            userDetails={userDetails}
-          />
-        )} */}
+        {userDetails?.role === 'parent' && (
+          // <ParentProfileTabs
+          //   studentDetails={studentDetails}
+          //   userDetails={userDetails}
+          // />
+          <h1>you are on a parent page</h1>
+        )}
 
         {userDetails?.role === 'student' && (
           <>

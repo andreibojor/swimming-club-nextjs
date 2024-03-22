@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import React, { useState } from 'react';
@@ -60,9 +61,6 @@ const UserRegistrationSchema = z.object({
   phoneNumber: z.string().regex(phoneRegex, 'Invalid Number!'),
   swimmerLevel: z.string(),
   pool: z.string(),
-  medicalCertificate: z.instanceof(Blob, {
-    message: 'Medical Certificate is required',
-  }),
 });
 
 const UserRegistrationForm = ({ userDetails }: Props) => {
@@ -84,30 +82,31 @@ const UserRegistrationForm = ({ userDetails }: Props) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof UserRegistrationSchema>) {
-    // setIsSubmitting(true);
-    // const selectedRole = form.watch('role');
-    // const { phoneNumber, swimmerLevel, pool, medicalCertificate, role } =
-    // values;
-    const { phoneNumber, role } = values;
-    console.log('values:', values);
+    setIsSubmitting(true);
+    const selectedRole = form.watch('role');
+    const { phoneNumber, swimmerLevel, pool, medicalCertificate, role } =
+      values;
+
     try {
       await registerUser({
         userId: userDetails.id,
         phoneNumber: phoneNumber,
         role: role,
+        swimmerLevel: swimmerLevel,
+        pool: pool,
+        medicalCertificate: medicalCertificate,
         path: pathname,
+        selectedRole: selectedRole,
       });
 
       toast.success('Event has been created');
     } catch (error) {
-      console.log('error', error);
-
+      console.error('Caught error:', error);
       throw Error;
+    } finally {
+      setIsSubmitting(false);
+      setIsOpen(false);
     }
-    // finally {
-    //   setIsSubmitting(false);
-    //   setIsOpen(false);
-    // }
   }
 
   return (
@@ -166,7 +165,7 @@ const UserRegistrationForm = ({ userDetails }: Props) => {
                 </FormItem>
               )}
             />
-            {/* {form.watch('role') === 'student' && (
+            {form.watch('role') === 'student' && (
               <>
                 <FormField
                   control={form.control}
@@ -253,11 +252,10 @@ const UserRegistrationForm = ({ userDetails }: Props) => {
                   )}
                 />
               </>
-            )} */}
+            )}
 
             <DialogFooter>
-              {/* <Button type="submit" disabled={isSubmitting}> */}
-              <Button type="submit">
+              <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && (
                   <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}

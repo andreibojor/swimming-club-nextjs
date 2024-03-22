@@ -32,13 +32,26 @@ interface RegisterUserParams {
   phoneNumber: string;
   role: string;
   path: string;
+  swimmerLevel?: string;
+  pool?: string;
+  medicalCertificate?: Blob;
+  selectedRole?: string;
 }
 
 export async function registerUser(params: RegisterUserParams) {
   try {
     const supabase = createClient();
 
-    const { userId, phoneNumber, role, path } = params;
+    const {
+      userId,
+      phoneNumber,
+      role,
+      swimmerLevel,
+      pool,
+      medicalCertificate,
+      path,
+      selectedRole,
+    } = params;
 
     await supabase
       .from('users')
@@ -49,8 +62,30 @@ export async function registerUser(params: RegisterUserParams) {
       })
       .eq('id', userId);
 
+    if (selectedRole === 'student') {
+      await supabase
+        .from('students')
+        .update({
+          swimmer_level: swimmerLevel,
+          pool: pool,
+          student_phone: phoneNumber,
+          lessons_left: 0,
+          medical_certificate_path: `mc-${userId}`,
+        })
+        .eq('id', userId);
+
+      await supabase.storage
+        .from('medical-certificates')
+        .upload(`mc-${userId}`, medicalCertificate!, {
+          cacheControl: '3600',
+          upsert: true, // Consider changing to true if overwrite is desired
+          upsert: false,
+        });
+    }
+
     revalidatePath(path);
   } catch (error) {
+    console.log('here2');
     console.log(error);
     throw error;
   }
