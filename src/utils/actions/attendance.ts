@@ -77,12 +77,13 @@ interface HandlePresenceProps {
   attendance: 'present' | 'absent';
   path: string;
   type?: 'attendance' | 'appointment';
+  date: string;
 }
 export async function updatePresence(params: HandlePresenceProps) {
   try {
     const supabase = createClient();
 
-    const { studentId, lessonsLeft, attendance, path } = params;
+    const { studentId, lessonsLeft, attendance, date, path } = params;
 
     const updateLessonsLeft = '';
     await supabase
@@ -92,6 +93,14 @@ export async function updatePresence(params: HandlePresenceProps) {
           attendance === 'present' ? lessonsLeft - 1 : lessonsLeft + 1,
       })
       .eq('id', studentId);
+
+    await supabase
+      .from('attendance_record')
+      .update({
+        status: attendance === 'present' ? 'present' : 'absent',
+      })
+      .eq('student_id', studentId)
+      .eq('date', new Date(date));
 
     revalidatePath(path);
   } catch (error) {

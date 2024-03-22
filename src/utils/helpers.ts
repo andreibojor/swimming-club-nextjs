@@ -147,41 +147,6 @@ export const formatCityName = (city: string) => {
   return formattedCity;
 };
 
-export const convertBlobToBase64 = (blob: Blob): string => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result);
-      } else {
-        reject(new Error('Invalid result type'));
-      }
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-};
-
-export const convertBase64ToBlob = (base64: string): Blob => {
-  // Check if the base64 string starts with 'data:' indicating a data URI
-  if (!base64.startsWith('data:')) {
-    throw new Error('Invalid base64 format');
-  }
-
-  // Extract the base64 data after the comma
-  const data = base64.split(',')[1];
-
-  // Convert the base64 data to binary
-  const byteCharacters = atob(data);
-  const byteArray = new Uint8Array(byteCharacters.length);
-
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteArray[i] = byteCharacters.charCodeAt(i);
-  }
-  // Create and return Blob object
-  return new Blob([uint8Array], { type: 'application/pdf' });
-};
-
 export const formatDate = (inputDate: string): string => {
   const options: Intl.DateTimeFormatOptions = {
     day: 'numeric',

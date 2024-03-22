@@ -28,7 +28,7 @@ interface Props {
   students: Tables<'students'>[];
 }
 
-export function AttendancePanel({ students }: Props) {
+export function AttendancePanel({ students, date }: Props) {
   const [filteredStudents, setFilteredStudents] = useState('');
 
   const displayedStudents = students.filter((student) =>
@@ -71,7 +71,7 @@ export function AttendancePanel({ students }: Props) {
 
       <ScrollArea className="h-[555px]">
         {displayedStudents?.map((student) => (
-          <AttendanceCard key={student.id} student={student} />
+          <AttendanceCard key={student.id} student={student} date={date} />
         ))}
       </ScrollArea>
     </>

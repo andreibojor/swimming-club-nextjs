@@ -5,7 +5,7 @@ import React from 'react';
 
 import StudentRegistrationForm from '@/components/forms/student-registration-form';
 import * as Icons from '@/components/icons';
-import StudentCalendar from '@/components/shared/calendar';
+import StudentCalendar from '@/components/shared/student-calendar';
 import {
   Avatar,
   AvatarFallback,

@@ -12,16 +12,17 @@ interface Props {
   student: Tables<'students'>;
 }
 
-export const AttendanceButton = ({ student }: Props) => {
+export const AttendanceButton = ({ student, date }: Props) => {
   const pathname = usePathname();
 
   const [isPresent, setIsPresent] = useState(false);
-
+  console.log(date);
   const handleAttendance = async (attendance: 'present' | 'absent') => {
     try {
       await updatePresence({
         studentId: student.id,
         lessonsLeft: student.lessons_left,
+        date: date,
         attendance: attendance,
         path: pathname,
       });

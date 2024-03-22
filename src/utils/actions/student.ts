@@ -4,7 +4,6 @@
 import { revalidatePath } from 'next/cache';
 
 import { createClient } from '@/utils/supabase/server';
-import { convertBase64ToBlob } from '../helpers';
 
 interface GetStudentsParams {
   pool: string;
@@ -60,8 +59,9 @@ export async function getStudentsByPool(params: GetStudentsParams) {
 
     const { data } = await supabase
       .from('students')
-      .select('*')
-      .eq('pool', pool);
+      .select('*, attendance_record(student_id, type, date, status)')
+      .eq('pool', pool)
+      .order('full_name', { ascending: true });
 
     return data || [];
   } catch (error) {

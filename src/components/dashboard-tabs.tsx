@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import queryString from 'query-string';
 
 import { DashboardTabsProps } from '@/types/types';
 import { formUrlQuery } from '@/utils/urlQuery';
 import AttendancePanel from './attendance-panel';
+import DashboardCalendar from './dashboard-calendar';
 import OpenHoursPoolForm from './forms/open-hours-form';
 import DashboardFullCalendar from './full-calendar';
 import {
@@ -26,19 +28,32 @@ const DashboardTabs = ({
 }: DashboardTabsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const query = searchParams.get('pool');
+  const poolQuery = searchParams.get('pool');
+  const dateQuery = searchParams.get('date');
 
-  const [pool, setPool] = useState(query || 'cluj-napoca');
-
+  const [pool, setPool] = useState(poolQuery || 'cluj-napoca');
+  const [date, setDate] = useState(dateQuery || new Date().toISOString());
   useEffect(() => {
-    const newUrl = formUrlQuery({
-      params: searchParams.toString(),
-      key: 'pool',
-      value: pool,
+    const currentParams = queryString.parse(searchParams.toString());
+
+    // Update both 'pool' and 'date' parameters
+    const updatedParams = {
+      ...currentParams,
+      pool: pool,
+      date: date,
+    };
+
+    // Stringify the updated parameters into a query string
+    const queryStringified = queryString.stringify(updatedParams, {
+      skipNull: true,
     });
 
+    // Generate the new URL with updated query parameters
+    const newUrl = `${window.location.pathname}?${queryStringified}`;
+
+    // Use Next.js router to navigate to the new URL without reloading the page
     router.push(newUrl, { scroll: false });
-  }, [pool, router, searchParams]);
+  }, [pool, date, router, searchParams]);
 
   return (
     <>
@@ -63,7 +78,8 @@ const DashboardTabs = ({
               <OpenHoursPoolForm openHours={poolOpenHours} />
               {/* <DashboardFullCalendar appointments={appointments} /> */}
               {/* <AttendancePanel students={sortedStudents} /> */}
-              <AttendancePanel students={students} />
+              <DashboardCalendar date={date} setDate={setDate} />
+              <AttendancePanel students={students} date={date} />
             </TabsContent>
           ))}
         </CardContent>

@@ -7,12 +7,16 @@ import { DayPicker } from 'react-day-picker';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+interface Props {
+  location: 'dashboard' | 'profile';
+}
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & Props;
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  location,
   ...props
 }: CalendarProps) {
   return (
@@ -36,7 +40,7 @@ function Calendar({
         head_cell:
           'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]',
         row: 'flex w-full mt-2 justify-between',
-        // 👇 previously had [&:has([aria-selected])]:bg-accent . Maybe this was good for range selecting
+        // 👇 previously had [&:has([aria-selected])]:bg-accent . This was good for range selecting
         cell: 'h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-transparent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
         day: cn(
           buttonVariants({ variant: 'ghost' }),
@@ -44,8 +48,11 @@ function Calendar({
         ),
         day_range_end: 'day-range-end',
         // 👇 removed bg-primary from here. It is added in modifiersClassNames
-        day_selected:
+        day_selected: cn(
+          location === 'dashboard' ? 'bg-primary' : '',
           'text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+        ),
+
         day_today: 'bg-accent text-accent-foreground',
         day_outside:
           'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',

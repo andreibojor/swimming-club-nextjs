@@ -28,7 +28,7 @@ import SwimmerCard from './swimmer-card';
 interface Props {
   student: Tables<'students'>;
 }
-export function AttendanceCard({ student }: Props) {
+export function AttendanceCard({ student, date }: Props) {
   const [lessonsLeft, setLessonsLeft] = useState(student.lessons_left);
 
   const getInitials = (name: string) => {
@@ -65,7 +65,7 @@ export function AttendanceCard({ student }: Props) {
             )}
           </div>
         </SwimmerCard>
-        <AttendanceButton student={student} />
+        <AttendanceButton student={student} date={date} />
 
         {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
