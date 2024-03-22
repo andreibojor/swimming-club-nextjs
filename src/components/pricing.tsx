@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 'use client';
 
 import { useState } from 'react';
@@ -79,6 +77,7 @@ export default function Pricing({
     price: Price,
     quantity: number,
     studentId: string,
+    studentLevel: string,
   ) => {
     setPriceIdLoading(price.id);
 
@@ -243,7 +242,12 @@ export default function Pricing({
                 <Button
                   disabled={priceIdLoading === price.id}
                   onClick={() =>
-                    handleStripeCheckout(price, quantity, studentId)
+                    handleStripeCheckout(
+                      price,
+                      quantity,
+                      studentId,
+                      studentLevel,
+                    )
                   }
                 >
                   {priceIdLoading === price.id && (

@@ -78,7 +78,6 @@ export async function registerUser(params: RegisterUserParams) {
         .from('medical-certificates')
         .upload(`mc-${userId}`, medicalCertificate!, {
           cacheControl: '3600',
-          upsert: true, // Consider changing to true if overwrite is desired
           upsert: false,
         });
     }
