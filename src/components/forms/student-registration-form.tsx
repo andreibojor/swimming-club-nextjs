@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client';
 
 import React, { useState } from 'react';
@@ -35,7 +34,6 @@ import {
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from '@/constants';
 import { Json } from '@/types/types_db';
 import { registerStudent } from '@/utils/actions/student';
-import { convertBlobToBase64 } from '@/utils/helpers';
 
 interface Props {
   type?: 'create' | 'edit';
@@ -72,7 +70,7 @@ const StudentRegistrationSchema = z.object({
     ),
 });
 
-const StudentRegistrationForm = ({ userDetails, poolOpenHours }: Props) => {
+const StudentRegistrationForm = ({ userDetails }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -93,8 +91,6 @@ const StudentRegistrationForm = ({ userDetails, poolOpenHours }: Props) => {
     setIsSubmitting(true);
     // const selectedRole = form.watch('role');
     const { phoneNumber, swimmerLevel, pool, medicalCertificate } = values;
-    // Convert the medicalCertificate Blob to a base64-encoded string
-    const medicalCertificateBase64 = convertBlobToBase64(medicalCertificate);
 
     try {
       await registerStudent({
@@ -103,7 +99,7 @@ const StudentRegistrationForm = ({ userDetails, poolOpenHours }: Props) => {
         phoneNumber: phoneNumber,
         swimmerLevel: swimmerLevel,
         pool: pool,
-        medicalCertificate: medicalCertificateBase64,
+        medicalCertificate: medicalCertificate,
         path: pathname,
       });
 

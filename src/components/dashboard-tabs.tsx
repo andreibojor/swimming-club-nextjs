@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -7,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { DashboardTabsProps } from '@/types/types';
 import { formUrlQuery } from '@/utils/urlQuery';
+import AttendancePanel from './attendance-panel';
 import OpenHoursPoolForm from './forms/open-hours-form';
 import DashboardFullCalendar from './full-calendar';
 import {
@@ -40,7 +39,6 @@ const DashboardTabs = ({
 
     router.push(newUrl, { scroll: false });
   }, [pool, router, searchParams]);
-  console.log(appointments);
 
   return (
     <>
@@ -67,8 +65,9 @@ const DashboardTabs = ({
           {pools.map((pool) => (
             <TabsContent key={pool.id} value={pool.value} className="space-y-4">
               <OpenHoursPoolForm openHours={poolOpenHours} />
-              <DashboardFullCalendar appointments={appointments} />
+              {/* <DashboardFullCalendar appointments={appointments} /> */}
               {/* <AttendancePanel students={sortedStudents} /> */}
+              <AttendancePanel students={students} />
             </TabsContent>
           ))}
         </CardContent>

@@ -24,7 +24,7 @@ interface RegisterStudentParams {
   phoneNumber: string;
   swimmerLevel: string;
   pool: string;
-  medicalCertificate: string;
+  medicalCertificate: Blob;
   path: string;
 }
 
@@ -101,9 +101,6 @@ export async function registerStudent(params: RegisterStudentParams) {
       path,
     } = params;
 
-    // Convert the medicalCertificate base64-encoded string back to a Blob
-    const medicalCertificateBlob = convertBase64ToBlob(medicalCertificate);
-
     await supabase
       .from('users')
       .update({
@@ -119,13 +116,14 @@ export async function registerStudent(params: RegisterStudentParams) {
         swimmer_level: swimmerLevel,
         pool: pool,
         student_phone: phoneNumber,
+        lessons_left: 0,
         medical_certificate_path: `mc-${userId}`,
       })
       .eq('id', userId);
 
     await supabase.storage
       .from('medical-certificates')
-      .upload(`mc-${userId}`, medicalCertificateBlob, {
+      .upload(`mc-${userId}`, medicalCertificate, {
         cacheControl: '3600',
         upsert: false,
       });

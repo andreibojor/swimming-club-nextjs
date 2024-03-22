@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import DashboardTabs from '@/components/dashboard-tabs';
@@ -41,7 +40,6 @@ const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
 
   return (
     <div className="m-3 flex w-full max-w-screen-lg animate-fade-up flex-col p-5 xl:px-0">
-      <div className="m-4">asds</div>
       <Card className="shadow-sm md:shadow-md">
         <DashboardTabs
           pools={pools}
