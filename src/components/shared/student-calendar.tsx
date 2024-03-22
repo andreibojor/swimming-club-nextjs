@@ -1,9 +1,7 @@
-// @ts-nocheck
 'use client';
 
 import React from 'react';
-import { format, isAfter, isEqual } from 'date-fns';
-import { Activity } from 'lucide-react';
+import { format, isAfter, isEqual, isToday } from 'date-fns';
 import { Button, useDayPicker, useDayRender } from 'react-day-picker';
 
 import {
@@ -20,36 +18,26 @@ const StudentCalendar = ({
   poolOpenHours,
   studentDetails,
 }: StudentCalendarProps) => {
-  // This issue can be resolved by properly accounting for the timezone differences.
-  // In JavaScript, the `Date` object is created in the client's timezone, and this leads
-  // to shifts when you are trying to convert it back to a string.
+  type ActivityStatus = 'scheduled' | 'present' | 'absent';
 
-  // To get around this issue, you can manually construct the key for `statusByDate` by
-  // pulling out the Year, Month, and Day parts individually as follows:
-
-  const statusByDate = [];
+  interface StatusByDateMap {
+    [key: string]: ActivityStatus;
+  }
+  const statusByDate: StatusByDateMap = {};
   studentActivity.forEach((activity) => {
+    // Use `format` to simplify the date key creation
     const date = new Date(activity.date);
-    const year = date.getUTCFullYear();
-    const month = date.getUTCMonth() + 1; // getUTCMonth() starts from 0
-    const day = date.getUTCDate(); // getUTCDate() starts from 1
-    const key = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const key = format(date, 'yyyy-MM-dd');
     statusByDate[key] = activity.status;
   });
 
   const modifiers = {
-    scheduled: (date) =>
-      statusByDate[
-        `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
-      ] === 'scheduled',
-    present: (date) =>
-      statusByDate[
-        `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
-      ] === 'present',
-    absent: (date) =>
-      statusByDate[
-        `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
-      ] === 'absent',
+    scheduled: (date: Date) =>
+      statusByDate[format(date, 'yyyy-MM-dd')] === 'scheduled',
+    present: (date: Date) =>
+      statusByDate[format(date, 'yyyy-MM-dd')] === 'present',
+    absent: (date: Date) =>
+      statusByDate[format(date, 'yyyy-MM-dd')] === 'absent',
   };
 
   const modifiersClassNames = {
@@ -59,20 +47,9 @@ const StudentCalendar = ({
   };
 
   function isTodayOrFuture(date: Date) {
+    // Simplify comparison using `isToday` and `isAfter`
     const today = new Date();
-    // Remove time part from today's date
-    const todayWithoutTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-    );
-    // Remove time part from the provided date
-    const dateWithoutTime = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-    );
-    return dateWithoutTime >= todayWithoutTime;
+    return isToday(date) || isAfter(date, today);
   }
 
   return (
@@ -101,14 +78,7 @@ const StudentCalendar = ({
             }
 
             // Get the key for the statusByDate object
-            const key = `${props.date.getFullYear()}-${(
-              props.date.getMonth() + 1
-            )
-              .toString()
-              .padStart(
-                2,
-                '0',
-              )}-${props.date.getDate().toString().padStart(2, '0')}`;
+            const key = format(props.date, 'yyyy-MM-dd');
 
             return (
               <Popover>
