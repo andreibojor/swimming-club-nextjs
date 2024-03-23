@@ -32,7 +32,7 @@ const DashboardTabs = ({
   const dateQuery = searchParams.get('date');
 
   const [pool, setPool] = useState(poolQuery || 'cluj-napoca');
-  const [date, setDate] = useState(dateQuery || new Date().toISOString());
+  const [date, setDate] = useState(dateQuery || new Date().toString());
   useEffect(() => {
     const currentParams = queryString.parse(searchParams.toString());
 

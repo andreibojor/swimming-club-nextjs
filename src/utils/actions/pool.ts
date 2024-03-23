@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use server';
 
 import { createClient } from '@/utils/supabase/server';

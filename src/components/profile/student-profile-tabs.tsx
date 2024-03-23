@@ -1,4 +1,3 @@
-//@ts-nocheck
 'use client';
 
 import React from 'react';
@@ -88,7 +87,7 @@ const StudentProfileTabs = ({
                   {userDetails?.completed_registration && (
                     <div className="flex items-center justify-between space-x-4">
                       <p className="flex items-end text-sm font-medium leading-none">
-                        <Icons.Waves className="mr-1 size-4 text-primary" />{' '}
+                        <Icons.Waves className="mr-1 size-4 text-primary" />
                         Abonament:
                       </p>
                       <p className="flex items-end text-sm font-medium leading-none">
