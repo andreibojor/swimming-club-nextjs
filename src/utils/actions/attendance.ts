@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/server';
 interface SetAppointmentParams {
   studentId: string;
   date: string;
+  time: string;
 }
 
 interface StudentAppointmentsParams {
@@ -21,12 +22,13 @@ export async function setAppointment(params: SetAppointmentParams) {
   try {
     const supabase = createClient();
 
-    const { studentId, date } = params;
+    const { studentId, date, time } = params;
 
     await supabase.from('attendance_record').insert({
       student_id: studentId,
       type: 'appointment',
       date: date,
+      time: time,
       status: 'scheduled',
     });
   } catch (error) {

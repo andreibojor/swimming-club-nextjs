@@ -1,9 +1,9 @@
-// @ts-nocheck
 'use client';
 
 import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { addMinutes, format, setHours, setMinutes } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -24,7 +24,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
   Select,
   SelectContent,
   SelectItem,
@@ -43,6 +42,7 @@ interface Props {
 const RegistrationSchema = z.object({
   hour: z.string(),
   date: z.string(),
+  time: z.string(),
 });
 
 const ScheduleLessonForm = ({
@@ -55,40 +55,34 @@ const ScheduleLessonForm = ({
   const router = useRouter();
   const pathname = usePathname();
 
-  function getOpenHoursFormat(onDate, openTime, closeTime) {
-    // Convert strings into date
-    let start = new Date(`${onDate} ${openTime}`);
-    let end = new Date(`${onDate} ${closeTime}`);
-    // Subtract one hour from the close time
-    end.setHours(end.getHours() - 1);
-    // Array to hold results
-    let timeSlots = [];
+  const getOpenHoursFormat = (
+    onDate: Date,
+    openTime: string,
+    closeTime: string,
+  ) => {
+    const [openHour, openMinute] = openTime.split(':').map(Number);
+    const [closeHour, closeMinute] = closeTime.split(':').map(Number);
 
-    // Iterate until we reach the close time
+    let start = setHours(setMinutes(onDate, openMinute), openHour);
+    const end = setHours(setMinutes(onDate, closeMinute), closeHour - 1); // Subtracting one hour from close time
+
+    let timeSlots: string[] = [];
+
     while (start <= end) {
-      // Push formatted time into array
-      timeSlots.push(
-        ('0' + start.getHours()).slice(-2) +
-          ':' +
-          ('0' + start.getMinutes()).slice(-2),
-      );
-
-      // Add 15 minutes
-      start.setMinutes(start.getMinutes() + 15);
+      timeSlots.push(format(start, 'HH:mm'));
+      start = addMinutes(start, 15); // Add 15 minutes
     }
 
     return timeSlots;
-  }
-  const formattedDate = onDate.toLocaleDateString('en-US', {
-    month: '2-digit',
-    day: '2-digit',
-    year: 'numeric',
-  });
+  };
+  // Using date-fns to format onDate
+  const formattedDate = format(onDate, 'MM-dd-yyyy');
 
+  const openHoursForDay = poolOpenHours[onDate.getDay()];
   const openHoursSelectList = getOpenHoursFormat(
-    onDate.toISOString().slice(0, 10), // Convert onDate to YYYY-MM-DD format
-    poolOpenHours[onDate.getDay()].open_time,
-    poolOpenHours[onDate.getDay()].close_time,
+    onDate,
+    openHoursForDay.open_time,
+    openHoursForDay.close_time,
   );
 
   // 1. Define your form.
@@ -97,20 +91,19 @@ const ScheduleLessonForm = ({
     defaultValues: {
       hour: '',
       date: formattedDate,
+      time: '',
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof RegistrationSchema>) {
     setIsSubmitting(true);
-
-    // Convert hour and date to timestampz format
-    const timestamptzHour = `${values.date} ${values.hour}:00`;
-    console.log('Timestampz format:', timestamptzHour);
+    const { date, time } = values;
     try {
       setAppointment({
         studentId: studentDetails.id,
-        date: timestamptzHour,
+        date: date,
+        time: time,
       });
     } catch (error) {
     } finally {
@@ -134,7 +127,7 @@ const ScheduleLessonForm = ({
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid">
             <FormField
               control={form.control}
-              name="hour"
+              name="time"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Selectati ora</FormLabel>
