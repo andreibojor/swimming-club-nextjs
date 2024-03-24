@@ -1,4 +1,5 @@
 import React from 'react';
+import { redirect } from 'next/navigation';
 
 import CustomerPortalForm from '@/components/forms/customer-portal-form';
 import UserRegistrationForm from '@/components/forms/user-registration-form';
@@ -18,36 +19,19 @@ import { getUserDetails } from '@/utils/actions/user';
 import { createClient } from '@/utils/supabase/server';
 
 const ProfilePage = async ({ params, searchParams }: URLProps) => {
-  const pools = await getPools();
-
-  const userDetails = await getUserDetails({
-    userId: params.id,
-  });
-
-  const studentDetails = await getStudentDetails({
-    studentId: params.id,
-  });
-  // const studentPool = pools.find((pool) => pool.value === studentDetails?.pool);
-  // const studentActivity = await getStudentActivity({
-  //   studentId: params.id,
-  // });
-
-  // const poolOpenHours = await getOpenHoursByPool({
-  //   poolId: studentPool?.id!,
-  // });
-
-  // // Stripe stuff
-  // const subscription = await getSubscriptions();
-
-  // const products = await getProducts({
-  //   studentLevel: studentDetails?.swimmer_level!,
-  // });
-
   const supabase = createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect('/signin');
+  }
+
+  const userDetails = await getUserDetails({
+    userId: user.id,
+  });
 
   const { data: subscription, error } = await supabase
     .from('subscriptions')
@@ -67,8 +51,27 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     .order('metadata->index')
     .order('unit_amount', { referencedTable: 'prices' });
 
-  console.log('subscription', subscription);
+  const pools = await getPools();
 
+  const studentDetails = await getStudentDetails({
+    studentId: params.id,
+  });
+  // const studentPool = pools.find((pool) => pool.value === studentDetails?.pool);
+  // const studentActivity = await getStudentActivity({
+  //   studentId: params.id,
+  // });
+
+  // const poolOpenHours = await getOpenHoursByPool({
+  //   poolId: studentPool?.id!,
+  // });
+
+  // // Stripe stuff
+  // const subscription = await getSubscriptions();
+
+  // const products = await getProducts({
+  //   studentLevel: studentDetails?.swimmer_level!,
+  // });
+  console.log(studentDetails);
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-sm md:shadow-md">

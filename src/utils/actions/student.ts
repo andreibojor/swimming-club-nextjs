@@ -42,7 +42,6 @@ export async function getStudentDetails(params: GetStudentDetailsParams) {
       .select('*')
       .eq('id', studentId)
       .single();
-
     return data || null;
   } catch (error) {
     console.log(error);
