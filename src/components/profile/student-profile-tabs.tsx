@@ -17,6 +17,7 @@ import {
 } from '@/components/ui';
 import { StudentProfileTabsProps } from '@/types/types';
 import { formatCityName } from '@/utils/helpers';
+import { createClient } from '@/utils/supabase/server';
 import Pricing from '../pricing';
 
 const StudentProfileTabs = ({
@@ -24,9 +25,6 @@ const StudentProfileTabs = ({
   userDetails,
   studentActivity,
   poolOpenHours,
-  user,
-  products,
-  subscription,
 }: StudentProfileTabsProps) => {
   return (
     <>
