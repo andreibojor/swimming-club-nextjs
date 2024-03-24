@@ -1,5 +1,6 @@
 import React from 'react';
 
+import CustomerPortalForm from '@/components/forms/customer-portal-form';
 import UserRegistrationForm from '@/components/forms/user-registration-form';
 import Pricing from '@/components/pricing';
 import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
@@ -95,6 +96,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
           products={products ?? []}
           subscription={subscription}
         />
+        <CustomerPortalForm subscription={subscription} />
         {userDetails?.role === null && (
           <UserRegistrationForm userDetails={userDetails} />
         )}
