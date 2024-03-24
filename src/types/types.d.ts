@@ -42,7 +42,7 @@ export interface StudentProfileTabsProps {
   userDetails: Tables<'users'> | null;
   studentActivity: Tables<'attendance_record'>[];
   poolOpenHours: Tables<'open_hours'>[];
-  user: User;
+  user: string;
   products: Tables<'products'>[];
   subscription: Tables<'subscriptions'>[];
 }

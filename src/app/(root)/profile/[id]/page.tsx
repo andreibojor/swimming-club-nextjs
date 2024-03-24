@@ -30,7 +30,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   });
 
   const poolOpenHours = await getOpenHoursByPool({
-    poolId: studentPool?.id,
+    poolId: studentPool?.id!,
   });
 
   // Stripe stuff
@@ -39,7 +39,9 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const products = await getProducts({
     studentLevel: studentDetails?.swimmer_level!,
   });
-  console.log('poolOpenHours', poolOpenHours);
+
+  console.log('subscription', subscription);
+
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-sm md:shadow-md">
