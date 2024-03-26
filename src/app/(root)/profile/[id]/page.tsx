@@ -40,10 +40,12 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
   const studentActivity = await getStudentActivity({
     studentId: params.id,
   });
-
-  const poolOpenHours = await getOpenHoursByPool({
-    poolId: studentDetails.pool.id,
-  });
+  let poolOpenHours = [];
+  userDetails?.role !== null
+    ? (poolOpenHours = await getOpenHoursByPool({
+        poolId: studentDetails.pool.id,
+      }))
+    : '';
 
   // Stripe stuff
   const subscription = await getSubscriptions();

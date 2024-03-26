@@ -86,33 +86,35 @@ export async function updatePresence(params: HandlePresenceProps) {
   try {
     const supabase = createClient();
 
-    const { studentId, lessonsLeft, attendance, path, date } = params;
+    const { studentId, lessonsLeft, path } = params;
 
-    const updateLessonsLeft = '';
     await supabase
       .from('students')
       .update({
-        lessons_left:
-          attendance === 'present' ? lessonsLeft - 1 : lessonsLeft + 1,
+        lessons_left: lessonsLeft - 1,
       })
       .eq('id', studentId);
 
-    await supabase
-      .from('attendance_record')
-      .update({
-        status: attendance,
-      })
-      .eq('student_id', studentId)
-      .eq('date', date);
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
-    // TODO if student level is advanced or pro, insert record
-    // await supabase.from('attendance_record').insert({
-    //   student_id: studentId,
-    //   date: date,
-    //   status: attendance === 'present' ? 'present' : 'absent',
-    //   time: null,
-    //   type: 'attendance',
-    // });
+export async function updateAbsence(params: HandlePresenceProps) {
+  try {
+    const supabase = createClient();
+
+    const { studentId, lessonsLeft, path } = params;
+
+    await supabase
+      .from('students')
+      .update({
+        lessons_left: lessonsLeft + 1,
+      })
+      .eq('id', studentId);
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);
