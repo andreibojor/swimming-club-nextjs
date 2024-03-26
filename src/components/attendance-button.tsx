@@ -21,7 +21,7 @@ export const AttendanceButton = ({ student, date, studentActivity }: Props) => {
   const supabase = createClient();
   useEffect(() => {
     const changes = supabase
-      .channel(`attendance_record_${student.id}`)
+      .channel(`attendance_record_channel`)
       .on(
         'postgres_changes',
         {
