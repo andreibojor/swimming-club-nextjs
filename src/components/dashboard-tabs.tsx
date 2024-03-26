@@ -2,15 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { format } from 'date-fns';
 import queryString from 'query-string';
 
 import { DashboardTabsProps } from '@/types/types';
-import { formUrlQuery } from '@/utils/urlQuery';
 import AttendancePanel from './attendance-panel';
 import DashboardCalendar from './dashboard-calendar';
 import OpenHoursPoolForm from './forms/open-hours-form';
 import DashboardFullCalendar from './full-calendar';
 import {
+  Card,
   CardContent,
   CardHeader,
   CardTitle,
@@ -32,7 +33,9 @@ const DashboardTabs = ({
   const dateQuery = searchParams.get('date');
 
   const [pool, setPool] = useState(poolQuery || 'cluj-napoca');
-  const [date, setDate] = useState(dateQuery || new Date().toString());
+  const [date, setDate] = useState(
+    dateQuery || format(new Date(), 'yyyy-MM-dd'),
+  );
   useEffect(() => {
     const currentParams = queryString.parse(searchParams.toString());
 
@@ -64,8 +67,9 @@ const DashboardTabs = ({
             {pools.map((pool) => (
               <TabsTrigger
                 key={pool.id}
-                value={pool.value}
-                onClick={() => setPool(pool.value)}
+                value={pool.name}
+                onClick={() => setPool(pool.name)}
+                className="capitalize"
               >
                 {pool.name}
               </TabsTrigger>
@@ -74,15 +78,20 @@ const DashboardTabs = ({
         </CardHeader>
         <CardContent>
           {pools.map((pool) => (
-            <TabsContent key={pool.id} value={pool.value} className="space-y-4">
+            <TabsContent key={pool.id} value={pool.name} className="space-y-4">
               <OpenHoursPoolForm openHours={poolOpenHours} />
               {/* <DashboardFullCalendar appointments={appointments} /> */}
-              {/* <AttendancePanel students={sortedStudents} /> */}
+
               <DashboardCalendar date={date} setDate={setDate} />
               <AttendancePanel students={students} date={date} />
             </TabsContent>
           ))}
         </CardContent>
+        <Card>
+          <CardHeader>
+            <CardTitle>Invite teacher</CardTitle>
+          </CardHeader>
+        </Card>
       </Tabs>
     </>
   );

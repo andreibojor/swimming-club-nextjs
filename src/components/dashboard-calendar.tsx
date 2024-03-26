@@ -2,7 +2,14 @@
 
 import React, { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { format, isAfter, isEqual } from 'date-fns';
+import {
+  format,
+  isAfter,
+  isEqual,
+  isFuture,
+  isToday,
+  startOfDay,
+} from 'date-fns';
 import { Button, useDayPicker, useDayRender } from 'react-day-picker';
 
 import {
@@ -16,28 +23,14 @@ import { formUrlQuery } from '@/utils/urlQuery';
 
 const DashboardCalendar = ({ date, setDate }: DashboardCalendarProps) => {
   function isTodayOrFuture(date: Date) {
-    const today = new Date();
-    // Remove time part from today's date
-    const todayWithoutTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-    );
-    // Remove time part from the provided date
-    const dateWithoutTime = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-    );
-    return dateWithoutTime >= todayWithoutTime;
+    // Using date-fns to check if the date is today or in the future
+    const dateStartOfDay = startOfDay(date);
+    return isToday(dateStartOfDay) || isFuture(dateStartOfDay);
   }
 
   const formatDateToLocalISOString = (date: Date) => {
-    // Format the date as YYYY-MM-DD
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // JS months are 0-indexed
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    // Use date-fns to format the date as YYYY-MM-DD
+    return format(date, 'yyyy-MM-dd');
   };
 
   const selectedDate = new Date(date);
@@ -69,14 +62,7 @@ const DashboardCalendar = ({ date, setDate }: DashboardCalendarProps) => {
             }
 
             // Get the key for the statusByDate object
-            const key = `${props.date.getFullYear()}-${(
-              props.date.getMonth() + 1
-            )
-              .toString()
-              .padStart(
-                2,
-                '0',
-              )}-${props.date.getDate().toString().padStart(2, '0')}`;
+            const key = format(props.date, 'yyyy-MM-dd');
 
             return (
               <Popover>

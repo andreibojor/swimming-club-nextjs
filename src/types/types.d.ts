@@ -38,13 +38,13 @@ export interface ParentProfileTabsProps {
 }
 
 export interface StudentProfileTabsProps {
-  studentDetails: Tables<'students'> | null;
+  studentDetails: Tables<'student_details_including_pool_id'> | null;
   userDetails: Tables<'users'> | null;
   studentActivity: Tables<'attendance_record'>[];
   poolOpenHours: Tables<'open_hours'>[];
-  user: string;
-  products: Tables<'products'>[];
-  subscription: Tables<'subscriptions'>[];
+  user: User;
+  products: ProductWithPrices[];
+  subscription: SubscriptionWithProduct | null;
 }
 
 export interface StudentCalendarProps {

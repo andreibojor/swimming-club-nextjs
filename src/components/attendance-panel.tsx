@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
 
 import * as Icons from '@/components/icons';
 import {
@@ -26,6 +27,7 @@ const swimmerLevelFilters = [
 
 interface Props {
   students: Tables<'students'>[];
+  date: Date;
 }
 
 export function AttendancePanel({ students, date }: Props) {
@@ -35,6 +37,11 @@ export function AttendancePanel({ students, date }: Props) {
     student.full_name.toLowerCase().includes(filteredStudents.toLowerCase()),
   );
 
+  type Checked = DropdownMenuCheckboxItemProps['checked'];
+
+  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
+  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
+  const [showPanel, setShowPanel] = React.useState<Checked>(false);
   return (
     <>
       <div className="flex justify-between">
@@ -44,6 +51,7 @@ export function AttendancePanel({ students, date }: Props) {
           onChange={(event) => setFilteredStudents(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px]"
         />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="ml-auto flex h-8">
@@ -68,7 +76,34 @@ export function AttendancePanel({ students, date }: Props) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">Open</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuCheckboxItem
+            checked={showStatusBar}
+            onCheckedChange={setShowStatusBar}
+          >
+            Status Bar
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={showActivityBar}
+            onCheckedChange={setShowActivityBar}
+            disabled
+          >
+            Activity Bar
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={showPanel}
+            onCheckedChange={setShowPanel}
+          >
+            Panel
+          </DropdownMenuCheckboxItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <ScrollArea className="h-[555px]">
         {displayedStudents?.map((student) => (
           <AttendanceCard key={student.id} student={student} date={date} />

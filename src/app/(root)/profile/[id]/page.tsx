@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import CustomerPortalForm from '@/components/forms/customer-portal-form';
 import UserRegistrationForm from '@/components/forms/user-registration-form';
-import Pricing from '@/components/pricing';
+import Pricing from '@/components/pricing-parent';
 import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
 import StudentProfileTabs from '@/components/profile/student-profile-tabs';
 import { Card } from '@/components/ui';
@@ -33,54 +33,32 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     userId: user.id,
   });
 
-  const { data: subscription, error } = await supabase
-    .from('subscriptions')
-    .select('*, prices(*, products(*))')
-    .in('status', ['trialing', 'active'])
-    .maybeSingle();
-
-  if (error) {
-    console.log(error);
-  }
-
-  const { data: products } = await supabase
-    .from('products')
-    .select('*, prices(*)')
-    .eq('active', true)
-    .eq('prices.active', true)
-    .order('metadata->index')
-    .order('unit_amount', { referencedTable: 'prices' });
-
-  const pools = await getPools();
-
   const studentDetails = await getStudentDetails({
     studentId: params.id,
   });
-  // const studentPool = pools.find((pool) => pool.value === studentDetails?.pool);
-  // const studentActivity = await getStudentActivity({
-  //   studentId: params.id,
-  // });
 
-  // const poolOpenHours = await getOpenHoursByPool({
-  //   poolId: studentPool?.id!,
-  // });
+  const studentActivity = await getStudentActivity({
+    studentId: params.id,
+  });
 
-  // // Stripe stuff
-  // const subscription = await getSubscriptions();
+  const poolOpenHours = await getOpenHoursByPool({
+    poolId: studentDetails.pool.id,
+  });
 
-  // const products = await getProducts({
-  //   studentLevel: studentDetails?.swimmer_level!,
-  // });
-  console.log(studentDetails);
+  // Stripe stuff
+  const subscription = await getSubscriptions();
+  const products = await getProducts({
+    studentLevel: studentDetails?.swimmer_level!,
+  });
+
   return (
     <div className="flex w-full max-w-screen-lg animate-fade-up flex-col gap-5 p-5 xl:px-0">
       <Card className="shadow-sm md:shadow-md">
-        {/* {userDetails?.role === 'parent' && (
-          // <ParentProfileTabs
-          //   studentDetails={studentDetails}
-          //   userDetails={userDetails}
-          // />
-          <h1>you are on a parent page</h1>
+        {userDetails?.role === 'parent' && (
+          <ParentProfileTabs
+            studentDetails={studentDetails}
+            userDetails={userDetails}
+          />
         )}
 
         {userDetails?.role === 'student' && (
@@ -91,15 +69,13 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
               studentActivity={studentActivity}
               poolOpenHours={poolOpenHours}
               // for stripe
+              user={user}
+              products={products ?? []}
+              subscription={subscription}
             />
           </>
-        )} */}
-        <Pricing
-          user={user}
-          products={products ?? []}
-          subscription={subscription}
-        />
-        <CustomerPortalForm subscription={subscription} />
+        )}
+
         {userDetails?.role === null && (
           <UserRegistrationForm userDetails={userDetails} />
         )}

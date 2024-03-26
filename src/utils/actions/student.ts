@@ -1,7 +1,9 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { toast } from 'sonner';
 
+import { Tables } from '@/types/types_db';
 import { createClient } from '@/utils/supabase/server';
 
 interface GetStudentsParams {
@@ -38,10 +40,13 @@ export async function getStudentDetails(params: GetStudentDetailsParams) {
     const { studentId } = params;
 
     const { data } = await supabase
-      .from('students')
-      .select('*')
-      .eq('id', studentId)
+      .from('student_details_including_pool_id')
+      .select()
+      .match({ id: studentId })
       .single();
+    // .returns<Tables<'student_details_including_pool_id'>>();
+
+    // return data || ([] as Tables<'student_details_including_pool_id'>[]);
     return data || null;
   } catch (error) {
     console.log(error);
@@ -147,11 +152,11 @@ export async function updateStudentLessons(params: UpdateStudentLessonsParams) {
       .single();
 
     if (error) {
-      throw error;
+      toast.error(error.message);
     }
 
     if (!student) {
-      throw new Error('Student not found');
+      toast.error('Student not found');
     }
 
     // Calculate new lessons left

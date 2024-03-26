@@ -130,7 +130,7 @@ const ParentProfileTabs = ({
             <TabsContent value="child2">child2</TabsContent>
             <TabsContent value="child1" className="flex justify-between">
               <div className="flex flex-col">
-                <StudentCalendar />
+                {/* <StudentCalendar /> */}
                 <DateTimePickerDemo studentId={userDetails!.id} />
               </div>
               <Card className="border-none">

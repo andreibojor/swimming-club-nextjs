@@ -10,6 +10,7 @@ export const ArrowUp = Lucide.ArrowUp;
 export const ArrowLeft = Lucide.ArrowLeft;
 export const ArrowRight = Lucide.ArrowRight;
 export const BankNote = Lucide.Banknote;
+export const Bell = Lucide.Bell;
 export const CaretSort = Lucide.SortAsc;
 export const Calendar = Lucide.Calendar;
 export const CalendarCheck = Lucide.CalendarCheck;

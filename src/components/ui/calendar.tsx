@@ -49,7 +49,7 @@ function Calendar({
         day_range_end: 'day-range-end',
         // 👇 removed bg-primary from here. It is added in modifiersClassNames
         day_selected: cn(
-          location === 'dashboard' ? 'bg-primary' : '',
+          location === 'dashboard' ? 'bg-primary ' : '',
           'text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
         ),
 

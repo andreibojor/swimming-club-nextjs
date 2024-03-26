@@ -9,9 +9,9 @@ import { getStudentsByPool } from '@/utils/actions/student';
 
 const DashboardPage = async ({ searchParams }: SearchParamsProps) => {
   const pools = await getPools();
-  const selectedPool = pools.find((pool) => pool.value === searchParams.pool);
+  const selectedPool = pools.find((pool) => pool.name === searchParams.pool);
   const poolOpenHours = await getOpenHoursByPool({
-    poolId: selectedPool?.id,
+    poolId: selectedPool?.id!,
   });
 
   const students = await getStudentsByPool({

@@ -132,21 +132,6 @@ export const getErrorRedirect = (
     arbitraryParams,
   );
 
-export const formatCityName = (city: string) => {
-  // Split the city name into an array of words
-  const words = city.split('-');
-
-  // Capitalize the first letter of each word
-  const capitalizedWords = words.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-  );
-
-  // Join the words back together with hyphens
-  const formattedCity = capitalizedWords.join('-');
-
-  return formattedCity;
-};
-
 export const formatDate = (inputDate: string): string => {
   const options: Intl.DateTimeFormatOptions = {
     day: 'numeric',

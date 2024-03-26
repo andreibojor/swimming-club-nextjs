@@ -61,7 +61,7 @@ export async function checkoutWithStripe(
           quantity: 1,
         },
       ],
-      cancel_url: getURL(),
+      cancel_url: getURL(redirectPath),
       success_url: getURL(redirectPath),
     };
 

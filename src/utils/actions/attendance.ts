@@ -10,14 +10,6 @@ interface SetAppointmentParams {
   time: string;
 }
 
-interface StudentAppointmentsParams {
-  studentId: string;
-}
-
-interface GetAppointmentParams {
-  poolValue: string;
-}
-
 export async function setAppointment(params: SetAppointmentParams) {
   try {
     const supabase = createClient();
@@ -37,6 +29,10 @@ export async function setAppointment(params: SetAppointmentParams) {
   }
 }
 
+interface GetAppointmentParams {
+  poolValue: string;
+}
+
 export async function getAppointments(params: GetAppointmentParams) {
   try {
     const supabase = createClient();
@@ -53,6 +49,10 @@ export async function getAppointments(params: GetAppointmentParams) {
     console.log(error);
     throw error;
   }
+}
+
+interface StudentAppointmentsParams {
+  studentId: string;
 }
 
 export async function getStudentActivity(params: StudentAppointmentsParams) {
@@ -77,15 +77,16 @@ interface HandlePresenceProps {
   studentId: string;
   lessonsLeft: number;
   attendance: 'present' | 'absent';
-  path: string;
   type?: 'attendance' | 'appointment';
+  path: string;
   date: string;
 }
+
 export async function updatePresence(params: HandlePresenceProps) {
   try {
     const supabase = createClient();
 
-    const { studentId, lessonsLeft, attendance, date, path } = params;
+    const { studentId, lessonsLeft, attendance, path, date } = params;
 
     const updateLessonsLeft = '';
     await supabase
@@ -99,11 +100,19 @@ export async function updatePresence(params: HandlePresenceProps) {
     await supabase
       .from('attendance_record')
       .update({
-        status: attendance === 'present' ? 'present' : 'absent',
+        status: attendance,
       })
       .eq('student_id', studentId)
-      .eq('date', new Date(date));
+      .eq('date', date);
 
+    // TODO if student level is advanced or pro, insert record
+    // await supabase.from('attendance_record').insert({
+    //   student_id: studentId,
+    //   date: date,
+    //   status: attendance === 'present' ? 'present' : 'absent',
+    //   time: null,
+    //   type: 'attendance',
+    // });
     revalidatePath(path);
   } catch (error) {
     console.log(error);

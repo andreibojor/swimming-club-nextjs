@@ -84,77 +84,12 @@ export default function SwimmerCard({ student, children }) {
   const [studentData, setStudentData] = useState({} as any);
 
   const supabase = createClient();
-  const getStudentAttendances = async (studentId: string) => {
-    const { data } = await supabase
-      .from('attendance_record')
-      .select('*')
-      .eq('student_id', studentId);
-
-    if (!data) return [];
-
-    const formattedAttendances = data.map((attendance: any) => ({
-      id: attendance.id,
-      date: new Date(attendance.date),
-    }));
-
-    const dates = formattedAttendances.map((attendance) => attendance.date);
-    setStudentAttendances(dates);
-    getStudentData(studentId);
-  };
-
-  // const getInitials = (name: string) => {
-  //   const initials = name
-  //     .split(" ")
-  //     .map((n) => n[0])
-  //     .join("");
-
-  //   return initials;
-  // };
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: 'onChange',
   });
-
-  const getStudentData = async (userId: string): Promise => {
-    const { data: userData, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', userId)
-      .single();
-
-    const { data: studentData, error: studentError } = await supabase
-      .from('students')
-      .select('*')
-      .eq('id', userId)
-      .single();
-
-    const parentId = studentData?.parent_id;
-    let parentName = null;
-    if (parentId) {
-      const { data: parentData, error: parentError } = await supabase
-        .from('users')
-        .select('full_name') // Adjust field name as necessary
-        .eq('id', parentId)
-        .single();
-
-      if (parentError) {
-        console.log('Error fetching parent data:', parentError);
-      } else {
-        parentName = parentData?.full_name;
-      }
-    }
-
-    error && console.log(error);
-    const allData = {
-      ...userData,
-      ...studentData,
-      parent_name: parentName,
-    };
-
-    setStudentData(allData);
-  };
 
   const onSubmit = async (data: ProfileFormValues) => {
     // const { name, pool, swimmerLevel, medicalCertificate } = data;
@@ -194,28 +129,27 @@ export default function SwimmerCard({ student, children }) {
     // });
 
     setIsOpenDialog(false);
-    router.refresh();
   };
 
-  async function getMedicalCertificate() {
-    try {
-      const { data: studentData, error } = await supabase
-        .from('students')
-        .select('medical_certificate_path')
-        .eq('id', student.id);
+  // async function getMedicalCertificate() {
+  //   try {
+  //     const { data: studentData, error } = await supabase
+  //       .from('students')
+  //       .select('medical_certificate_path')
+  //       .eq('id', student.id);
 
-      const medicalCertificatePath = studentData[0]?.medical_certificate_path;
+  //     const medicalCertificatePath = studentData[0]?.medical_certificate_path;
 
-      const { data: medicalCertificateUrl } = await supabase.storage
-        .from('medical-certificates')
-        .getPublicUrl(medicalCertificatePath);
+  //     const { data: medicalCertificateUrl } = await supabase.storage
+  //       .from('medical-certificates')
+  //       .getPublicUrl(medicalCertificatePath);
 
-      window.open(medicalCertificateUrl.publicUrl, '_blank');
-    } catch (error) {
-      console.error('An error occurred:', error);
-      setCertificateError(true);
-    }
-  }
+  //     window.open(medicalCertificateUrl.publicUrl, '_blank');
+  //   } catch (error) {
+  //     console.error('An error occurred:', error);
+  //     setCertificateError(true);
+  //   }
+  // }
 
   return (
     <Dialog
@@ -229,7 +163,7 @@ export default function SwimmerCard({ student, children }) {
             animationDelay: '0.40s',
             animationFillMode: 'forwards',
           }}
-          onClick={() => getStudentAttendances(student.id)}
+          // onClick={() => getStudentAttendances(student.id)}
           className="w-full flex-1 justify-start px-0 py-1.5 text-sm font-[400]"
         >
           {children}
@@ -315,7 +249,7 @@ export default function SwimmerCard({ student, children }) {
           <div className="mt-5">
             <Button
               disabled={certificateError}
-              onClick={() => getMedicalCertificate()}
+              // onClick={() => getMedicalCertificate()}
             >
               <Icons.Eye />
             </Button>
@@ -323,6 +257,7 @@ export default function SwimmerCard({ student, children }) {
           {/* <Calendar mode="multiple" /> */}
           <Calendar
             mode="multiple"
+            location="profile"
             selected={studentAttendances}
             className="flex justify-center"
           />

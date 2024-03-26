@@ -16,15 +16,17 @@ import {
   CardTitle,
 } from '@/components/ui';
 import { StudentProfileTabsProps } from '@/types/types';
-import { formatCityName } from '@/utils/helpers';
-import { createClient } from '@/utils/supabase/server';
-import Pricing from '../pricing';
+import CustomerPortalForm from '../forms/customer-portal-form';
+import PricingStudent from '../pricing-student';
 
 const StudentProfileTabs = ({
   studentDetails,
   userDetails,
   studentActivity,
   poolOpenHours,
+  user,
+  products,
+  subscription,
 }: StudentProfileTabsProps) => {
   return (
     <>
@@ -66,9 +68,8 @@ const StudentProfileTabs = ({
                       <Icons.Waves className="mr-1 size-4 text-primary" />
                       Bazin:
                     </p>
-                    <p className="flex items-end text-sm font-medium leading-none">
-                      {studentDetails?.pool &&
-                        formatCityName(studentDetails?.pool)}
+                    <p className="flex items-end text-sm font-medium capitalize leading-none">
+                      {studentDetails.pool.name}
                     </p>
                   </div>
                   {studentDetails?.swimmer_level === 'beginner' && (
@@ -113,15 +114,14 @@ const StudentProfileTabs = ({
             </div>
           </Card>
         </div>
-        <div className="flex w-full gap-0 md:gap-4">
-          <Pricing
-            user={user}
-            products={products ?? []}
-            subscription={subscription}
-            studentLevel={studentDetails?.swimmer_level}
-            studentId={studentDetails?.id}
-          />
-        </div>
+
+        <PricingStudent
+          user={user}
+          products={products ?? []}
+          subscription={subscription}
+          swimmerLevel={studentDetails?.swimmer_level ?? ''}
+        />
+        <CustomerPortalForm subscription={subscription} />
       </CardContent>
     </>
   );

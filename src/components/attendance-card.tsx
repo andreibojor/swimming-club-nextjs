@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import {
   Avatar,
@@ -39,6 +40,60 @@ export function AttendanceCard({ student, date }: Props) {
 
     return initials;
   };
+
+  const supabase = createClient();
+
+  useEffect(() => {
+    const changes = supabase
+      .channel('attendance_record_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'students',
+        },
+        async (payload) => {
+          const { data, error } = await supabase
+            .from('students')
+            .select('*')
+            .match({ id: payload.new.id })
+            .single();
+          console.log(data?.lessons_left);
+          if (error) {
+            toast.error(error.message);
+          } else {
+            toast.info(`${payload.new.full_name}, ${payload.new.lessons_left}`);
+          }
+        },
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'attendance_record',
+        },
+        async (payload) => {
+          const { data, error } = await supabase
+            .from('attendance_record')
+            .select('*')
+            .match({ student_id: payload.new.student_id, date: date })
+            .single();
+          console.log(data?.status);
+          if (error) {
+            toast.error(error.message);
+          } else {
+            toast.info(` for ${payload.new.status}`);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      changes.unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-1">

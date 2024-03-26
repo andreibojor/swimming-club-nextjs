@@ -2,27 +2,27 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { format } from 'date-fns';
 
 import * as Icons from '@/components/icons';
 import { Button } from '@/components/ui';
 import { Tables } from '@/types/types_db';
 import { updatePresence } from '@/utils/actions/attendance';
+import { createClient } from '@/utils/supabase/client';
 
 interface Props {
   student: Tables<'students'>;
+  date: Date;
 }
-
 export const AttendanceButton = ({ student, date }: Props) => {
   const pathname = usePathname();
-
-  const [isPresent, setIsPresent] = useState(false);
-  console.log(date);
+  console.log(student.lessons_left);
   const handleAttendance = async (attendance: 'present' | 'absent') => {
     try {
       await updatePresence({
         studentId: student.id,
         lessonsLeft: student.lessons_left,
-        date: date,
+        date: format(date, 'yyyy-MM-dd'),
         attendance: attendance,
         path: pathname,
       });
@@ -36,17 +36,17 @@ export const AttendanceButton = ({ student, date }: Props) => {
     <>
       <Button
         onClick={() => handleAttendance('present')}
-        variant="outline"
-        className="ml-auto px-2 py-1 md:px-4 md:py-2"
+        variant="secondary"
+        className="ml-auto bg-green-800 px-2 py-1 md:px-4 md:py-2"
       >
-        <Icons.Check className="size-5 text-muted-foreground" />
+        <Icons.Check className="size-5 " />
       </Button>
       <Button
         onClick={() => handleAttendance('absent')}
-        variant="outline"
-        className="ml-auto px-2 py-1 md:px-4 md:py-2"
+        variant="secondary"
+        className="ml-auto bg-red-500 px-2 py-1 md:px-4 md:py-2"
       >
-        <Icons.Close className="size-5 text-muted-foreground" />
+        <Icons.Close className="size-5" />
       </Button>
     </>
   );

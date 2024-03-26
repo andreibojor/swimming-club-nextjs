@@ -28,7 +28,7 @@ export async function getOpenHoursByPool(params: GetOpenHoursByPoolParams) {
     const { data } = await supabase
       .from('open_hours')
       .select('*')
-      .eq('pool_id', poolId)
+      .match({ pool_id: poolId })
       .order('dayIndex', { ascending: true });
 
     return data || [];
