@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
   Separator,
 } from '@/components/ui';
+import { useStudent } from '@/store/studentActivity';
 import { Tables } from '@/types/types_db';
 import { createClient } from '@/utils/supabase/client';
 import { AttendanceButton } from './attendance-button';
@@ -30,8 +31,6 @@ interface Props {
   student: Tables<'students'>;
 }
 export function AttendanceCard({ student, date }: Props) {
-  const [lessonsLeft, setLessonsLeft] = useState(student.lessons_left);
-
   const getInitials = (name: string) => {
     const initials = name
       .split(' ')
@@ -40,7 +39,22 @@ export function AttendanceCard({ student, date }: Props) {
 
     return initials;
   };
+  const {
+    studentDetails,
+    studentActivity,
+    setStudentDetails,
+    setStudentActivity,
+  } = useStudent((state) => state);
+  useEffect(() => {
+    console.log(
+      `studentDetails ${studentDetails?.full_name} updated:`,
+      studentDetails,
+    );
+  }, [studentDetails]);
 
+  useEffect(() => {
+    console.log(`studentActivity updated:`, studentActivity);
+  }, [studentActivity]);
   const supabase = createClient();
 
   useEffect(() => {
@@ -59,10 +73,13 @@ export function AttendanceCard({ student, date }: Props) {
             .select('*')
             .match({ id: payload.new.id })
             .single();
-          console.log(data?.lessons_left);
+
           if (error) {
             toast.error(error.message);
           } else {
+            console.log(payload.new);
+            setStudentDetails(payload.new);
+            console.log('studentDetails', studentDetails);
             toast.info(`${payload.new.full_name}, ${payload.new.lessons_left}`);
           }
         },
@@ -80,10 +97,12 @@ export function AttendanceCard({ student, date }: Props) {
             .select('*')
             .match({ student_id: payload.new.student_id, date: date })
             .single();
-          console.log(data?.status);
+
           if (error) {
             toast.error(error.message);
           } else {
+            setStudentActivity(payload.new);
+            console.log('studentActivity:', studentActivity);
             toast.info(` for ${payload.new.status}`);
           }
         },
@@ -93,7 +112,7 @@ export function AttendanceCard({ student, date }: Props) {
     return () => {
       changes.unsubscribe();
     };
-  }, []);
+  }, [date, supabase]);
 
   return (
     <div className="flex flex-col gap-1">
@@ -115,12 +134,18 @@ export function AttendanceCard({ student, date }: Props) {
                 <p className="text-sm font-medium leading-none">
                   Attendances Left:
                 </p>
-                <p className="text-sm font-medium">{lessonsLeft}</p>
+                <p className="text-sm font-medium">
+                  {studentDetails?.lessons_left}
+                </p>
               </>
             )}
           </div>
         </SwimmerCard>
-        <AttendanceButton student={student} date={date} />
+        <AttendanceButton
+          student={student}
+          date={date}
+          studentActivity={studentActivity}
+        />
 
         {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>

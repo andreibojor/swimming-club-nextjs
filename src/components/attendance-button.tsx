@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 import * as Icons from '@/components/icons';
 import { Button } from '@/components/ui';
@@ -14,9 +15,10 @@ interface Props {
   student: Tables<'students'>;
   date: Date;
 }
-export const AttendanceButton = ({ student, date }: Props) => {
+export const AttendanceButton = ({ student, date, studentActivity }: Props) => {
   const pathname = usePathname();
-  console.log(student.lessons_left);
+  const supabase = createClient();
+
   const handleAttendance = async (attendance: 'present' | 'absent') => {
     try {
       await updatePresence({
@@ -37,14 +39,15 @@ export const AttendanceButton = ({ student, date }: Props) => {
       <Button
         onClick={() => handleAttendance('present')}
         variant="secondary"
-        className="ml-auto bg-green-800 px-2 py-1 md:px-4 md:py-2"
+        // className="ml-auto bg-green-800 px-2 py-1 md:px-4 md:py-2"
+        className={studentActivity?.status === 'present' ? 'bg-green-800' : ''}
       >
-        <Icons.Check className="size-5 " />
+        <Icons.Check className="size-5" />
       </Button>
       <Button
         onClick={() => handleAttendance('absent')}
         variant="secondary"
-        className="ml-auto bg-red-500 px-2 py-1 md:px-4 md:py-2"
+        className={studentActivity?.status === 'absent' ? 'bg-red-500' : ''}
       >
         <Icons.Close className="size-5" />
       </Button>
