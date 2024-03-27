@@ -8,6 +8,7 @@ import queryString from 'query-string';
 import { DashboardTabsProps } from '@/types/types';
 import AttendancePanel from './attendance-panel';
 import DashboardCalendar from './dashboard-calendar';
+import InviteTeacherForm from './forms/invite-teacher-form';
 import OpenHoursPoolForm from './forms/open-hours-form';
 import DashboardFullCalendar from './full-calendar';
 import {
@@ -76,7 +77,7 @@ const DashboardTabs = ({
             ))}
           </TabsList>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-1 pt-0 md:p-6">
           {pools.map((pool) => (
             <TabsContent key={pool.id} value={pool.name} className="space-y-4">
               <OpenHoursPoolForm openHours={poolOpenHours} />
@@ -91,6 +92,9 @@ const DashboardTabs = ({
           <CardHeader>
             <CardTitle>Invite teacher</CardTitle>
           </CardHeader>
+          <CardContent>
+            <InviteTeacherForm />
+          </CardContent>
         </Card>
       </Tabs>
     </>

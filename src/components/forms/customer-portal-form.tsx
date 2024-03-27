@@ -4,8 +4,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
-import Button from '@/components/button';
+import * as Icons from '@/components/icons';
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
@@ -75,11 +76,15 @@ export default function CustomerPortalForm({ subscription }: Props) {
       <CardFooter>
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
           <p className="pb-4 sm:pb-0">Manage your subscription on Stripe.</p>
+
           <Button
-            variant="slim"
+            disabled={isSubmitting}
             onClick={handleStripePortalRequest}
-            loading={isSubmitting}
+            className="text-slate-50"
           >
+            {isSubmitting && (
+              <Icons.Spinner className="mr-2 size-4 animate-spin" />
+            )}
             Open customer portal
           </Button>
         </div>

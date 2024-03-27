@@ -5,11 +5,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import cn from 'classnames';
 
-import Button from '@/components/button';
+import * as Icons from '@/components/icons';
+import { Button } from '@/components/ui';
 import type { Tables } from '@/types/types_db';
 import { getErrorRedirect } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe/client';
-import { checkoutWithStripe } from '@/utils/stripe/server';
+import { checkoutWithStripe } from '@/utils/stripe/server-student';
 import { Card, CardContent, CardHeader, CardTitle } from './ui';
 
 type Subscription = Tables<'subscriptions'>;
@@ -119,20 +120,24 @@ export default function PricingStudent({
           </div>
           <div className="mt-12 flex flex-wrap justify-center gap-6 space-y-4 sm:mt-16 sm:space-y-0 lg:mx-auto lg:max-w-4xl xl:mx-0 xl:max-w-none">
             {products.map((product) => {
-              const price = product?.prices?.find(
-                (price) => price.interval === billingInterval,
-              );
+              // 👇 old format, made hacky stuff
+              // const price = product?.prices?.find(
+              //   (price) => price.interval === billingInterval,
+              // );
+              // 👇 the hacky stuff 💀
+              const price = product?.prices?.find((price) => price === price);
               if (!price) return null;
               const priceString = new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: price.currency!,
                 minimumFractionDigits: 0,
               }).format((price?.unit_amount || 0) / 100);
+
               return (
                 <Card
                   key={product.id}
                   className={cn(
-                    'flex flex-col divide-y divide-zinc-600 rounded-lg shadow-sm',
+                    'flex flex-col divide-y rounded-lg shadow-sm',
                     {
                       'border border-pink-500': subscription
                         ? product.name === subscription?.prices?.products?.name
@@ -160,13 +165,15 @@ export default function PricingStudent({
                         /{billingInterval}
                       </span>
                     </p>
+
                     <Button
-                      variant="slim"
-                      type="button"
-                      loading={priceIdLoading === price.id}
+                      disabled={priceIdLoading === price.id}
                       onClick={() => handleStripeCheckout(price)}
-                      className="mt-8 block w-full rounded-md py-2 text-center text-sm font-semibold text-white hover:bg-zinc-900"
+                      className="mt-8 w-full text-slate-50"
                     >
+                      {priceIdLoading === price.id && (
+                        <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
+                      )}
                       {subscription ? 'Manage' : 'Subscribe'}
                     </Button>
                   </CardContent>
