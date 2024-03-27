@@ -19,17 +19,9 @@ interface Props {
 export const AttendanceButton = ({ student, date }: Props) => {
   const pathname = usePathname();
 
-  const supabase = createClient();
-  let matchingRecord = [];
-  student.attendance_record &&
-    student.attendance_record?.find((record) => record.date === date);
-
-  const {
-    studentDetails,
-    studentActivity,
-    setStudentDetails,
-    setStudentActivity,
-  } = useStudent();
+  const [matchingRecord, setMatchingRecord] = useState(
+    student.attendance_record?.find((record) => record.date === date) || ,
+  );
 
   useEffect(() => {
     const changes = supabase
