@@ -112,6 +112,11 @@ export const AttendanceButton = ({ student, date }: Props) => {
 
   return (
     <>
+      {student.swimmer_level === 'beginner' ? (
+        <p>Sedinte: {student.lessons_left}</p>
+      ) : (
+        ''
+      )}
       <Button
         onClick={() => {
           if (matchingRecord && matchingRecord.status !== 'present') {
