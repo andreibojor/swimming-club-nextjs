@@ -84,7 +84,6 @@ export async function registerUser(params: RegisterUserParams) {
 
     revalidatePath(path);
   } catch (error) {
-    console.log('here2');
     console.log(error);
     throw error;
   }

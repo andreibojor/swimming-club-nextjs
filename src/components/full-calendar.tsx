@@ -33,8 +33,6 @@ const DashboardFullCalendar = ({
     color: 'red',
   }));
 
-  appointments.map((app) => console.log(app));
-
   return (
     <div className="relative w-full">
       <FullCalendar
