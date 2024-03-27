@@ -19,10 +19,18 @@ interface Props {
 export const AttendanceButton = ({ student, date }: Props) => {
   const pathname = usePathname();
 
-  const [matchingRecord, setMatchingRecord] = useState(
-    student.attendance_record?.find((record) => record.date === date) || {},
-  );
   const supabase = createClient();
+  let matchingRecord = student.attendance_record.find(
+    (record) => record.date === date,
+  );
+  console.log('matchingRecord: ', matchingRecord);
+  const {
+    studentDetails,
+    studentActivity,
+    setStudentDetails,
+    setStudentActivity,
+  } = useStudent();
+
   useEffect(() => {
     const changes = supabase
       .channel(`attendance_record_channel`)
@@ -70,7 +78,7 @@ export const AttendanceButton = ({ student, date }: Props) => {
     return () => {
       changes.unsubscribe();
     };
-  }, [date, student.id]);
+  }, [date, setStudentActivity, student.id, supabase]);
 
   const handlePresence = async () => {
     try {
@@ -114,21 +122,22 @@ export const AttendanceButton = ({ student, date }: Props) => {
           }
         }}
         variant="secondary"
-        className={matchingRecord.status === 'present' ? 'bg-green-800' : ''}
+        className={
+          matchingRecord && matchingRecord.status === 'present'
+            ? 'bg-green-800'
+            : ''
+        }
       >
         <Icons.Check className="size-5" />
       </Button>
       <Button
-        onClick={() => {
-          if (matchingRecord && matchingRecord.status !== 'absent') {
-            handleAbsence();
-          } else {
-            // Optionally, you can provide feedback to the user here that the student is already marked as present
-            console.log('Student is already marked as present');
-          }
-        }}
+        onClick={handleAbsence}
         variant="secondary"
-        className={matchingRecord.status === 'absent' ? 'bg-red-500' : ''}
+        className={
+          matchingRecord && matchingRecord.status === 'absent'
+            ? 'bg-red-500'
+            : ''
+        }
       >
         <Icons.Close className="size-5" />
       </Button>

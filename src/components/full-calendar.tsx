@@ -47,10 +47,10 @@ const DashboardFullCalendar = ({
         hiddenDays={[0]}
         businessHours={{
           daysOfWeek: [1, 2, 3, 4, 5, 6],
-          startTime: '09:00',
+          startTime: '08:00',
           endTime: '21:00',
         }}
-        slotMinTime={'09:00'}
+        slotMinTime={'08:00'}
         slotMaxTime={'21:30'}
         locale={roLocale}
         timeZone="UTC"
