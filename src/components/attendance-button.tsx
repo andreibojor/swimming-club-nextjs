@@ -23,7 +23,7 @@ export const AttendanceButton = ({ student, date }: Props) => {
   let matchingRecord = student.attendance_record.find(
     (record) => record.date === date,
   );
-  console.log('matchingRecord: ', matchingRecord);
+
   const {
     studentDetails,
     studentActivity,
