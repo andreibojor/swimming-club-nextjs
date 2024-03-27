@@ -10,6 +10,7 @@ import type { Tables } from '@/types/types_db';
 import { getErrorRedirect } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe/client';
 import { checkoutWithStripe } from '@/utils/stripe/server';
+import { Card, CardContent, CardHeader, CardTitle } from './ui';
 
 type Subscription = Tables<'subscriptions'>;
 type Product = Tables<'products'>;
@@ -128,10 +129,10 @@ export default function PricingStudent({
                 minimumFractionDigits: 0,
               }).format((price?.unit_amount || 0) / 100);
               return (
-                <div
+                <Card
                   key={product.id}
                   className={cn(
-                    'flex flex-col divide-y divide-zinc-600 rounded-lg bg-zinc-900 shadow-sm',
+                    'flex flex-col divide-y divide-zinc-600 rounded-lg shadow-sm',
                     {
                       'border border-pink-500': subscription
                         ? product.name === subscription?.prices?.products?.name
@@ -142,16 +143,20 @@ export default function PricingStudent({
                     'max-w-xs', // Sets a maximum width to the cards to prevent them from getting too large
                   )}
                 >
-                  <div className="p-6">
-                    <h2 className="text-2xl font-semibold leading-6 text-white">
+                  <CardHeader className="p-6">
+                    <CardTitle className="text-2xl font-semibold leading-6 text-primary">
                       {product.name}
-                    </h2>
-                    <p className="mt-4 text-zinc-300">{product.description}</p>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="mt-4 text-foreground">
+                      {product.description}
+                    </p>
                     <p className="mt-8">
-                      <span className="white text-5xl font-extrabold">
+                      <span className="text-5xl font-extrabold">
                         {priceString}
                       </span>
-                      <span className="text-base font-medium text-zinc-100">
+                      <span className="text-base font-medium text-foreground">
                         /{billingInterval}
                       </span>
                     </p>
@@ -164,8 +169,8 @@ export default function PricingStudent({
                     >
                       {subscription ? 'Manage' : 'Subscribe'}
                     </Button>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
