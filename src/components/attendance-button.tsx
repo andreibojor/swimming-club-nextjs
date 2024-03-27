@@ -20,9 +20,9 @@ export const AttendanceButton = ({ student, date }: Props) => {
   const pathname = usePathname();
 
   const [matchingRecord, setMatchingRecord] = useState(
-    student.attendance_record?.find((record) => record.date === date) || ,
+    student.attendance_record?.find((record) => record.date === date) || {},
   );
-
+  const supabase = createClient();
   useEffect(() => {
     const changes = supabase
       .channel(`attendance_record_channel`)
@@ -70,7 +70,7 @@ export const AttendanceButton = ({ student, date }: Props) => {
     return () => {
       changes.unsubscribe();
     };
-  }, [date, setStudentActivity, student.id, supabase]);
+  }, [date, student.id]);
 
   const handlePresence = async () => {
     try {
