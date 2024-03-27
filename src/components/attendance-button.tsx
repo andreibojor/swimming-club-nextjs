@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 import * as Icons from '@/components/icons';
 import { Button } from '@/components/ui';
+import { useStudent } from '@/store/studentActivity';
 import { Tables } from '@/types/types_db';
 import { updateAbsence, updatePresence } from '@/utils/actions/attendance';
 import { createClient } from '@/utils/supabase/client';
@@ -15,10 +16,21 @@ interface Props {
   student: Tables<'students'>;
   date: Date;
 }
-export const AttendanceButton = ({ student, date, studentActivity }: Props) => {
+export const AttendanceButton = ({ student, date }: Props) => {
   const pathname = usePathname();
 
   const supabase = createClient();
+  let matchingRecord = student.attendance_record.find(
+    (record) => record.date === date,
+  );
+  console.log('matchingRecord: ', matchingRecord);
+  const {
+    studentDetails,
+    studentActivity,
+    setStudentDetails,
+    setStudentActivity,
+  } = useStudent();
+
   useEffect(() => {
     const changes = supabase
       .channel(`attendance_record_channel`)
@@ -38,10 +50,26 @@ export const AttendanceButton = ({ student, date, studentActivity }: Props) => {
 
           if (error) {
             toast.error(error.message);
+          }
+        },
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'attenandce_record',
+        },
+        async (payload) => {
+          const { data, error } = await supabase
+            .from('attendance_record')
+            .select('*')
+            .match({ student_id: payload.new.id, date: date })
+            .single();
+          if (error) {
+            toast.error(error.message);
           } else {
-            toast.info(
-              `${payload.new.full_name} lessons left: ${payload.new.lessons_left}`,
-            );
+            setStudentActivity(payload.new);
           }
         },
       )
@@ -50,15 +78,15 @@ export const AttendanceButton = ({ student, date, studentActivity }: Props) => {
     return () => {
       changes.unsubscribe();
     };
-  }, [date, student.id, supabase]);
+  }, [date, setStudentActivity, student.id, supabase]);
 
-  const handlePresence = async (attendance: string) => {
+  const handlePresence = async () => {
     try {
       await updatePresence({
         studentId: student.id,
         lessonsLeft: student.lessons_left,
         date: format(date, 'yyyy-MM-dd'),
-        attendance: attendance,
+        attendance: 'present',
         path: pathname,
       });
     } catch (error) {
@@ -67,13 +95,13 @@ export const AttendanceButton = ({ student, date, studentActivity }: Props) => {
     }
   };
 
-  const handleAbsence = async (attendance: string) => {
+  const handleAbsence = async () => {
     try {
       await updateAbsence({
         studentId: student.id,
         lessonsLeft: student.lessons_left,
         date: format(date, 'yyyy-MM-dd'),
-        attendance: attendance,
+        attendance: 'absent',
         path: pathname,
       });
     } catch (error) {
@@ -85,16 +113,30 @@ export const AttendanceButton = ({ student, date, studentActivity }: Props) => {
   return (
     <>
       <Button
-        onClick={() => handlePresence('present')}
+        onClick={() => {
+          if (matchingRecord && matchingRecord.status !== 'present') {
+            handlePresence();
+          } else {
+            // Optionally, you can provide feedback to the user here that the student is already marked as present
+            console.log('Student is already marked as present');
+          }
+        }}
         variant="secondary"
-        className="bg-green-800"
+        className={matchingRecord.status === 'present' ? 'bg-green-800' : ''}
       >
         <Icons.Check className="size-5" />
       </Button>
       <Button
-        onClick={() => handleAbsence('absent')}
+        onClick={() => {
+          if (matchingRecord && matchingRecord.status !== 'absent') {
+            handleAbsence();
+          } else {
+            // Optionally, you can provide feedback to the user here that the student is already marked as present
+            console.log('Student is already marked as present');
+          }
+        }}
         variant="secondary"
-        className="bg-red-500"
+        className={matchingRecord.status === 'absent' ? 'bg-red-500' : ''}
       >
         <Icons.Close className="size-5" />
       </Button>

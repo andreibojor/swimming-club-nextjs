@@ -86,7 +86,7 @@ export async function updatePresence(params: HandlePresenceProps) {
   try {
     const supabase = createClient();
 
-    const { studentId, lessonsLeft, path } = params;
+    const { studentId, lessonsLeft, date, attendance, path } = params;
 
     await supabase
       .from('students')
@@ -94,6 +94,12 @@ export async function updatePresence(params: HandlePresenceProps) {
         lessons_left: lessonsLeft - 1,
       })
       .eq('id', studentId);
+
+    await supabase
+      .from('attendance_record')
+      .update({ status: attendance })
+      .eq('student_id', studentId)
+      .eq('date', date);
 
     revalidatePath(path);
   } catch (error) {
@@ -106,7 +112,7 @@ export async function updateAbsence(params: HandlePresenceProps) {
   try {
     const supabase = createClient();
 
-    const { studentId, lessonsLeft, path } = params;
+    const { studentId, lessonsLeft, date, attendance, path } = params;
 
     await supabase
       .from('students')
@@ -114,6 +120,12 @@ export async function updateAbsence(params: HandlePresenceProps) {
         lessons_left: lessonsLeft + 1,
       })
       .eq('id', studentId);
+
+    await supabase
+      .from('attendance_record')
+      .update({ status: attendance })
+      .eq('student_id', studentId)
+      .eq('date', date);
 
     revalidatePath(path);
   } catch (error) {

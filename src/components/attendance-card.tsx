@@ -24,6 +24,7 @@ interface Props {
   date: Date;
 }
 export function AttendanceCard({ student, date }: Props) {
+  console.log(student);
   return (
     <div className="flex flex-col gap-1">
       <div className="mt-2 flex items-center justify-between gap-2">

@@ -35,5 +35,5 @@ export const useStudent = create<StudentState>()((set) => ({
   studentActivity: null,
   setStudentDetails: (details) => set(() => ({ studentDetails: details })),
   setStudentActivity: (newActivity) =>
-    set((state) => ({ studentActivity: newActivity })),
+    set(() => ({ studentActivity: newActivity })),
 }));
