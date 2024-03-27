@@ -124,7 +124,7 @@ export const AttendanceButton = ({ student, date }: Props) => {
         variant="secondary"
         className={
           matchingRecord && matchingRecord.status === 'present'
-            ? 'bg-green-800'
+            ? 'bg-green-500 text-slate-50'
             : ''
         }
       >
@@ -135,7 +135,7 @@ export const AttendanceButton = ({ student, date }: Props) => {
         variant="secondary"
         className={
           matchingRecord && matchingRecord.status === 'absent'
-            ? 'bg-red-500'
+            ? 'bg-red-500 text-slate-50'
             : ''
         }
       >
