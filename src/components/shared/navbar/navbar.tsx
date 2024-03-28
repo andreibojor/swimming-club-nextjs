@@ -19,6 +19,7 @@ import {
 import { getUserDetails } from '@/utils/actions/user';
 import { createClient } from '@/utils/supabase/server';
 import SignOut from '../../forms/auth-forms/sign-out';
+import NotificationDropdown from './notification-dropdown';
 
 const Navbar = async () => {
   const supabase = createClient();
@@ -39,7 +40,7 @@ const Navbar = async () => {
 
   return (
     <div className="fixed z-50 h-16 w-full bg-background">
-      <nav className="z-51 container flex h-16 w-full items-center justify-between border-b bg-background sm:px-12">
+      <nav className="z-51 container flex h-16 max-w-7xl items-center justify-between border-b bg-background sm:px-12">
         <Link href="/" className="flex items-center gap-1">
           <p className="text-xl font-semibold text-primary">C S C</p>
         </Link>
@@ -48,7 +49,7 @@ const Navbar = async () => {
         {user ? (
           <div className="flex items-center gap-2">
             {(userRole?.role === 'admin' || userRole?.role === 'teacher') && (
-              <Icons.Bell className="m-1 size-6" />
+              <NotificationDropdown />
             )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

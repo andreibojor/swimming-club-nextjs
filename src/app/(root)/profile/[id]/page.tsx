@@ -7,7 +7,7 @@ import StudentProfileTabs from '@/components/profile/student-profile-tabs';
 import { Card } from '@/components/ui';
 import { URLProps } from '@/types/types';
 import { getStudentActivity } from '@/utils/actions/attendance';
-import { getOpenHoursByPool, getPools } from '@/utils/actions/pool';
+import { getOpenHoursByPool } from '@/utils/actions/pool';
 import {
   getProducts,
   getSubscriptions,
