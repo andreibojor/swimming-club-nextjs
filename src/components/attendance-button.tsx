@@ -10,6 +10,7 @@ import { Button } from '@/components/ui';
 import { useStudent } from '@/store/studentActivity';
 import { Tables } from '@/types/types_db';
 import { updateAbsence, updatePresence } from '@/utils/actions/attendance';
+import { cn } from '@/utils/cn';
 import { createClient } from '@/utils/supabase/client';
 
 interface Props {
@@ -127,22 +128,24 @@ export const AttendanceButton = ({ student, date }: Props) => {
           }
         }}
         variant="secondary"
-        className={
+        className={cn(
           matchingRecord && matchingRecord.status === 'present'
             ? 'bg-green-500 text-slate-50'
-            : ''
-        }
+            : '',
+          'hover:bg-primary hover:text-slate-50',
+        )}
       >
         <Icons.Check className="size-5" />
       </Button>
       <Button
         onClick={handleAbsence}
         variant="secondary"
-        className={
+        className={cn(
           matchingRecord && matchingRecord.status === 'absent'
             ? 'bg-red-500 text-slate-50'
-            : ''
-        }
+            : '',
+          'hover:bg-primary hover:text-slate-50',
+        )}
       >
         <Icons.Close className="size-5" />
       </Button>

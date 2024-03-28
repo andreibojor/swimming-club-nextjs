@@ -41,9 +41,9 @@ const StudentCalendar = ({
   };
 
   const modifiersClassNames = {
-    scheduled: 'bg-primary',
-    present: 'bg-green-700',
-    absent: 'bg-red-500',
+    scheduled: 'bg-primary text-slate-50',
+    present: 'bg-green-700 text-slate-50',
+    absent: 'bg-red-500 text-slate-50',
   };
 
   function isTodayOrFuture(date: Date) {

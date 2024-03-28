@@ -55,7 +55,7 @@ export function AttendancePanel({ students, date }: Props) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="ml-auto flex h-8">
-              <Icons.MixerHorizontal className="mr-2 h-4 w-4" />
+              <Icons.MixerHorizontal className="mr-2 size-4" />
               View
             </Button>
           </DropdownMenuTrigger>
