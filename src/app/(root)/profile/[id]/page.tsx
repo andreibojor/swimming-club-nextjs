@@ -1,9 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 
-import CustomerPortalForm from '@/components/forms/customer-portal-form';
 import UserRegistrationForm from '@/components/forms/user-registration-form';
-import Pricing from '@/components/pricing-parent';
 import ParentProfileTabs from '@/components/profile/parent-profile-tabs';
 import StudentProfileTabs from '@/components/profile/student-profile-tabs';
 import { Card } from '@/components/ui';

@@ -28,6 +28,7 @@ const StudentProfileTabs = ({
   products,
   subscription,
 }: StudentProfileTabsProps) => {
+  console.log(subscription);
   return (
     <>
       <CardHeader className="flex-row items-center justify-between">
