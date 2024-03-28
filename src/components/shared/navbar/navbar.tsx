@@ -82,14 +82,14 @@ const Navbar = async () => {
                   userRole?.role === 'teacher' ? (
                     <DropdownMenuItem asChild>
                       <Link href={`/dashboard`}>
-                        <Icons.User className="mr-2 h-4 w-4" />
-                        <span>Profile</span>
+                        <Icons.CalendarDays className="mr-2 size-4" />
+                        <span>Dashboard</span>
                       </Link>
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem asChild>
                       <Link href={`/profile/${user?.id}`}>
-                        <Icons.User className="mr-2 h-4 w-4" />
+                        <Icons.User className="mr-2 size-4" />
                         <span>Profile</span>
                       </Link>
                     </DropdownMenuItem>
@@ -97,16 +97,16 @@ const Navbar = async () => {
 
                   <DropdownMenuItem asChild>
                     <Link href={`#`}>
-                      <Icons.CreditCard className="mr-2 h-4 w-4" />
+                      <Icons.CreditCard className="mr-2 size-4" />
                       <span>Billing</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem disabled>
-                    <Icons.Settings className="mr-2 h-4 w-4" />
+                    <Icons.Settings className="mr-2 size-4" />
                     <span>Settings</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem disabled>
-                    <Icons.PlusCircle className="mr-2 h-4 w-4" />
+                    <Icons.PlusCircle className="mr-2 size-4" />
                     <span>New Team</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
@@ -122,7 +122,7 @@ const Navbar = async () => {
             href="/signin"
             className={buttonVariants({ variant: 'outline' })}
           >
-            Sign In <Icons.ChevronRight className="ml-1 h-4 w-4" />
+            Sign In <Icons.ChevronRight className="ml-1 size-4" />
           </Link>
         )}
       </nav>

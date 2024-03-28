@@ -41,7 +41,7 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
     studentId: params.id,
   });
   let poolOpenHours = [];
-  userDetails?.role !== null
+  userDetails?.completed_registration === true
     ? (poolOpenHours = await getOpenHoursByPool({
         poolId: studentDetails.pool.id,
       }))

@@ -14,6 +14,7 @@ export const Bell = Lucide.Bell;
 export const CaretSort = Lucide.SortAsc;
 export const Calendar = Lucide.Calendar;
 export const CalendarCheck = Lucide.CalendarCheck;
+export const CalendarDays = Lucide.CalendarDays;
 export const ChevronDown = Lucide.ChevronDown;
 export const Check = Lucide.Check;
 export const CheckCircle = Lucide.CheckCircle;
